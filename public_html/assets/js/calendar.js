@@ -135,7 +135,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 	if (layout == 'full') {
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevyr\', \'full\')\">« <span class="btn-change-date">' + prev_year + '<\/span><\/span><\/td>';
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevmo\', \'full\')\">« <span class="btn-change-date">' + prev_month + '<\/span><\/span><\/td>';
-		calendarString += '<td class=\"calendar-title\" colspan=\"3\"><span><i class=\"fa fa-calendar-o\"><\/i>' + wordMonth[monthNum - 1] + '&nbsp;&nbsp;' + yearNum + '<\/span><\/td>';
+		calendarString += '<td class=\"calendar-title\" colspan=\"3\"><span><i class=\"far fa-calendar-alt\"><\/i>' + wordMonth[monthNum - 1] + '&nbsp;&nbsp;' + yearNum + '<\/span><\/td>';
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextmo\', \'full\')\"><span class="btn-change-date">' + next_month + '<\/span> »<\/span><\/td>';
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextyr\', \'full\')\"><span class="btn-change-date">' + next_year + '<\/span> »<\/span><\/td>';
 	} else {
@@ -198,7 +198,21 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 									var events = getEvents(daycounter, monthNum, yearNum);
 									for (var t = 0; t < events.length; t++) {
 										if (typeof events[t] != "undefined") {
-											var color = events[t].color ? events[t].color : 1;
+                                                                                    							//TODO: PRUEBAS ICONOS EVENTOS
+                                                                                        var icono = "";
+                                                                                        var color = 0;
+                                                                                        var tipo_evento = events[t].name.split(":");
+                                                                                        tipo_evento = tipo_evento[0];
+                                                                                        if (tipo_evento === "VUELO"){
+                                                                                            icono = "fas fa-plane";
+                                                                                            color = 1;
+                                                                                        }else{
+                                                                                            icono = "fas fa-bicycle";
+                                                                                            color = 4;
+                                                                                        }
+                                                                                    
+                                                                                    
+											// color = events[t].color ? events[t].color : 1;
 											var event_class = "one-day";
 											if (events[t].first_day && !events[t].last_day) {
 												event_class = "first-day";
@@ -207,8 +221,8 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 											} else if (!events[t].first_day && !events[t].last_day) {
 												event_class = "middle-day";
 											}
-																				
-											calendarString += '<div class=\"calendar-event-name ' + event_class + ' color-' + color + '\" id=\"' + events[t].id + '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ')\"><span class="event-name">' + getShortText(events[t].name, 2) + '</span><\/div>';
+				                                                                                      
+											calendarString += '<div class=\"calendar-event-name ' + event_class + ' color-' + color + '\" id=\"' + events[t].id + '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ')\"><i class=\"' + icono +'\"></i><span class="event-name">' + getShortText(events[t].name, 2) + '</span><\/div>';    //TODO: <span> con el nombre evento (añadir iconos)
 										} else {
 											var event_fake;
 											if (typeof events[t+1] != "undefined") {
@@ -220,7 +234,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 											} else {
 												event_fake = "no-name";
 											}
-											calendarString += '<div class=\"calendar-event-name no-name\">' + event_fake + '</div>';
+											calendarString += '<div class=\"calendar-event-name no-name\">' + event_fake + '</div>';  //TODO: DIV NOMBRE EVENTO
 										}
 									}
 								} else {
@@ -269,22 +283,22 @@ function checkEvents(day, month, year) {
 	}
 }
 
-function getOrderNumber(id, day, month, year) {
+function getOrderNumber(id, day, month, year) {  //TODO OBTIENE EL NÚMERO 
 	var date_check = new Date(year, Number(month) - 1, day); //fecha actual
-	var events = [];
+	var events = [];  //array para trabajar con los eventos recibidos en el json y ordenarlos después en cliente
 	for (var i = 0; i < tiva_events.length; i++) {
 		var start_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, tiva_events[i].day); //FECHA INICIO EVENTO
 		var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1); //FECHA FIN EVENTO = fecha inicio + duración - 1
 		if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) { //si la FECHA ACTUAL está entre la INICIO y la FIN del evento
-			var first_day = (start_date.getTime() == date_check.getTime()) ? true : false; //
-			var event = {id:tiva_events[i].id, name:tiva_events[i].name, day:tiva_events[i].day, month:tiva_events[i].month, year:tiva_events[i].year, first_day:first_day};
+			var first_day = (start_date.getTime() == date_check.getTime()) ? true : false; //si la fecha inicio coincide con la fecha actual, first_day es TRUE
+			var event = {id:tiva_events[i].id, name:tiva_events[i].name, day:tiva_events[i].day, month:tiva_events[i].month, year:tiva_events[i].year, first_day:first_day}; //se crea el evento  y se insertará en la lista
 			events.push(event);
 		}
 	}
 	
 	if (events.length) {
 		if (events[0].id == id) {
-			var num = order_num;
+			var num = order_num;  //inicializada a 0 en la declaración
 			order_num = 0;
 			return num;	
 		} else { 
@@ -301,7 +315,7 @@ function getOrderNumber(id, day, month, year) {
 	return 0;
 }
 
-// Get events of day  TODO: OBTENER EVENTOS DEL DÍA
+// Get events of day  TODO: OBTENER EVENTOS DEL DÍA INDICADO EN PARÁMETROS
 function getEvents(day, month, year) {
 	var n = 0;
 	var date_check = new Date(year, Number(month) - 1, day);
@@ -348,7 +362,7 @@ function showTooltip(id, layout, day, month, year, el) {
 		
 		jQuery(el).parent().find('.tiva-event-tooltip').html(	'<div class="event-tooltip-item">'
 																+ event_time
-																+ '<div class="event-name">' + tiva_events[id].name + '</div>'
+																+ '<div class="event-name">' + tiva_events[id].name + '</div>'  //TODO: DIV NOMBRE EVENTO
 																+ '<div class="event-image">' + event_image + '</div>'
 																+ '<div class="event-intro">' + getShortText(tiva_events[id].description, 10) + '</div>'
 																+ '</div>'
@@ -464,7 +478,7 @@ function showEventList(layout, max_events) {
 														+ '</div>'
 														+ '<div class="event-item-right pull-left">'
 															+ '<div class="event-name link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' + tiva_list_events[i].name + '</div>'
-															+ '<div class="event-date"><i class="fa fa-calendar-o"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
+															+ '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
 															+ '<div class="event-time">' + event_time + '</div>'
 															+ '<div class="event-intro">' + getShortText(tiva_list_events[i].description, 25) + '</div>'
 														+ '</div>'
@@ -523,7 +537,7 @@ function showEventList(layout, max_events) {
 			jQuery('.tiva-event-list-compact').append(	'<div class="event-item">'
 															+ '<div class="event-image link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'compact\', 0, 0, 0)">' + event_image + '</div>'
 															+ '<div class="event-name link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'compact\', 0, 0, 0)">' + tiva_list_events[i].name + '</div>'
-															+ '<div class="event-date"><i class="fa fa-calendar-o"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
+															+ '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
 															+ '<div class="event-time">' + event_time + '</div>'
 															+ '<div class="event-intro">' + getShortText(tiva_list_events[i].description, 15) + '</div>'	
 														+ '</div>'
@@ -606,7 +620,7 @@ function showEventDetail(id, layout, day, month, year) {
 		jQuery('.tiva-event-detail-full').html(	'<div class="event-item">'
 													+ '<div class="event-image">' + event_image + '</div>'
 													+ '<div class="event-name">' + tiva_events[id].name + '</div>'
-													+ '<div class="event-date"><i class="fa fa-calendar-o"></i>' + event_day + ', ' + event_date + event_end_time  + '</div>'
+													+ '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time  + '</div>'
 													+ '<div class="event-time">' + event_time + '</div>'
 													+ '<div class="event-location">' + event_location + '</div>'
 													+ event_desc
@@ -683,7 +697,7 @@ function showEventDetail(id, layout, day, month, year) {
 				jQuery('.tiva-event-detail-compact').append( 	'<div class="event-item">'
 																	+ '<div class="event-image">' + event_image + '</div>'
 																	+ '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
-																	+ '<div class="event-date"><i class="fa fa-calendar-o"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
+																	+ '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
 																	+ '<div class="event-time">' + event_time + '</div>'
 																	+ '<div class="event-location">' + event_location + '</div>'
 																	+ event_desc
@@ -698,7 +712,7 @@ jQuery(document).ready(function(){  //TODO: código en $(document).ready()
 	// Init calendar full
 	if (jQuery('.tiva-events-calendar.full').length) {
 		jQuery('.tiva-events-calendar.full').html(	'<div class="events-calendar-bar">'
-														+ '<span class="bar-btn calendar-view active"><i class="fa fa-calendar-o"></i>' + calendar_view + '</span>'
+														+ '<span class="bar-btn calendar-view active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
 														+ '<span class="bar-btn list-view"><i class="fa fa-list"></i>' + list_view + '</span>'
 														+ '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
 													+ '</div>'
@@ -714,7 +728,7 @@ jQuery(document).ready(function(){  //TODO: código en $(document).ready()
 	// Init calendar compact
 	if (jQuery('.tiva-events-calendar.compact').length) {
 		jQuery('.tiva-events-calendar.compact').html(	'<div class="events-calendar-bar">'
-															+ '<span class="bar-btn calendar-view active"><i class="fa fa-calendar-o"></i>' + calendar_view + '</span>'
+															+ '<span class="bar-btn calendar-view active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
 															+ '<span class="bar-btn list-view"><i class="fa fa-list"></i>' + list_view + '</span>'
 															+ '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
 														+ '</div>'
@@ -746,8 +760,8 @@ jQuery(document).ready(function(){  //TODO: código en $(document).ready()
 		}
 	});
 	
-	// Set wordDay //TODO: 
-	date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') != "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'sunday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
+	// Set wordDay 
+	date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') != "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
 	if (date_start == 'sunday') {
 		wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
 	} else { // Start with Monday

@@ -1,0 +1,90 @@
+{
+    "entrada": [
+        {
+            "Pedido": "P1-8/1900",
+            "FechaInicio": "2018-04-28T12:00:00+02:00",
+            "FechaFin": "2018-05-01T12:00:00+02:00",
+            "Tipo": "HT",
+            "Destino": "Valencia",
+            "Asunto":"Reserva de Hotel Valencia",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                },
+                {
+                    "id": "18001",
+                    "nombre": "Nombre y Apellidos 2"
+                }
+            ],
+            "Detalles": {
+                "NombreHotel": "H. de Prueba",
+                "Localizador": "234-2347858",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. de las Cortes, 34 46001 Valencia España",
+                "Regimen": "Alojamiento y Desayuno",
+                "TipoHabitacion": "Doble Uso Individual",
+                "Adjuntos": [
+                    {
+                        "id": "20000",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20001",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },
+        {
+            "Pedido": "P1-8/1900",
+            "FechaInicio": "2018-04-28T10:00:00+02:00",
+            "FechaFin": "2018-04-28T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Valencia",
+            "Asunto":"Reserva de vuelo Valencia",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. de las Cortes, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        }
+    ]
+}
