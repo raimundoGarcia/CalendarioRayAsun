@@ -1,0 +1,76 @@
+body {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.page-block-header {
+	padding: 15px 60px 40px 60px;
+    font-size: 18px;
+    font-weight: 200;
+    line-height: 30px;
+    color: inherit;
+    background-color: #eeeeee;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+.page-block-header h1 {
+    margin-bottom: 0;
+    font-size: 60px;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: inherit;
+}
+.block-title {
+	font-size: 24px;
+	border-bottom: 1px solid #e2e2e2;
+	padding-bottom: 15px;
+	color: #666666;
+}
+.guide {
+	color: #666;
+	margin-bottom: 40px;
+}
+h4 {
+	border-bottom: 1px solid #e2e2e2;
+	padding-bottom: 8px;
+	color: #245269;
+	margin-top: 20px;
+}
+.code {
+	background-color: #f5f5f5;
+    border: 1px solid #ccc;
+	padding: 10px;
+	margin-bottom: 15px;
+	color: #5AA4A3;
+}
+.code-title {
+	color: #f0c674;
+}
+.code-attribute {
+	color: #567BD2;
+}
+.code-value {
+	color: #de935f;
+}
+
+.calendar-day-event .tiva-event-tooltip::before, .calendar-day-event .tiva-event-tooltip::after {
+	top: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+.calendar-day-event .tiva-event-tooltip::after {
+	border-color: rgba(245, 245, 245, 0);
+	border-top-color: #f5f5f5;
+	border-width: 8px;
+	margin-left: -8px;
+}
+.calendar-day-event .tiva-event-tooltip::before {
+	border-color: rgba(204, 204, 204, 0);
+	border-top-color: #cccccc;
+	border-width: 9px;
+	margin-left: -9px;
+}
