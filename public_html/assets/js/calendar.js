@@ -39,7 +39,7 @@ function getShortText(text, num) {
 	return "";
 }
 
-function sortEventsByDate(a,b) {
+function sortEventsByDate(a,b) {   //TODO: FUNCIÓN QUE ORDENA EVENTOS POR FECHA
 	if (a.date < b.date) {
 		return -1;
 	} else if (a.date > b.date) {
@@ -48,6 +48,16 @@ function sortEventsByDate(a,b) {
 		return 0;
 	}
 }
+
+/*
+ * 
+ * Date.UTC(año,mes[, dia[, hora[, minutos[, segundos, milisegundos]]]])  CON DATE() FUNCIONA =
+ * 
+ * IPOfecha.setTime(Date.parse("Aug 9, 1995")) ;
+ * 
+ * 
+ * 
+ */
 
 function sortEventsByUpcoming(a,b) {
 	var today_date = new Date(todaysYear, todaysMonth - 1, todaysDate);
@@ -198,7 +208,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 									var events = getEvents(daycounter, monthNum, yearNum);
 									for (var t = 0; t < events.length; t++) {
 										if (typeof events[t] != "undefined") {
-                                                                                    							//TODO: PRUEBAS ICONOS EVENTOS
+                                                                                                                        //TODO: PRUEBAS ICONOS EVENTOS
                                                                                         var icono = "";
                                                                                         var color = 0;
                                                                                         var tipo_evento = events[t].name.split(":");
@@ -207,7 +217,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                                                             icono = "fas fa-plane";
                                                                                             color = 1;
                                                                                         }else{
-                                                                                            icono = "fas fa-bicycle";
+                                                                                            icono = "fas fa-asterisk";
                                                                                             color = 4;
                                                                                         }
                                                                                     
@@ -223,7 +233,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 											}
 				                                                                                      
 											calendarString += '<div class=\"calendar-event-name ' + event_class + ' color-' + color + '\" id=\"' + events[t].id + '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ')\"><i class=\"' + icono +'\"></i><span class="event-name">' + getShortText(events[t].name, 2) + '</span><\/div>';    //TODO: <span> con el nombre evento (añadir iconos)
-										} else {
+										} else { //CREA UN EVENTO NO-NAME NO VISIBLE 
 											var event_fake;
 											if (typeof events[t+1] != "undefined") {
 												if (typeof tiva_events[events[t+1].id - 1] != "undefined") { 
@@ -817,7 +827,7 @@ jQuery(document).ready(function(){  //TODO: código en $(document).ready()
 				}
 				
 				// Sort events by date
-				tiva_events.sort(sortEventsByDate);
+				tiva_events.sort(sortEventsByDate);  //TODO: ORDENAR EVENTOS DEL DÍA
 				
 				for (var j = 0; j < tiva_events.length; j++) {
 					tiva_events[j].id = j;
