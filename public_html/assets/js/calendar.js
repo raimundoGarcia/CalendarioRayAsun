@@ -746,7 +746,7 @@ jQuery(document).ready(function(){  //TODO: código en $(document).ready()
 		}
 	});
 	
-	// Set wordDay
+	// Set wordDay //TODO: 
 	date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') != "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'sunday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
 	if (date_start == 'sunday') {
 		wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
