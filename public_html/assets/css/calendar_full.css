@@ -1,4 +1,7 @@
 /* Events Calendar contain */
+.container{
+    
+}
 .tiva-events-calendar.full .tiva-events-calendar-wrap {
 	margin: 25px 0 40px 0;
 	border: 1px solid #dedade;
@@ -22,6 +25,7 @@
 /* Calendar */
 .tiva-calendar-full .calendar-table {
 	margin-bottom: 0 !important;
+        
 }
 .tiva-calendar-full .calendar-title , .tiva-calendar-full .calendar-btn {
 	text-align: center !important;
@@ -95,11 +99,22 @@
 	padding: 0 3px;
 	cursor: pointer;
 }
-.tiva-calendar-full .calendar-event-name span {
+.tiva-calendar-full .calendar-event-name button {  /*volver a cambiar div por span*/
 	color: #ffffff;
 	font-size: 11px;
 	line-height: 20px;
+        background: transparent;
 }
+
+.event-name{
+    visibility: hidden;
+    background: transparent;
+    
+}
+.main-event-name{
+     
+}
+
 .tiva-calendar-full .calendar-event-name.no-name {
 	opacity: 0;
 	visibility: hidden;
@@ -132,8 +147,9 @@
     -moz-border-radius: 0;
     border-radius: 0;
 }
-.tiva-calendar-full .calendar-event-name.middle-day span {
-	opacity: 0;	
+.tiva-calendar-full .calendar-event-name.middle-day span {  
+	opacity: 0;
+        visibility: hidden;
 }
 .tiva-calendar-full .calendar-event-name.last-day {
 	margin-left: -11px;
@@ -145,7 +161,8 @@
     border-bottom-left-radius: 0;
 }
 .tiva-calendar-full .calendar-event-name.last-day span {
-	opacity: 0;	
+	opacity: 0;
+        visibility: hidden;
 }
 
 /* Event list */

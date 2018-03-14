@@ -149,11 +149,13 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextmo\', \'full\')\"><span class="btn-change-date">' + next_month + '<\/span> »<\/span><\/td>';
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextyr\', \'full\')\"><span class="btn-change-date">' + next_year + '<\/span> »<\/span><\/td>';
 	} else {
+            /*
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevyr\', \'compact\')\">«<\/span><\/td>';
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevmo\', \'compact\')\">«<\/span><\/td>';
 		calendarString += '<td class=\"calendar-title\" colspan=\"3\"><span>' + wordMonth[monthNum - 1] + '&nbsp;&nbsp;' + yearNum + '<\/span><\/td>';
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextmo\', \'compact\')\">»<\/span><\/td>';
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextyr\', \'compact\')\">»<\/span><\/td>';
+            */
 	}
 	calendarString += '<\/tr>';
 	
@@ -206,6 +208,9 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 								// Get events of day
 								if (layout == 'full') {
 									var events = getEvents(daycounter, monthNum, yearNum);
+                                                                        
+                                                                        console.log(events);
+                                                                     //   events.sort(sortEventsByDate); //TODO: PRUEBA ORDENAR EVENTOS - FALTA HACER FECHAS date() CON LA HORA
 									for (var t = 0; t < events.length; t++) {
 										if (typeof events[t] != "undefined") {
                                                                                                                         //TODO: PRUEBAS ICONOS EVENTOS
@@ -223,16 +228,31 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                                                     
                                                                                     
 											// color = events[t].color ? events[t].color : 1;
-											var event_class = "one-day";
-											if (events[t].first_day && !events[t].last_day) {
+                                                                                        var event_class = "one-day";
+                                                                                        var texto = '<i class=\"' + icono +'\"></i>';
+                                                                                        var clase_aux = "main-event-name";
+                                                                                        var largo=3;
+                                                                                        if (events[t].first_day && !events[t].last_day) {
 												event_class = "first-day";
+                                                                                                largo = 3;                                                                                               
 											} else if (events[t].last_day && !events[t].first_day) {
 												event_class = "last-day";
+                                                                                                texto = " ";
+                                                                                                clase_aux= "event-name";
+                                                                                                largo = 1;
 											} else if (!events[t].first_day && !events[t].last_day) {
 												event_class = "middle-day";
+                                                                                                texto= " ";
+                                                                                                clase_aux= "event-name";
+                                                                                                largo = 1;
 											}
-				                                                                                      
-											calendarString += '<div class=\"calendar-event-name ' + event_class + ' color-' + color + '\" id=\"' + events[t].id + '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ')\"><i class=\"' + icono +'\"></i><span class="event-name">' + getShortText(events[t].name, 2) + '</span><\/div>';    //TODO: <span> con el nombre evento (añadir iconos)
+				                                                        
+                                                                                 calendarString += '<div class=\"calendar-event-name ' + event_class + ' color-' + color + '\" id=\"' + events[t].id +
+                                                                                         '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
+                                                                                         ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
+                                                                                         daycounter + ', ' + monthNum + ', ' + yearNum + ')\"><label class="'+clase_aux+'">' + texto + //class="event-name" en el ORIGINAL
+                                                                                         getShortText(events[t].name, largo) + '</label><\/div>';    //TODO: <span> con el nombre evento (ORIGINAL)
+										
 										} else { //CREA UN EVENTO NO-NAME NO VISIBLE 
 											var event_fake;
 											if (typeof events[t+1] != "undefined") {
@@ -269,7 +289,9 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 	if (layout == 'full') {
 		jQuery('.tiva-calendar-full').html(calendarString);
 	} else {
+            /*
 		jQuery('.tiva-calendar-compact').html(calendarString);
+            */
 	}
 	thisDate = 1;
 }
@@ -330,13 +352,14 @@ function getEvents(day, month, year) {
 	var n = 0;
 	var date_check = new Date(year, Number(month) - 1, day);
 	var events = [];
+       
 	for (var i = 0; i < tiva_events.length; i++) {
 		var start_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, tiva_events[i].day);
 		var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1);
 		if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) {
 			var first_day = (start_date.getTime() == date_check.getTime()) ? true : false;
 			var last_day = (end_date.getTime() == date_check.getTime()) ? true : false;
-			var event = {id:tiva_events[i].id, name:tiva_events[i].name, first_day:first_day, last_day:last_day, color:tiva_events[i].color};
+			var event = {id:tiva_events[i].id, name:tiva_events[i].name, first_day:first_day, last_day:last_day, color:tiva_events[i].color, duration:tiva_events[i].duration}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
 			
 			if (!first_day) {
 				n = getOrderNumber(tiva_events[i].id, tiva_events[i].day, tiva_events[i].month, tiva_events[i].year);
@@ -418,9 +441,11 @@ function clearTooltip(layout, el) {
 		jQuery(el).parent().find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
 		jQuery(el).parent().find('.tiva-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
 	} else {
+            /*
 		jQuery(el).find('.tiva-event-tooltip').css('opacity', '0');
 		jQuery(el).find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
 		jQuery(el).find('.tiva-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
+        */
 	}
 }
 
@@ -497,6 +522,7 @@ function showEventList(layout, max_events) {
 												);
 		}
 	} else {
+            /*
 		jQuery('.tiva-event-list-compact').html('');
 		for (var i = 0; i < tiva_list_events.length; i++) {
 			// Start date
@@ -553,7 +579,9 @@ function showEventList(layout, max_events) {
 														+ '</div>'
 														+ '<div class="cleardiv"></div>'
 													);
+                                                                                                        
 		}
+*/
 	}
 }
 
@@ -786,19 +814,19 @@ jQuery(document).ready(function(){  //TODO: código en $(document).ready()
 				var event_date = new Date(data.items[i].year, Number(data.items[i].month) - 1, data.items[i].day);
 				data.items[i].date = event_date.getTime();
 				tiva_events.push(data.items[i]);
-                                console.log(tiva_events);
+                               
 			}
-			
+		console.log(tiva_events);
 			// Sort events by date
 			tiva_events.sort(sortEventsByDate);
-			
+		console.log(tiva_events);
 			for (var j = 0; j < tiva_events.length; j++) {
 				tiva_events[j].id = j;
 				if (!tiva_events[j].duration) {
 					tiva_events[j].duration = 1;
 				}
 			}
-			
+		console.log(tiva_events);
 			// Create calendar
 			changedate('current', 'full');
 			changedate('current', 'compact');
