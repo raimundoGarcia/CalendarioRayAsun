@@ -2,7 +2,7 @@
 var thisDate = 1;
 var today = new Date();  //Tue Mar 13 2018 12:19:54 GMT+0100 (Hora estándar romance)
 console.log("Fecha actual: "+today);
-var todaysDay = today.getDay() + 1; //día de la semana
+var todaysDay = today.getDay() + 1; //día de la semana (de 0 a 6) aumentado en 1 para coincicir con el orden natural
 var todaysDate = today.getDate(); //día del mes actual
 var todaysMonth = today.getMonth() + 1; //mes actual
 var todaysYear = today.getFullYear(); //año actual 4 dígitos
@@ -102,10 +102,10 @@ function changedate(btn, layout) {
 		eval("yearNum_" + layout + " = todaysYear;");
 	}
 
-	if (monthNum_full == 0) {
+	if (monthNum_full == 0) { //si al retroceder un mes (getDay++)-1, resulta 0, el mes a mostrar es DICIEMBRE (12) Y EL AÑO ANTERIOR(--)
 		monthNum_full = 12;
 		yearNum_full--;
-	} else if (monthNum_full == 13) {
+	} else if (monthNum_full == 13) { //si al avanzar un mes (getDay++)+1, resulta 13, el mes a mostrar es ENERO (1) Y EL AÑO EL SIGUIENTE (++)
 		monthNum_full = 1;
 		yearNum_full++
 	}
@@ -119,14 +119,14 @@ function changedate(btn, layout) {
 	}
 	
 	// Get first day and number days of month
-	eval("firstDate = new Date(yearNum_" + layout + ", monthNum_" + layout + " - 1, 1);");
+	eval("firstDate = new Date(yearNum_" + layout + ", monthNum_" + layout + " - 1, 1);"); //asigna a vble. la fecha del día 1 del mes actual
 	if (date_start == 'sunday') {
-		firstDay = firstDate.getDay() + 1;
+		firstDay = firstDate.getDay() + 1;  //first_day será el día de la semana que corresponda
 	} else {
-		firstDay = (firstDate.getDay() == 0) ? 7 : firstDate.getDay();
+		firstDay = (firstDate.getDay() == 0) ? 7 : firstDate.getDay(); //si la semana empieza en lunes, y el día 1 es domingo, la vble. firstDay es domingo (7) 6+1
 	}
-	eval("lastDate = new Date(yearNum_" + layout + ", monthNum_" + layout + ", 0);");
-	numbDays = lastDate.getDate();
+	eval("lastDate = new Date(yearNum_" + layout + ", monthNum_" + layout + ", 0);"); //asigna a la vble la fecha del último día del mes actual 
+	numbDays = lastDate.getDate(); //números de días del mes
 	
 	// Create calendar
 	eval("createCalendar(layout, firstDay, numbDays, monthNum_" + layout + ", yearNum_" + layout + ");");
@@ -157,11 +157,11 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 		calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextyr\', \'compact\')\">»<\/span><\/td>';
             */
 	}
-	calendarString += '<\/tr>';
+	calendarString += '<\/tr>'; //fin de cabecera botones
 	
 	calendarString += '<tr class="active">';
 	for (var m = 0; m < wordDay.length; m++) {
-		calendarString += '<th>' + wordDay[m].substring(0, 3) + '<\/th>';
+		calendarString += '<th>' + wordDay[m].substring(0, 3) + '<\/th>';  //TODO: ACORTADOR STRING DÍAS DE LA SEMANA para cabecera días semana
 	}
 	calendarString += '<\/tr>';
 
@@ -169,7 +169,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 	
 	for (var i = 1; i <= 6; i++) {
 		var k = (i - 1) * 7 + 1;
-		if (k < (firstDay + numbDays)) {
+		if (k < (firstDay + numbDays)) {  //( día semana del día 1 del mes + num días del mes )
 			calendarString += '<tr>';
 			for (var x = 1; x <= 7; x++) {
 				daycounter = (thisDate - firstDay) + 1;

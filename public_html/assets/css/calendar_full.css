@@ -1,6 +1,8 @@
 /* Events Calendar contain */
-.container{
-    
+.pruebas{
+    margin-top: 30px;
+    margin-left: 30px;
+    background: lightyellow;
 }
 .tiva-events-calendar.full .tiva-events-calendar-wrap {
 	margin: 25px 0 40px 0;
