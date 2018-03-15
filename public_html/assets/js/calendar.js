@@ -209,10 +209,12 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 								if (layout == 'full') {
 									var events = getEvents(daycounter, monthNum, yearNum);
                                                                         
-                                                                        console.log(events);
+                                                                        //console.log(events);
                                                                      //   events.sort(sortEventsByDate); //TODO: PRUEBA ORDENAR EVENTOS - FALTA HACER FECHAS date() CON LA HORA
 									for (var t = 0; t < events.length; t++) {
-										if (typeof events[t] != "undefined") {
+                                                                            var tipo = typeof events[t];
+                                                                            console.log(tipo);
+										if (typeof events[t] != "undefined") { //si existe evento en esa posición del array de eventos DE UN DÍA CONCRETO (no undefined)
                                                                                                                         //TODO: PRUEBAS ICONOS EVENTOS
                                                                                         var icono = "";
                                                                                         var color = 0;
@@ -223,7 +225,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                                                             color = 1;
                                                                                         }else{
                                                                                             icono = "fas fa-asterisk";
-                                                                                            color = 4;
+                                                                                            color = 2;
                                                                                         }
                                                                                     
                                                                                     
@@ -250,21 +252,22 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                                                  calendarString += '<div class=\"calendar-event-name ' + event_class + ' color-' + color + '\" id=\"' + events[t].id +
                                                                                          '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
                                                                                          ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
-                                                                                         daycounter + ', ' + monthNum + ', ' + yearNum + ')\"><label class="'+clase_aux+'">' + texto + //class="event-name" en el ORIGINAL
-                                                                                         getShortText(events[t].name, largo) + '</label><\/div>';    //TODO: <span> con el nombre evento (ORIGINAL)
+                                                                                         daycounter + ', ' + monthNum + ', ' + yearNum + ')\"><span class="'+clase_aux+'">' + texto + //class="event-name" en el ORIGINAL
+                                                                                         getShortText(events[t].name, largo) + '</span><\/div>';    //TODO: <span> con el nombre evento (ORIGINAL)
 										
-										} else { //CREA UN EVENTO NO-NAME NO VISIBLE 
-											var event_fake;
-											if (typeof events[t+1] != "undefined") {
-												if (typeof tiva_events[events[t+1].id - 1] != "undefined") { 
+										} else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
+											var event_fake; //crea una variable
+											if (typeof events[t+1] != "undefined") {  //establece otra condición: si el siguiente elemento del array no es indefinido -> Si el día sgte hay evento
+												if (typeof tiva_events[events[t+1].id - 1] != "undefined") { //entonces si el evento de la lista global ordenada inmediatamente anterior al actual
+                                                                                                                                                               //está definido, la vble. toma el nombre de ese evento inmediatamente anterior acortado
 													event_fake = getShortText(tiva_events[events[t+1].id - 1].name, 2);
 												} else {
-													event_fake = "no-name";
+													event_fake = "no-name";  //si es undefined, la vble. será no-name
 												}
 											} else {
-												event_fake = "no-name";
+												event_fake = "no-name"; //si no hay siguiente evento del día, la vble. también será no-name
 											}
-											calendarString += '<div class=\"calendar-event-name no-name\">' + event_fake + '</div>';  //TODO: DIV NOMBRE EVENTO
+											calendarString += '<div class=\"calendar-event-name no-name color-0\">' + event_fake + '</div>';  //TODO: PINTA UN DIV (invisible) con el valor de vble.
 										}
 									}
 								} else {
@@ -816,7 +819,7 @@ jQuery(document).ready(function(){  //TODO: código en $(document).ready()
 				tiva_events.push(data.items[i]);
                                
 			}
-		console.log(tiva_events);
+		
 			// Sort events by date
 			tiva_events.sort(sortEventsByDate);
 		console.log(tiva_events);

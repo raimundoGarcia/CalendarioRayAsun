@@ -116,8 +116,12 @@
 }
 
 .tiva-calendar-full .calendar-event-name.no-name {
-	opacity: 0;
-	visibility: hidden;
+	opacity: 1;   /*opacity a 0*/
+        color: black;  /*eliminar color*/
+	visibility: visible;  /*cambiar a hidden*/
+}
+.tiva-calendar-full .calendar-event-name.color-0 {  /*QUITAR SELECTOR ENTERO, PARA EVENTO FAKE*/
+	background: #adff2f;
 }
 .tiva-calendar-full .calendar-event-name.color-1 {
 	background: #567BD2;
