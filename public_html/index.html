@@ -32,11 +32,11 @@
 	</head>
 	
 	<body>
-            
-            <div class="tiva-events-calendar full" data-source="json"></div>
-            
+            <div class="container">
+                <div class="tiva-events-calendar full" data-source="json"></div> 
+            </div>
             <div class="pruebas">
-                
+
                 <script>
                     //asigna a la vble la fecha del día 0 ? del mes actual 
                     var lastDate = new Date(2018,3,0); 
@@ -48,13 +48,13 @@
                     var contenido = "Fecha día 0 es: "+lastDate + "  Y num días mes es: "+numbDays;
                     document.getElementsByClassName("pruebas")[0].innerHTML = contenido;
                 </script>
-                
+
             </div>
+
             
             
             
-            
-	<!--	
+        <!-- Call Full Events Calendar 
             <div class="container">
 					
                     <div class="row">
@@ -72,9 +72,9 @@
 				
 			</div>
                 </div>
-             -->   
-            
-            <!-- Call Full Events Calendar -->
+               
+            -->
+           
 					
 		
         </body>

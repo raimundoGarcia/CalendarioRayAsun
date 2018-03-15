@@ -121,9 +121,9 @@ function changedate(btn, layout) {
 	// Get first day and number days of month
 	eval("firstDate = new Date(yearNum_" + layout + ", monthNum_" + layout + " - 1, 1);"); //asigna a vble. la fecha del día 1 del mes actual
 	if (date_start == 'sunday') {
-		firstDay = firstDate.getDay() + 1;  //first_day será el día de la semana que corresponda
+		firstDay = firstDate.getDay() + 1;  //first_day será el día de la semana del día 1
 	} else {
-		firstDay = (firstDate.getDay() == 0) ? 7 : firstDate.getDay(); //si la semana empieza en lunes, y el día 1 es domingo, la vble. firstDay es domingo (7) 6+1
+		firstDay = (firstDate.getDay() == 0) ? 7 : firstDate.getDay(); //si la semana empieza a contar en lunes, y el día 1 primer día de semana, la vble. firstDay es 7
 	}
 	eval("lastDate = new Date(yearNum_" + layout + ", monthNum_" + layout + ", 0);"); //asigna a la vble la fecha del último día del mes actual 
 	numbDays = lastDate.getDate(); //números de días del mes
