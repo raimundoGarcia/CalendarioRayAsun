@@ -321,7 +321,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                     calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
                                             '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
                                             ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
-                                            daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name">'+ events[t].icono  + //class="event-name" en el ORIGINAL
+                                            daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name">'+ events[t].icono +'&nbsp;' + //class="event-name" en el ORIGINAL
                                             getShortText(events[t].name, palabrasEvento) + '</span><\/div>';    
 
                                 } else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
