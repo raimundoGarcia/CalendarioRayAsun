@@ -3,7 +3,7 @@
         {
             "Pedido": "P1-8/1900",
             "FechaInicio": "2018-03-21T12:30:00+02:00",
-            "FechaFin": "2018-03-29T12:00:00+02:00",
+            "FechaFin": "2018-03-21T12:00:00+02:00",
             "Tipo": "HT",
             "Destino": "Valencia",
             "Asunto":"Reserva de Hotel Valencia blabla blabla blabla blabla blabla blabla ",
@@ -44,7 +44,7 @@
         {
             "Pedido": "P1-8/1900",
             "FechaInicio": "2018-03-21T10:00:00+02:00",
-            "FechaFin": "2018-03-27T11:00:00+02:00",
+            "FechaFin": "2018-03-22T11:00:00+02:00",
             "Tipo": "AV",
             "Destino": "Valencia",
             "Asunto":"Reserva de vuelo VLC-CDG blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla",
@@ -89,7 +89,7 @@
             {
             "Pedido": "P1-80/1900",
             "FechaInicio": "2018-03-21T11:00:00+02:00",
-            "FechaFin": "2018-03-26T11:00:00+02:00",
+            "FechaFin": "2018-03-23T11:00:00+02:00",
             "Tipo": "RC",
             "Destino": "Denia",
             "Asunto":"Reserva de coche Valencia  blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla",
@@ -178,8 +178,8 @@
         },
             {
             "Pedido": "P2-30/1900",
-            "FechaInicio": "2018-03-31T18:00:00+02:00",
-            "FechaFin": "2018-04-05T11:00:00+02:00",
+            "FechaInicio": "2018-03-21T18:00:00+02:00",
+            "FechaFin": "2018-03-25T11:00:00+02:00",
             "Tipo": "AV",
             "Destino": "Tarragona",
             "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",

@@ -170,10 +170,10 @@
 .maxlength-5 {
     max-width: 450%; 
 }
-.first-day .maxlength-6 {
+.maxlength-6 {
     max-width: 550%;
 }
-.first-day .maxlength-7 {
+.maxlength-7 {
     max-width: 650%; 
 }
 @media (max-width:700px){
@@ -192,10 +192,10 @@
     .maxlength-5 {
         max-width: 400%; 
     }
-    .first-day .maxlength-6 {
+     .maxlength-6 {
         max-width: 500%;
     }
-    .first-day .maxlength-7 {
+    .maxlength-7 {
         max-width: 600%; 
     }
 }

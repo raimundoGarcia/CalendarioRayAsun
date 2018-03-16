@@ -31,22 +31,88 @@ function getShortText(text, num) {
     if (text) {
 
         var ancho = $(window).width();
+        var caracteres = 1;
         switch (true) {
-            case (ancho < 600):
-                num = Math.floor(num / 3);
-                if (num === 0) {
-                    num = 1;
-                }
+            case (ancho > 0 && ancho <= 320):
+                caracteres = Math.floor(num * 0);
                 break;
-            case (ancho > 600 && ancho < 900):
-                num = Math.ceil(num / 2);
+            case (ancho >= 321 && ancho <= 425):
+                caracteres = Math.floor(num * 1);
                 break;
+            case (ancho >= 425 && ancho <= 500):
+                caracteres = Math.floor(num * 2);
+                break;
+            case (ancho >= 501 && ancho <= 550):
+                caracteres = Math.floor(num * 3);
+                break;
+            case (ancho >= 551 && ancho <= 600):
+                caracteres = Math.floor(num * 4);
+                break;
+            case (ancho >= 601 && ancho <= 650):
+                caracteres = Math.floor(num * 4.5);
+                break;
+            case (ancho >= 651 && ancho <= 700):
+                caracteres = Math.floor(num * 5);
+                break;
+            case (ancho >= 701 && ancho <= 750):    // 766 explota al cambiar la resolucion de la pantalla por algun media 
+                caracteres = Math.floor(num * 5.5);
+                break;
+            case (ancho >= 751 && ancho <= 800):
+                caracteres = Math.floor(num * 6);
+                break;
+            case (ancho >= 801 && ancho <= 850):
+                caracteres = Math.floor(num * 6.5);
+                break;
+            case (ancho >= 851 && ancho <= 900):
+                caracteres = Math.floor(num * 10);
+                break;
+            case (ancho >= 901 && ancho <= 950):
+                caracteres = Math.floor(num * 11);
+                break;
+            case (ancho >= 951 && ancho <= 1000):
+                caracteres = Math.floor(num * 12);
+                break;
+            case (ancho >= 1001 && ancho <= 1050):
+                caracteres = Math.floor(num * 13);
+                break;
+            case (ancho >= 1051 && ancho <= 1100):
+                caracteres = Math.floor(num * 14);
+                break;
+            case (ancho >= 1101 && ancho <= 1150):
+                caracteres = Math.floor(num * 15);
+                break;
+            case (ancho >= 1151 && ancho <= 1200):
+                caracteres = Math.floor(num * 16);
+                break;
+            case (ancho >= 1201 && ancho <= 1250):
+                caracteres = Math.floor(num * 17);
+                break;
+            case (ancho >= 1251 && ancho <= 1300):
+                caracteres = Math.floor(num * 18);
+                break;
+            case (ancho >= 1301 && ancho <= 1350):
+                caracteres = Math.floor(num * 19);
+                break;
+            case (ancho >= 1351 && ancho <= 1400):
+                caracteres = Math.floor(num * 20);
+                break;
+            case (ancho >= 1401 && ancho <= 1450):
+                caracteres = Math.floor(num * 21);
+                break;
+            case (ancho >= 1451 && ancho <= 1500):
+                caracteres = Math.floor(num * 22);
+                break;
+            case (ancho >= 1501 && ancho <= 1550):
+                caracteres = Math.floor(num * 23);
+                break;
+
         }
         // Get num of word
-        var textArray = text.split(" ");
-        if (textArray.length > num) {
-            return textArray.slice(0, num).join(" ") + "...";
-        }
+        var textArray = text.substring(0, caracteres);
+        console.log(textArray);
+
+        return textArray + "...";
+
         return text;
     }
     return "";
@@ -252,25 +318,25 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                         case "one-day":
                                             divSize = "";
                                             maxDiv = "";
-                                            palabrasSegunDuracion = 2;
-                                            divMaxSegunDiaSemana = 2;
+                                            palabrasSegunDuracion = 1;
+                                            divMaxSegunDiaSemana = 1;
                                             break;
                                         case "middle-day":
                                             divSize = "";
                                             maxDiv = "";
-                                            palabrasSegunDuracion = 1;
-                                            divMaxSegunDiaSemana = 1;
+                                            palabrasSegunDuracion = 0;
+                                            divMaxSegunDiaSemana = 0;
                                             break;
                                         case "last-day":
                                             divSize = "";
                                             maxDiv = "";
-                                            palabrasSegunDuracion = 1;
-                                            divMaxSegunDiaSemana = 1;
+                                            palabrasSegunDuracion = 0;
+                                            divMaxSegunDiaSemana = 0;
                                             break;
                                         case "first-day":
                                             // Delimita el máximo de palabras que puede mostrar un evento y el tamaño del div, según la duración del evento
                                             duracion = tiva_events[t].duration;
-                                            palabrasSegunDuracion = 2 * duracion;
+                                            palabrasSegunDuracion = duracion;
 
                                             divSize = " length-" + duracion;
                                             if (duracion > 7) {
@@ -280,31 +346,31 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
                                             switch (wordDay[x - 1]) {
                                                 case "Lunes":
-                                                    divMaxSegunDiaSemana = 14;
+                                                    divMaxSegunDiaSemana = 7;
                                                     maxDiv = 7;
                                                     break;
                                                 case "Martes":
-                                                    divMaxSegunDiaSemana = 12;
+                                                    divMaxSegunDiaSemana = 6;
                                                     maxDiv = 6;
                                                     break;
                                                 case "Miercoles":
-                                                    divMaxSegunDiaSemana = 10;
+                                                    divMaxSegunDiaSemana = 5;
                                                     maxDiv = 5;
                                                     break;
                                                 case "Jueves":
-                                                    divMaxSegunDiaSemana = 8;
+                                                    divMaxSegunDiaSemana = 4;
                                                     maxDiv = 4;
                                                     break;
                                                 case "Viernes":
-                                                    divMaxSegunDiaSemana = 6;
+                                                    divMaxSegunDiaSemana = 3;
                                                     maxDiv = 3;
                                                     break;
                                                 case "Sabado":
-                                                    divMaxSegunDiaSemana = 4;
+                                                    divMaxSegunDiaSemana = 2;
                                                     maxDiv = 2;
                                                     break;
                                                 case "Domingo":
-                                                    divMaxSegunDiaSemana = 2;
+                                                    divMaxSegunDiaSemana = 1;
                                                     maxDiv = 1;
                                                     break;
                                             }
@@ -318,11 +384,19 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                     var palabrasEvento = Math.min(palabrasSegunDuracion, divMaxSegunDiaSemana);
 
                                     //renderiza eventos
-                                    calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
-                                            '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
-                                            ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
-                                            daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name">'+ events[t].icono  + //class="event-name" en el ORIGINAL
-                                            getShortText(events[t].name, palabrasEvento) + '</span><\/div>';    
+                                    if (event_class === "first-day" || event_class === "one-day") {
+                                        calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
+                                                '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
+                                                ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
+                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + events[t].icono + '&nbsp;' + getShortText(events[t].name, palabrasEvento) +
+                                                '</span><\/div>';
+                                    } else {
+                                        calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
+                                                '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
+                                                ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
+                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + getShortText(events[t].name, palabrasEvento) +
+                                                '</span><\/div>';
+                                    }
 
                                 } else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
                                     var event_fake; //crea una variable
