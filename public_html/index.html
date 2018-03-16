@@ -9,6 +9,7 @@
 		
 		<!-- Include events calendar css file -->
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+               
 		<!-- <link rel="stylesheet" href="assets/css/font-awesome.min.css"> -->
                 <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 		<link rel="stylesheet" href="assets/css/calendar_full.css">
@@ -34,26 +35,7 @@
 	<body>
             <div class="container">
                 <div class="tiva-events-calendar full" data-source="json"></div> 
-            </div>
-            <div class="pruebas">
-
-                <script>
-                    //asigna a la vble la fecha del día 0 ? del mes actual 
-                    var lastDate = new Date(2018,3,0); 
-                    console.log(lastDate);
-                    
-                    var numbDays = lastDate.getDate(); //números de días del mes
-                    console.log(numbDays);
-                    
-                    var contenido = "Fecha día 0 es: "+lastDate + "  Y num días mes es: "+numbDays;
-                    document.getElementsByClassName("pruebas")[0].innerHTML = contenido;
-                </script>
-
-            </div>
-
-            
-            
-            
+            </div>      
         <!-- Call Full Events Calendar 
             <div class="container">
 					
