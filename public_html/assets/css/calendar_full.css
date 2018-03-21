@@ -388,3 +388,156 @@ body{
     display: none !important;
     visibility: hidden !important;
 }
+
+
+/*+++++++++++++++++++++FICHAS INFO+++++++++++++++++++++++++*/
+
+
+@media (max-width: 768px ){  /*Para que en móviles se vea la ventana modal de detalles centrada*/
+    
+    #centralModalLG{
+        padding-left: 0px;
+        position-left: 0px;
+    }
+    .logo{
+        width: 75px;
+        height: 40px;
+    }
+    .horario{
+    border: 1px solid #e2e2e2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    }
+}
+
+
+.logo{
+  /*  border: 3px solid #e2e2e2; */
+    width: 150px;
+    height: 80px;
+}
+.logo img{
+    width: 100%;
+    height: auto;
+}
+.horario{
+    border: 1px solid #e2e2e2;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.ciudad, .fecha, .hora{
+   padding: 2px; 
+   margin: 2px;
+}
+
+.ciudad{
+    
+}
+
+.fecha{
+    
+}
+
+.hora{
+    
+}
+
+.origen, .destino{
+    /* border: 1px solid #e2e2e2; */
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.linea{
+    height: 2px;
+    width: 300px;
+    border: 1px solid green;
+    background-color: green;
+    
+    margin: 5px;
+    
+}
+
+.descripcion{
+   /* border: 1px solid #e2e2e2; */
+    padding: 10px;
+}
+.listaviajeros{
+    border: 1px solid #e2e2e2;
+    padding: 10px;
+}
+.ubicacion{
+  /*  border: 1px solid #e2e2e2; */
+    padding: 10px;
+}
+.ubicacion-maps{
+
+}
+.adjuntos{
+    border: 1px solid #e2e2e2;
+    padding: 10px;
+}
+.ics{
+    border: 1px solid #e2e2e2;
+    padding: 10px;
+}
+
+.imgpdf{
+   padding: 10px;
+}
+
+.pdf{
+     object-fit: contain;
+}
+
+/*COLORES FONDO TÍTULO FICHA*/
+
+.vuelo{
+    background-color: #13baff;
+}
+
+.tren{
+    background-color: green;
+}
+
+.hotel{
+    background-color: orange;
+}
+
+.vehiculo{
+    background-color: orchid;
+}
+
+.otros{
+    background-color: #2bbbad;
+}
+
+
+
+/*CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA*/
+
+.modal-footer .btn+.btn {
+    margin: 2.5rem !important;
+}
+
+.w-100{
+    width: 100%;
+}
+
+.modal-title{
+    color: white;
+    padding: 5px;
+     
+}
