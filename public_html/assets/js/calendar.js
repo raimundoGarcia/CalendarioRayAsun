@@ -426,6 +426,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                     var palabrasEvento = Math.min(palabrasSegunDuracion, divMaxSegunDiaSemana);
 
                                     //renderiza eventos
+
                                     if (event_class === "first-day" || event_class === "one-day") {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
                                                 '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
@@ -440,6 +441,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                 '</span><\/div>';
 
                                     }
+
 
                                 } else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
                                     var event_fake; //crea una variable
