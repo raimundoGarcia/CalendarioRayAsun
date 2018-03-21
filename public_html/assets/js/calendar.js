@@ -1,7 +1,7 @@
 // Variable
 var thisDate = 1;
 var today = new Date();  //Tue Mar 13 2018 12:19:54 GMT+0100 (Hora estándar romance)
-console.log("Fecha actual: " + today);
+
 var todaysDay = today.getDay() + 1; //día de la semana (de 0 a 6) aumentado en 1 para coincicir con el orden natural
 var todaysDate = today.getDate(); //día del mes actual
 var todaysMonth = today.getMonth() + 1; //mes actual
@@ -26,90 +26,132 @@ var order_num = 0;
 // Config variable
 var wordDay;  //para nombre días largo o corto
 var date_start;
-
+var returnView = "calendario"; // asigna la vista a la que volver despues de mostrar los detalles de un evento
 function getShortText(text, num) {
     if (text) {
 
         var ancho = $(window).width();
         var caracteres = 1;
         switch (true) {
-            case (ancho > 0 && ancho <= 320):
-                caracteres = Math.floor(num * 0);
-                break;
-            case (ancho >= 321 && ancho <= 425):
-                caracteres = Math.floor(num * 1);
-                break;
-            case (ancho >= 425 && ancho <= 500):
-                caracteres = Math.floor(num * 2);
-                break;
-            case (ancho >= 501 && ancho <= 550):
-                caracteres = Math.floor(num * 3);
-                break;
-            case (ancho >= 551 && ancho <= 600):
-                caracteres = Math.floor(num * 4);
-                break;
+//            case (ancho > 0 && ancho <= 320):
+//                caracteres = Math.floor(num * 0);
+//                break;
+//            case (ancho >= 321 && ancho <= 425):
+//                caracteres = Math.floor(num * 0);
+//                break;
+//            case (ancho >= 425 && ancho <= 500):
+//                caracteres = Math.floor(num * 2);
+//                break;
+//            case (ancho >= 501 && ancho <= 550):
+//                caracteres = Math.floor(num * 3);
+//                break;
+//            case (ancho >= 551 && ancho <= 600):
+//                caracteres = Math.floor(num * 4);
+//                break;
             case (ancho >= 601 && ancho <= 650):
-                caracteres = Math.floor(num * 4.5);
+                caracteres = Math.floor(num * 8.5);
                 break;
             case (ancho >= 651 && ancho <= 700):
-                caracteres = Math.floor(num * 5);
+                caracteres = Math.floor(num * 9.5);
                 break;
-            case (ancho >= 701 && ancho <= 750):    // 766 explota al cambiar la resolucion de la pantalla por algun media 
-                caracteres = Math.floor(num * 5.5);
+            case (ancho >= 701 && ancho <= 750):
+                caracteres = Math.floor(num * 10.5);
                 break;
             case (ancho >= 751 && ancho <= 800):
-                caracteres = Math.floor(num * 6);
+                caracteres = Math.floor(num * 10.5);
                 break;
             case (ancho >= 801 && ancho <= 850):
-                caracteres = Math.floor(num * 6.5);
+                caracteres = Math.floor(num * 10.5);
                 break;
             case (ancho >= 851 && ancho <= 900):
-                caracteres = Math.floor(num * 10);
+                caracteres = Math.floor(num * 11.5);
                 break;
             case (ancho >= 901 && ancho <= 950):
-                caracteres = Math.floor(num * 11);
+                caracteres = Math.floor(num * 12.5);
                 break;
             case (ancho >= 951 && ancho <= 1000):
-                caracteres = Math.floor(num * 12);
+                caracteres = Math.floor(num * 12.5);
                 break;
             case (ancho >= 1001 && ancho <= 1050):
-                caracteres = Math.floor(num * 13);
+                caracteres = Math.floor(num * 13.5);
                 break;
             case (ancho >= 1051 && ancho <= 1100):
-                caracteres = Math.floor(num * 14);
+                caracteres = Math.floor(num * 14.5);
                 break;
             case (ancho >= 1101 && ancho <= 1150):
-                caracteres = Math.floor(num * 15);
+                caracteres = Math.floor(num * 15.5);
                 break;
             case (ancho >= 1151 && ancho <= 1200):
-                caracteres = Math.floor(num * 16);
+                caracteres = Math.floor(num * 16.5);
                 break;
             case (ancho >= 1201 && ancho <= 1250):
-                caracteres = Math.floor(num * 17);
+                caracteres = Math.floor(num * 17.5);
                 break;
             case (ancho >= 1251 && ancho <= 1300):
-                caracteres = Math.floor(num * 18);
+                caracteres = Math.floor(num * 18.5);
                 break;
             case (ancho >= 1301 && ancho <= 1350):
-                caracteres = Math.floor(num * 19);
+                caracteres = Math.floor(num * 19.5);
                 break;
             case (ancho >= 1351 && ancho <= 1400):
-                caracteres = Math.floor(num * 20);
+                caracteres = Math.floor(num * 20.5);
                 break;
             case (ancho >= 1401 && ancho <= 1450):
-                caracteres = Math.floor(num * 21);
+                caracteres = Math.floor(num * 21.5);
                 break;
             case (ancho >= 1451 && ancho <= 1500):
-                caracteres = Math.floor(num * 22);
+                caracteres = Math.floor(num * 22.5);
                 break;
             case (ancho >= 1501 && ancho <= 1550):
-                caracteres = Math.floor(num * 23);
+                caracteres = Math.floor(num * 23.5);
+                break;
+            case (ancho >= 1551 && ancho <= 1600):
+                caracteres = Math.floor(num * 24.5);
+                break;
+            case (ancho >= 1601 && ancho <= 1650):
+                caracteres = Math.floor(num * 25.5);
+                break;
+            case (ancho >= 1651 && ancho <= 1700):
+                caracteres = Math.floor(num * 26.5);
+                break;
+            case (ancho >= 1701 && ancho <= 1750):
+                caracteres = Math.floor(num * 26.5);
+                break;
+            case (ancho >= 1751 && ancho <= 1800):
+                caracteres = Math.floor(num * 27.5);
+                break;
+            case (ancho >= 1801 && ancho <= 1850):
+                caracteres = Math.floor(num * 28.5);
+                break;
+            case (ancho >= 1851 && ancho <= 1900):
+                caracteres = Math.floor(num * 29.5);
+                break;
+            case (ancho >= 1901 && ancho <= 1950):
+                caracteres = Math.floor(num * 30.5);
+                break;
+            case (ancho >= 1951 && ancho <= 2000):
+                caracteres = Math.floor(num * 31.5);
+                break;
+            case (ancho >= 2001 && ancho <= 2050):
+                caracteres = Math.floor(num * 32.5);
+                break;
+            case (ancho >= 2051 && ancho <= 2100):
+                caracteres = Math.floor(num * 33.5);
+                break;
+            case (ancho >= 2101 && ancho <= 2150):
+                caracteres = Math.floor(num * 34.5);
+                break;
+            case (ancho >= 2151 && ancho <= 2200):
+                caracteres = Math.floor(num * 35.5);
+                break;
+            case (ancho >= 2201):
+                caracteres = Math.floor(num * 36.5);
                 break;
 
         }
         // Get num of word
         var textArray = text.substring(0, caracteres);
-        console.log(textArray);
+
 
         return textArray + "...";
 
@@ -288,7 +330,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                         if (layout == 'full') {
                             var events = getEvents(daycounter, monthNum, yearNum);
 
-                            //console.log(events);
+
                             //   events.sort(sortEventsByDate); //TODO: PRUEBA ORDENAR EVENTOS - FALTA HACER FECHAS date() CON LA HORA
                             for (var t = 0; t < events.length; t++) {
 
@@ -394,8 +436,9 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
                                                 '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
                                                 ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
-                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + getShortText(events[t].name, palabrasEvento) +
+                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + "." +
                                                 '</span><\/div>';
+
                                     }
 
                                 } else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
@@ -403,7 +446,9 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                     if (typeof events[t + 1] != "undefined") {  //establece otra condición: si el siguiente elemento del array no es indefinido -> Si el día sgte hay evento
                                         if (typeof tiva_events[events[t + 1].id - 1] != "undefined") { //entonces si el evento de la lista global ordenada inmediatamente anterior al actual
                                             //está definido, la vble. toma el nombre de ese evento inmediatamente anterior acortado
-                                            event_fake = getShortText(tiva_events[events[t + 1].id - 1].name, 2);
+
+//                                            event_fake = getShortText(tiva_events[events[t + 1].id - 1].name, 2);
+                                            event_fake = "no-name";
                                         } else {
                                             event_fake = "no-name";  //si es undefined, la vble. será no-name
                                         }
@@ -934,15 +979,15 @@ function dayDifference(entrada, salida) {
 // and finaly, in days :)
     var timeDifferenceInDays = timeDifferenceInHours / 24;
     return timeDifferenceInDays;
-    console.log(timeDifferenceInDays);
+
 }
 
 jQuery(document).ready(function () {  //TODO: código en $(document).ready()
     // Init calendar full
     if (jQuery('.tiva-events-calendar.full').length) {
         jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
-                + '<span class="bar-btn calendar-view active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
-                + '<span class="bar-btn list-view"><i class="fa fa-list"></i>' + list_view + '</span>'
+                + '<span class="bar-btn calendar-view calendar-btn boton-oculto active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
+                + '<span class="bar-btn list-view calendar-btn  boton-oculto"><i class="fa fa-list"></i>' + list_view + '</span>'
                 + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
@@ -957,8 +1002,8 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
     // Init calendar compact
     if (jQuery('.tiva-events-calendar.compact').length) {
         jQuery('.tiva-events-calendar.compact').html('<div class="events-calendar-bar">'
-                + '<span class="bar-btn calendar-view active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
-                + '<span class="bar-btn list-view"><i class="fa fa-list"></i>' + list_view + '</span>'
+                + '<span class="bar-btn calendar-view calendar-btn active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
+                + '<span class="bar-btn list-view calendar-btn"><i class="fa fa-list"></i>' + list_view + '</span>'
                 + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
@@ -1032,7 +1077,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "day": entrada.FechaInicio.substring(8, 10),
                     "description": entrada.Asunto,
                     "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
-                    "image": "./events/images/corrido_fest_2016.jpg",
+                    "image": "",
                     "location": entrada.Detalles.Direccion,
                     "month": entrada.FechaInicio.substring(5, 7),
                     "name": entrada.Asunto,
@@ -1045,7 +1090,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                 if (!evento.duration) {
                     evento.duration = 1;
                 }
-                //  evento.id=  j;
+
                 var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
 
 
@@ -1061,25 +1106,20 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
             }
 
 
-//				for (var i = 0; i < data.length; i++) {
-//					var event_date = new Date(data[i].year, Number(data[i].month) - 1, data[i].day);
-//					data[i].date = event_date.getTime();
-//					tiva_events.push(data[i]);
-//				}
-//				
-//				// Sort events by date
-//				tiva_events.sort(sortEventsByDate);
-//				
-//				for (var j = 0; j < tiva_events.length; j++) {
-//					tiva_events[j].id = j;
-//					if (!tiva_events[j].duration) {
-//						tiva_events[j].duration = 1;
-//					}
-//				}
-//						
             // Create calendar
             changedate('current', 'full');
-            changedate('current', 'compact');
+            //  changedate('current', 'compact'); crea el calendario en forma compacta
+            if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta 
+            //    $(".calendar-btn").addClass("boton-oculto");
+                $(".list-view").click();
+                returnView = "lista";
+//       
+
+            }else{
+                $(".calendar-btn").removeClass("boton-oculto");
+        
+            }
+
 
             jQuery('.tiva-events-calendar').each(function (index) {
                 // Initial view
@@ -1101,6 +1141,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
 
         jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
         jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').addClass('active');
+        returnView = "calendario";
     });
 
     // Click - List view btn
@@ -1112,6 +1153,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
 
         jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').removeClass('active');
         jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
+        returnView = "lista";
 
         var layout = jQuery(this).parents('.tiva-events-calendar').attr('class') ? jQuery(this).parents('.tiva-events-calendar').attr('class') : 'full';
         var max_events = jQuery(this).parents('.tiva-events-calendar').attr('data-events') ? jQuery(this).parents('.tiva-events-calendar').attr('data-events') : 1000;
@@ -1127,8 +1169,9 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
         jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
 
-        var initial_view = (typeof jQuery(this).parents('.tiva-events-calendar').attr('data-view') != "undefined") ? jQuery(this).parents('.tiva-events-calendar').attr('data-view') : 'calendar';
-        if (initial_view == 'calendar') {
+        //var initial_view = (typeof jQuery(this).parents('.tiva-events-calendar').attr('data-view') != "undefined") ? jQuery(this).parents('.tiva-events-calendar').attr('data-view') : 'calendar';
+//        if (initial_view == 'calendar') {
+        if (returnView === "calendario") {
             jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(1500);
 
             jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
@@ -1140,5 +1183,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
             jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
         }
     });
+
+
 
 });

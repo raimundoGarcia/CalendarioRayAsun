@@ -2,8 +2,8 @@
    
         {
             "Pedido": "P1-8/1900",
-            "FechaInicio": "2018-03-21T12:30:00+02:00",
-            "FechaFin": "2018-03-21T12:00:00+02:00",
+            "FechaInicio": "2018-03-21T08:30:00+02:00",
+            "FechaFin": "2018-03-26T12:00:00+02:00",
             "Tipo": "HT",
             "Destino": "Valencia",
             "Asunto":"Reserva de Hotel Valencia blabla blabla blabla blabla blabla blabla ",
@@ -43,8 +43,8 @@
         },
         {
             "Pedido": "P1-8/1900",
-            "FechaInicio": "2018-03-21T10:00:00+02:00",
-            "FechaFin": "2018-03-22T11:00:00+02:00",
+            "FechaInicio": "2018-03-21T03:00:00+02:00",
+            "FechaFin": "2018-03-25T11:00:00+02:00",
             "Tipo": "AV",
             "Destino": "Valencia",
             "Asunto":"Reserva de vuelo VLC-CDG blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla",
@@ -88,8 +88,8 @@
         },
             {
             "Pedido": "P1-80/1900",
-            "FechaInicio": "2018-03-21T11:00:00+02:00",
-            "FechaFin": "2018-03-23T11:00:00+02:00",
+            "FechaInicio": "2018-03-21T04:00:00+02:00",
+            "FechaFin": "2018-03-24T11:00:00+02:00",
             "Tipo": "RC",
             "Destino": "Denia",
             "Asunto":"Reserva de coche Valencia  blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla",
@@ -133,8 +133,8 @@
         },
          {
             "Pedido": "P1-99/1900",
-            "FechaInicio": "2018-03-21T23:00:00+02:00",
-            "FechaFin": "2018-03-24T11:00:00+02:00",
+            "FechaInicio": "2018-03-21T05:00:00+02:00",
+            "FechaFin": "2018-03-23T11:00:00+02:00",
             "Tipo": "AV",
             "Destino": "Salamanca",
             "Asunto":"Reserva de vuelo Salamanca blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla",
@@ -178,11 +178,543 @@
         },
             {
             "Pedido": "P2-30/1900",
-            "FechaInicio": "2018-03-21T18:00:00+02:00",
+            "FechaInicio": "2018-03-21T06:00:00+02:00",
+            "FechaFin": "2018-03-22T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },
+        {
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-23T16:00:00+02:00",
+            "FechaFin": "2018-03-23T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },
+        {
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-22T17:00:00+02:00",
+            "FechaFin": "2018-03-23T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },
+        {
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-24T18:00:00+02:00",
+            "FechaFin": "2018-03-24T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-24T22:00:00+02:00",
             "FechaFin": "2018-03-25T11:00:00+02:00",
             "Tipo": "AV",
             "Destino": "Tarragona",
             "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-20T21:00:00+02:00",
+            "FechaFin": "2018-03-22T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-20T15:00:00+02:00",
+            "FechaFin": "2018-03-23T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-25T09:00:00+02:00",
+            "FechaFin": "2018-03-26T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-21T07:00:00+02:00",
+            "FechaFin": "2018-03-24T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"14:30 Vlc-Mdr",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-22T06:00:00+02:00",
+            "FechaFin": "2018-03-27T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-19T06:00:00+02:00",
+            "FechaFin": "2018-03-22T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"Reserva de vuelo Tarragona adfasdf adfasd fasdfa sdfasd fasdfa sdfasdfa sdddddddd dddddddddd ddddddddddd dddddddddd dddddddddddd ddddddddddddddd dddddddddddd",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },{
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-26T05:00:00+02:00",
+            "FechaFin": "2018-03-26T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"14:30 VLC-MDR",
+            "viajeros": [
+                {
+                    "id": "18000",
+                    "nombre": "Nombre y Apellidos 1"
+                }
+            ],
+            "Detalles": {
+                "Compañia": "Iberia",
+                "latitud": "3.45678",
+                "longitud": "-0.23456",
+                "Direccion": "Avda. del puerto, 34 46001 Valencia España",
+                "Localizador": "ZYFGRD",
+                "Tramos": [
+                    {
+                        "Salida": "Madrid",
+                        "Llegada": "Palma de Mallorca"
+                    },
+                    {
+                        "Salida": "Palma de Mallorca",
+                        "Llegada": "Valencia"
+                    }
+                ],
+                "Adjuntos": [
+                    {
+                        "id": "20002",
+                        "Nombre": "Nombre del archivo.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    },
+                    {
+                        "id": "20003",
+                        "Nombre": "Nombre del archivo1.pdf",
+                        "tipo": "pdf",
+                        "contenido": "ssssssssssssssssssssssssssssssssssssssss"
+                    }
+                ]
+            }
+        },
+        {
+            "Pedido": "P2-30/1900",
+            "FechaInicio": "2018-03-27T05:00:00+02:00",
+            "FechaFin": "2018-03-28T11:00:00+02:00",
+            "Tipo": "AV",
+            "Destino": "Tarragona",
+            "Asunto":"PRUEBA DE TEXTO CON MAYUSCULAS dddddd ddddddddddddddd dddddddddddd",
             "viajeros": [
                 {
                     "id": "18000",
