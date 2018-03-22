@@ -171,7 +171,20 @@
             </div>
             <!-- Central Modal Fluid -->
            
-					
+            <!-- BOTON PRUEBAS -->
+            
+           <br/> <button  id="googlesearchvuelo" class="btn btn-danger">DETALLES VUELO</button>
+           <script>
+               //BUSQUEDA VUELO GOOGLE
+               window.onload = function(){
+                   
+                 var q = "ux2006 "+"2018/03/21";
+                
+                document.getElementById("googlesearchvuelo").onclick = function(){
+                  window.open('http://www.google.com/search?q='+ q);  
+                };  
+               }; 
+            </script>
 		
         </body>
 </html>
