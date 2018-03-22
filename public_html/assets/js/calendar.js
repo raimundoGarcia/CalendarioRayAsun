@@ -149,9 +149,10 @@ function getShortText(text, num) {
                 break;
 
         }
-        // Get num of word
+        // Get num of caracters
+        console.log(text);
         var textArray = text.substring(0, caracteres);
-
+        console.log(textArray);
 
         return textArray + "...";
 
@@ -429,14 +430,13 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
                                     if (event_class === "first-day" || event_class === "one-day") {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
-                                                '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
-                                                ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
-                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + events[t].icono + '&nbsp;' + getShortText(events[t].name, palabrasEvento) +
+                                                ' \" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
+                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + events[t].icono + '&nbsp;' +
+                                                getShortText(events[t].name, palabrasEvento).replace("-", '<i class="fas fa-arrow-right"></i>') + //limita el número de caractres y cambia el "-" por una ->
                                                 '</span><\/div>';
                                     } else {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
-                                                '\" onmouseover=\"showTooltip(' + events[t].id + ', \'full\', ' + daycounter + ', ' + monthNum + ', ' + yearNum +
-                                                ', this)\" onmouseout=\"clearTooltip(\'full\', this)\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
+                                                '\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
                                                 daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + "." +
                                                 '</span><\/div>';
 
@@ -688,7 +688,7 @@ function showEventList(layout, max_events) {
 
             // Event time
             if (tiva_list_events[i].time) {
-                var event_time = '<i class="fa fa-clock-o"></i>' + tiva_list_events[i].time;
+                var event_time = '<i class="far fa-clock"></i>' + tiva_list_events[i].time;
             } else {
                 var event_time = '';
             }
@@ -783,7 +783,7 @@ function showEventDetail(id, layout, day, month, year) {
     jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide();
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
-    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(1500);
+    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
 
     jQuery('.tiva-events-calendar.' + layout + ' .list-view').removeClass('active');
     jQuery('.tiva-events-calendar.' + layout + ' .calendar-view').removeClass('active');
@@ -1045,8 +1045,10 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
     }
 
     jQuery.ajax({
-        url: "./events/ejemplo_agenda.json",
+        // url: "./events/ejemplo_agenda.json",
+        url: "http://192.168.0.250:5556/api/Calendario",
         dataType: 'json',
+        type: "GET",
         beforeSend: function () {
             jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
         },
@@ -1057,22 +1059,52 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                 var color = "1";
                 tipo = entrada.Tipo;
                 var icono = '<i class="fas fa-asterisk"></i>';
-                // Asigna un color a cada evento, dependiendo del tipo de evento 
+                // Asigna un color y un icono a cada evento, dependiendo del tipo de evento 
                 switch (tipo) {
-                    case "AV":
+                    case "Aereo":
                         color = "1";
                         icono = '<i class="fas fa-plane"></i>';
                         break;
-                    case "HT":
+                    case "Hotel":
                         color = "2";
+                        icono = '<i class="fas fa-h-square"></i>';
+                        break;
+                    case "Tren":
+                        color = "4";
+                        icono = '<i class="fas fa-train"></i>';
+                        break;
+                    case "Barco":
+                        color = "5";
+                        icono = '<i class="fas fa-ship"></i>';
+                        break;
+                    case "Coche":
+                        color = "6";
+                        icono = '<i class="fas fa-car"></i>';
+                        break;
+                    case "Otros":
+                        color = "6";
+                        icono = '<i class="fas fa-asterisk"></i>';
+                        break;
+                    case "Parking":
+                        color = "7";
+                        icono = '<i class="fas fa-asterisk"></i>';
+                        break;
+                    case "Seguro":
+                        color = "8";
                         icono = '<i class="fas fa-asterisk"></i>';
                         break;
                     default:
-                        color = "3";
+                        color = "9";
                         icono = '<i class="fas fa-asterisk"></i>';
                         break;
 
                 }
+                //conversión de el Asunto ( Añadir el icono de la flecha en vez de la flecha con guiones ) 
+                var fragmentosAsunto = entrada.Asunto.split(" ");
+                var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                console.log(asunto);
+                
+                // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
                 evento = {
 
                     "color": color,
@@ -1082,7 +1114,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "image": "",
                     "location": entrada.Detalles.Direccion,
                     "month": entrada.FechaInicio.substring(5, 7),
-                    "name": entrada.Asunto,
+                    "name": asunto,
                     "time": timeTo12HrFormat(entrada.FechaInicio.substring(11, 16)),
                     "year": entrada.FechaInicio.substring(0, 4),
                     "_icono": icono,
@@ -1112,14 +1144,13 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
             changedate('current', 'full');
             //  changedate('current', 'compact'); crea el calendario en forma compacta
             if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta 
-            //    $(".calendar-btn").addClass("boton-oculto");
                 $(".list-view").click();
                 returnView = "lista";
-//       
 
-            }else{
+
+            } else {
                 $(".calendar-btn").removeClass("boton-oculto");
-        
+
             }
 
 
@@ -1139,7 +1170,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
         jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').hide();
         jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(1500);
+        jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(500);
 
         jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
         jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').addClass('active');
@@ -1151,7 +1182,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
         jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').hide();
         jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(1500);
+        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(500);
 
         jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').removeClass('active');
         jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
@@ -1174,12 +1205,12 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
         //var initial_view = (typeof jQuery(this).parents('.tiva-events-calendar').attr('data-view') != "undefined") ? jQuery(this).parents('.tiva-events-calendar').attr('data-view') : 'calendar';
 //        if (initial_view == 'calendar') {
         if (returnView === "calendario") {
-            jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(1500);
+            jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(500);
 
             jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
             jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').addClass('active');
         } else {
-            jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(1500);
+            jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(500);
 
             jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').removeClass('active');
             jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
