@@ -47,7 +47,9 @@
 
             <!-- MODAL MDB -->
        
-       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalLG">Large </button>
+       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalLG">FichaDetalle </button>
+       <br>
+       <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#centralModalFluid">FichaLista </button>
                           
        
         <!-- Central Modal Large -->
@@ -120,7 +122,54 @@
             </div>
             <!-- Central Modal Large -->
             
-       
+            <!-- Central Modal Fluid -->
+            <div class="modal fade" id="centralModalFluid" tabindex="-1" role="dialog" aria-labelledby="myModalLabelF" aria-hidden="true">
+                <div class="modal-dialog modal-fluid" role="document">
+                    <!--Content-->
+                    <div class="modal-content">
+                         <!--Header-->
+                        <div class="modal-header tren">
+                            <h4 class="modal-title w-100" id="myModalLabel"> <i class="fas fa-train fa-2x"></i> BILLETE TREN (Asunto)</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <!--  <span aria-hidden="true">&times;</span> -->
+                            </button>
+                        </div>
+                        <!--Body-->
+                        <div class="modal-body modal-cuerpo">
+                            <div class="modal-content">
+                                <div class="view logo"> <img src="assets/images/logorenfeinverso.png" alt="Logo Renfe"/></div> 
+
+                                <div class="horario">
+                                    <div class="origen"> 
+                                        <div class="ciudad">ORIGEN</div>
+                                        <div class="fecha">dd/mm/aaaa</div>
+                                        <div class="hora">hh:mm</div> 
+                                    </div>
+                                    <div class="linea"></div>
+                                    <div class="destino"> 
+                                        <div class="ciudad">DESTINO</div>
+                                        <div class="fecha">dd/mm/aaaa</div>
+                                        <div class="hora">hh:mm</div>    
+                                    </div>
+                                </div>
+                                <div class="descripcion">
+                                    <h4>Descripción:</h4>
+                                    <!-- <div class="listaviajeros">COMPARTE CON: </div> -->
+                                </div>
+                                                                              
+                               
+                            </div>
+                        </div>
+                        <!--Footer-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Ver</button>
+                            <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->
+                        </div>
+                    </div>
+                    <!--/.Content-->
+                </div>
+            </div>
+            <!-- Central Modal Fluid -->
            
 					
 		
