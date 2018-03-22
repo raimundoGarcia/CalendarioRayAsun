@@ -404,7 +404,7 @@ body{
         height: 40px;
     }
     .horario{
-    border: 1px solid #e2e2e2;
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -414,16 +414,17 @@ body{
 
 
 .logo{
-  /*  border: 3px solid #e2e2e2; */
+  
     width: 150px;
     height: 80px;
+    padding: 5px;
 }
 .logo img{
     width: 100%;
     height: auto;
 }
 .horario{
-    border: 1px solid #e2e2e2;
+    
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -475,7 +476,7 @@ body{
     padding: 10px;
 }
 .listaviajeros{
-    border: 1px solid #e2e2e2;
+    
     padding: 10px;
 }
 .ubicacion{
@@ -486,11 +487,11 @@ body{
 
 }
 .adjuntos{
-    border: 1px solid #e2e2e2;
+   
     padding: 10px;
 }
 .ics{
-    border: 1px solid #e2e2e2;
+   
     padding: 10px;
 }
 
@@ -509,7 +510,7 @@ body{
 }
 
 .tren{
-    background-color: green;
+    background-color: #9cb162;
 }
 
 .hotel{
@@ -524,7 +525,31 @@ body{
     background-color: #2bbbad;
 }
 
+.info-clima{
+    padding: 5px;
+}
 
+.info-lugar{
+    padding: 5px;
+}
+
+.info-interes{
+    padding: 10px;
+    
+}
+
+/*MODIFICACIONES CLASES MDB*/
+
+.btn{
+    border-radius: 2px !important;
+}
+.modal-content{
+    border-radius: 2px !important;
+    padding: 10px !important;
+}
+modal-body{
+    border-radius: 2px !important;
+}
 
 /*CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA*/
 
