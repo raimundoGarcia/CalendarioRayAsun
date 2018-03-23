@@ -688,7 +688,7 @@ function showEventList(layout, max_events) {
 
             // Event time
             if (tiva_list_events[i].time) {
-                var event_time = '<i class="far fa-clock"></i>' + tiva_list_events[i].time;
+                var event_time = '<i class="far fa-clock"></i>&nbsp;&nbsp;' + tiva_list_events[i].time;
             } else {
                 var event_time = '';
             }
@@ -699,20 +699,70 @@ function showEventList(layout, max_events) {
             } else {
                 var event_image = '';
             }
-
-            jQuery('.tiva-event-list-full').append('<div class="event-item">'
-                    + '<div class="event-item-left pull-left">'
-                    + '<div class="event-image link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' + event_image + '</div>'
-                    + '</div>'
-                    + '<div class="event-item-right pull-left">'
-                    + '<div class="event-name link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' + tiva_list_events[i].name + '</div>'
-                    + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
-                    + '<div class="event-time">' + event_time + '</div>'
-                    + '<div class="event-intro">' + getShortText(tiva_list_events[i].description, 25) + '</div>'
-                    + '</div>'
-                    + '</div>'
-                    + '<div class="cleardiv"></div>'
-                    );
+            
+            var today = new Date;
+           
+            var resta =(day.getTime()- today.getTime());
+            console.log(resta);
+           if (resta >= 0){
+               alert("lista presente/futuro");
+           }else{
+               alert("lista pasado");
+           }
+            jQuery('.tiva-event-list-full').append('<div class="listado-eventos">' +
+                    '<div class="list__event" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
+                    '<div class="event__cabecera color-' + tiva_list_events[i].color + ' " >' +
+                     tiva_list_events[i]._icono +
+                    tiva_list_events[i].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5) +'</div>'+
+                    '<div class=event__fecha><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time +'</div>'+
+                    '<div class=event__hora>' + event_time + '</div>'+
+                    '<div class=event__ubicacion> RELLENAR CUANDO ESTE EN LA API</div>'+
+                 
+                    '</div>' +
+                    '</div>');
+            ////'<div class="event-item">' +
+//                    '  <div class="card" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
+//                    ' <div class="card-header  color-' + tiva_list_events[i].color + ' lighten-1 white-text">' + tiva_list_events[i]._icono +
+//                    tiva_list_events[i].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5) + '</div>' +
+//                    ' <div class="card-body"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time +
+//                    '    <h4 class="card-title">' + event_time + '</h4>' +
+//                    '  <p class="card-text"> Ubicación: cambiar por ubicacion real (tiva_list_events[i].ubicacion</p>' +
+//                    ' </div>' +
+//                    '</div>');
+//                    + '<div class="event-item-right pull-left">'
+//                    + '<div class="event-name link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' + tiva_list_events[i].name + '</div>'
+//                    + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
+//                    + '<div class="event-time">' + event_time + '</div>'
+//                    + '<div class="event-intro">' + getShortText(tiva_list_events[i].description, 25) + '</div>'
+//                    + '</div>'
+//                    + '</div>'
+//                    + '<div class="cleardiv"></div>'
+//                    );
+//                    ' <div class="lista__item"> ' +
+//                    '         <div class=" modal-fluid" role="document">' +
+//                    '            <!--Content-->' +
+//                    '           <div class="modal-content">' +
+//                    '             <!--Header-->' +
+//                    '             <div class="modal-header  color-' + tiva_list_events[i].color + '">' +
+//                    '                <h4 class="modal-title w-100">' + tiva_list_events[i]._icono +
+//                    tiva_list_events[i].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5) + ' </h4>' +
+//                    '           </div>' +
+//                    '  <!--Body-->' +
+//                    '         <div class="modal-body modal-cuerpo">' +
+//                    '             <div class="modal-content">' +
+//                    '                <div class="horario">  ' +
+//                    '               </div>' +
+//                    '              <div class="descripcion">' +
+//                    '                 <h4>Descripción:</h4>' +
+//                    '   <!-- <div class="listaviajeros">COMPARTE CON: </div> -->' +
+//                    '            </div>' +
+//                    '       </div>' +
+//                    '  </div>' +
+//                    '   <!--Footer-->' +
+//                    ' </div>' +
+//                    '  <!--/.Content-->' +
+//                    '      </div>' +
+//                    '   </div>');
         }
     } else {
         /*
@@ -1046,13 +1096,14 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
 
     jQuery.ajax({
         // url: "./events/ejemplo_agenda.json",
-        url: "http://192.168.0.250:5556/api/Calendario",
+        url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2",
         dataType: 'json',
         type: "GET",
         beforeSend: function () {
             jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
         },
         success: function (entradas) {
+            console.log(entradas);
             j = -1; //contador para asignar las IP a los eventos
             entradas.forEach(entrada => {
                 j++;
@@ -1103,19 +1154,19 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                 var fragmentosAsunto = entrada.Asunto.split(" ");
                 var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
                 console.log(asunto);
-                
+
                 // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
                 evento = {
 
                     "color": color,
                     "day": entrada.FechaInicio.substring(8, 10),
-                    "description": entrada.Asunto,
+                    "description": "",
                     "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
                     "image": "",
                     "location": entrada.Detalles.Direccion,
                     "month": entrada.FechaInicio.substring(5, 7),
                     "name": asunto,
-                    "time": timeTo12HrFormat(entrada.FechaInicio.substring(11, 16)),
+                    "time": entrada.FechaInicio.substring(11, 16),
                     "year": entrada.FechaInicio.substring(0, 4),
                     "_icono": icono,
                     "_tipo": entrada.Tipo
@@ -1146,7 +1197,6 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
             if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta 
                 $(".list-view").click();
                 returnView = "lista";
-
 
             } else {
                 $(".calendar-btn").removeClass("boton-oculto");

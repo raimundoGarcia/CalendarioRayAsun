@@ -111,16 +111,19 @@
     visibility: hidden;
     background-color: red;
 }
-.tiva-calendar-full .calendar-event-name.color-1 {
+/*.tiva-calendar-full .calendar-event-name.color-1 {
+    background: #567BD2;
+}*/
+.color-1{
     background: #567BD2;
 }
-.tiva-calendar-full .calendar-event-name.color-2 {
+.color-2 {
     background: #13baff;
 }
-.tiva-calendar-full .calendar-event-name.color-3 {
+.color-3 {
     background: #669933;
 }
-.tiva-calendar-full .calendar-event-name.color-4 {
+.color-4 {
     background: #ff8a23;
 }
 .tiva-calendar-full .calendar-event-name.first-day {
@@ -181,27 +184,27 @@
     max-width: 650%; 
 }
 @media (max-width:700px){*/
-    .maxlength-1 {
-        max-width:100%;
-    }
-    .maxlength-2 {
-        max-width: 180%;
-    }
-    .maxlength-3 {
-        max-width:250%; 
-    }
-    .maxlength-4 {
-        max-width:350%; 
-    }
-    .maxlength-5 {
-        max-width: 450%; 
-    }
-     .maxlength-6 {
-        max-width: 550%;
-    }
-    .maxlength-7 {
-        max-width: 650%; 
-    }
+.maxlength-1 {
+    max-width:100%;
+}
+.maxlength-2 {
+    max-width: 180%;
+}
+.maxlength-3 {
+    max-width:250%; 
+}
+.maxlength-4 {
+    max-width:350%; 
+}
+.maxlength-5 {
+    max-width: 450%; 
+}
+.maxlength-6 {
+    max-width: 550%;
+}
+.maxlength-7 {
+    max-width: 650%; 
+}
 
 /*///////////// ! DIv length ////////////////////////*/
 .tiva-calendar-full .calendar-event-name.middle-day {
@@ -210,7 +213,7 @@
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
- 
+
 }
 .tiva-calendar-full .calendar-event-name.middle-day span {
     opacity: 0;	
@@ -230,7 +233,7 @@
 
 /* Event list */
 .tiva-event-list-full {
-    padding: 15px;
+
     background: #eeeeee;
     display: none;
 }
@@ -344,7 +347,7 @@
 /* Responsive */
 @media (min-width: 768px) {
     .tiva-event-list-full .event-item-left {
-       margin-right: 2% !important;
+         margin-right: 2% !important;
     }
     .tiva-event-list-full .event-item-left.pull-left, .tiva-event-list-full .event-item-right.pull-left {
         float: left !important;
@@ -362,28 +365,22 @@
     }
     .tiva-event-list-full .event-item-left {
         margin-bottom: 10px !important;
-       
-        
-        
+
+
+
     }
     .tiva-event-list-full .event-item-left, .tiva-event-list-full .event-item-right {
         width: 100%;
     }
 }
 .container{
-     width: auto !important;
+    width: 100vw !important;
+    padding-left: 2vw !important;
+    padding-right:  2vw !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
-@media(max-width:768px){
-.container{
-   
-   padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-body{
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-}
+
 .boton-oculto{
     display: none !important;
     visibility: hidden !important;
@@ -394,7 +391,7 @@ body{
 
 
 @media (max-width: 768px ){  /*Para que en móviles se vea la ventana modal de detalles centrada*/
-    
+
     #centralModalLG{
         padding-left: 0px;
         position-left: 0px;
@@ -404,17 +401,17 @@ body{
         height: 40px;
     }
     .horario{
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 }
 
 
 .logo{
-  
+
     width: 150px;
     height: 80px;
     padding: 5px;
@@ -424,7 +421,7 @@ body{
     height: auto;
 }
 .horario{
-    
+
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -433,20 +430,20 @@ body{
 }
 
 .ciudad, .fecha, .hora{
-   padding: 2px; 
-   margin: 2px;
+    padding: 2px; 
+    margin: 2px;
 }
 
 .ciudad{
-    
+
 }
 
 .fecha{
-    
+
 }
 
 .hora{
-    
+
 }
 
 .origen, .destino{
@@ -466,41 +463,41 @@ body{
     width: 300px;
     border: 1px solid green;
     background-color: green;
-    
+
     margin: 5px;
-    
+
 }
 
 .descripcion{
-   /* border: 1px solid #e2e2e2; */
+    /* border: 1px solid #e2e2e2; */
     padding: 10px;
 }
 .listaviajeros{
-    
+
     padding: 10px;
 }
 .ubicacion{
-  /*  border: 1px solid #e2e2e2; */
+    /*  border: 1px solid #e2e2e2; */
     padding: 10px;
 }
 .ubicacion-maps{
 
 }
 .adjuntos{
-   
+
     padding: 10px;
 }
 .ics{
-   
+
     padding: 10px;
 }
 
 .imgpdf{
-   padding: 10px;
+    padding: 10px;
 }
 
 .pdf{
-     object-fit: contain;
+    object-fit: contain;
 }
 
 /*COLORES FONDO TÍTULO FICHA*/
@@ -535,7 +532,7 @@ body{
 
 .info-interes{
     padding: 10px;
-    
+
 }
 
 /*MODIFICACIONES CLASES MDB*/
@@ -551,7 +548,7 @@ modal-body{
     border-radius: 2px !important;
 }
 
-/*CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA*/
+CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 
 .modal-footer .btn+.btn {
     margin: 2.5rem !important;
@@ -564,5 +561,58 @@ modal-body{
 .modal-title{
     color: white;
     padding: 5px;
+
+}
+
+/* CLASES LISTA DE EVENTOS */
+
+.lista__item{
+    
+    width: 100vw;
+
+    height: 100%;
+   
+    /*  padding-left: 15px;*/
+}
+/*.events-calendar-bar{
+    padding-left: 15px;
+}*/
+
+/*@media(max-width:768px){
+    .lista__item{
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+}*/
+@media (max-width: 767px){
+    body {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }}
+
+.prueba-ancho{
+    width: 96vw;
+    height: 500vh;
+    background-color: red;
      
+}
+
+/* CONFIGUARCION DE LOS EVENTOS EN FORMATO LISTA */
+
+.list__event{
+    margin-top: 1vh;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 1vh 1vw;
+    text-align: center;
+    
+}
+.event__cabecera{
+    border-radius: 5px;
+    color:white;
+    height: 4vh;
+    font-size: 3vh;
+}
+.event__fecha, .event__hora, .event__ubicacion{
+    font-size: 2vh;
 }
