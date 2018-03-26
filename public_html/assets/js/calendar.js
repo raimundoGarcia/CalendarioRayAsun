@@ -431,9 +431,14 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                     if (event_class === "first-day" || event_class === "one-day") {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
                                                 ' \" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
-                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' + events[t].icono + '&nbsp;' +
-                                                getShortText(events[t].name, palabrasEvento).replace("-", '<i class="fas fa-arrow-right"></i>') + //limita el número de caractres y cambia el "-" por una ->
+                                                daycounter + ', ' + monthNum + ', ' + yearNum + ')\"> <span class="event-name"  >' +
+                                                formatCabecera(events[t].name, events[t].tipo, "calendario", palabrasEvento) +
+                                                //    getShortText(events[t].name, palabrasEvento).replace("-", '<i class="fas fa-arrow-right"></i>') + //limita el número de caractres y cambia el "-" por una ->
                                                 '</span><\/div>';
+                                        console.log(events[t].name);
+                                        console.log(events[t].tipo);
+                                        console.log(palabrasEvento);
+                                        console.log(formatCabecera(events[t].name, events[t].tipo, "calendario", palabrasEvento));
                                     } else {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
                                                 '\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
@@ -552,7 +557,7 @@ function getEvents(day, month, year) {
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) {
             var first_day = (start_date.getTime() == date_check.getTime()) ? true : false;
             var last_day = (end_date.getTime() == date_check.getTime()) ? true : false;
-            var event = {id: tiva_events[i].id, name: tiva_events[i].name, first_day: first_day, last_day: last_day, color: tiva_events[i].color, icono: tiva_events[i]._icono, tipo: tiva_events[i]._tipo}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
+            var event = {id: tiva_events[i].id, name: tiva_events[i].name, first_day: first_day, last_day: last_day, color: tiva_events[i].color, tipo: tiva_events[i]._tipo}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
 
             if (!first_day) {
                 n = getOrderNumber(tiva_events[i].id, tiva_events[i].day, tiva_events[i].month, tiva_events[i].year);
@@ -699,27 +704,27 @@ function showEventList(layout, max_events) {
             } else {
                 var event_image = '';
             }
-            
+
             var today = new Date;
-           
-            var resta =(day.getTime()- today.getTime());
+
+            var resta = (day.getTime() - today.getTime());
             console.log(resta);
-           if (resta >= 0){
-               alert("lista presente/futuro");
-           }else{
-               alert("lista pasado");
-           }
+            if (resta >= 0) {
+                console.log("lista presente/futuro");
+            } else {
+                console.log("lista pasado");
+            }
             jQuery('.tiva-event-list-full').append('<div class="listado-eventos">' +
                     '<div class="list__event" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
                     '<div class="event__cabecera color-' + tiva_list_events[i].color + ' " >' +
-                     tiva_list_events[i]._icono +
-                    tiva_list_events[i].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5) +'</div>'+
-                    '<div class=event__fecha><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time +'</div>'+
-                    '<div class=event__hora>' + event_time + '</div>'+
-                    '<div class=event__ubicacion> RELLENAR CUANDO ESTE EN LA API</div>'+
-                 
+                    formatCabecera(tiva_list_events[i].name, tiva_list_events[i]._tipo, "lista", null) +
+                    '</div>' +
+                    '<div class=event__fecha><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time + '</div>' +
+                    '<div class=event__hora>' + event_time + '</div>' +
+                    '<div class=event__ubicacion> RELLENAR CUANDO ESTE EN LA API</div>' +
                     '</div>' +
                     '</div>');
+
             ////'<div class="event-item">' +
 //                    '  <div class="card" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
 //                    ' <div class="card-header  color-' + tiva_list_events[i].color + ' lighten-1 white-text">' + tiva_list_events[i]._icono +
@@ -826,6 +831,118 @@ function showEventList(layout, max_events) {
          }
          */
     }
+}
+function formatCabecera(asunto, tipo, formato, maxCaracter) {
+    var texto = "";
+    switch (formato) {
+        case "calendario":
+            switch (tipo) {
+                case "Aereo":
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-plane"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
+                    break;
+                case "Hotel":
+                    texto = '<i class="fas fa-h-square"></i>&nbsp;' + getShortText(asunto, maxCaracter);
+                    break;
+                case "Tren":
+
+                    break;
+                case "Barco":
+
+                    break;
+                case "Coche":
+
+                    break;
+                case "Otros":
+
+                    break;
+                case "Parking":
+
+                    break;
+                case "Seguro":
+
+                    break;
+                default:
+
+                    break;
+            }
+            break;
+        case "lista":
+            switch (tipo) {
+                case "Aereo":
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5);
+                    break;
+                case "Hotel":
+                    texto = '<i class="fas fa-h-square"></i>&nbsp;' + asunto;
+
+                    break;
+                case "Tren":
+                    //    '<i class="fas fa-train"></i>';
+
+                    break;
+                case "Barco":
+                    //  '<i class="fas fa-ship"></i>'
+                    break;
+                case "Coche":
+                    //   '<i class="fas fa-car"></i>'
+                    break;
+                case "Otros":
+                    // '<i class="fas fa-asterisk"></i>'
+                    break;
+                case "Parking":
+
+                    break;
+                case "Seguro":
+
+                    break;
+                default:
+
+                    break;
+            }
+            break;
+
+        case "modal":
+            switch (tipo) {
+                case "Aereo":
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5);
+                    break;
+                case "Hotel":
+                    texto = '<i class="fas fa-h-square"></i>&nbsp;' + asunto;
+                    break;
+                case "Tren":
+
+                    break;
+                case "Barco":
+
+                    break;
+                case "Coche":
+
+                    break;
+                case "Otros":
+
+                    break;
+                case "Parking":
+
+                    break;
+                case "Seguro":
+
+                    break;
+                default:
+
+                    break;
+            }
+            break;
+
+        default:
+
+            break;
+    }
+    return texto;
 }
 
 // Show event detail TODO: mostrar detalles de los eventos
@@ -1109,51 +1226,40 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                 j++;
                 var color = "1";
                 tipo = entrada.Tipo;
-                var icono = '<i class="fas fa-asterisk"></i>';
-                // Asigna un color y un icono a cada evento, dependiendo del tipo de evento 
+               
+                // Asigna un color  cada evento, dependiendo del tipo de evento 
                 switch (tipo) {
                     case "Aereo":
                         color = "1";
-                        icono = '<i class="fas fa-plane"></i>';
                         break;
                     case "Hotel":
                         color = "2";
-                        icono = '<i class="fas fa-h-square"></i>';
                         break;
                     case "Tren":
                         color = "4";
-                        icono = '<i class="fas fa-train"></i>';
                         break;
                     case "Barco":
                         color = "5";
-                        icono = '<i class="fas fa-ship"></i>';
                         break;
                     case "Coche":
                         color = "6";
-                        icono = '<i class="fas fa-car"></i>';
                         break;
                     case "Otros":
                         color = "6";
-                        icono = '<i class="fas fa-asterisk"></i>';
                         break;
                     case "Parking":
                         color = "7";
-                        icono = '<i class="fas fa-asterisk"></i>';
                         break;
                     case "Seguro":
                         color = "8";
-                        icono = '<i class="fas fa-asterisk"></i>';
                         break;
                     default:
                         color = "9";
-                        icono = '<i class="fas fa-asterisk"></i>';
                         break;
 
                 }
-                //conversión de el Asunto ( Añadir el icono de la flecha en vez de la flecha con guiones ) 
-                var fragmentosAsunto = entrada.Asunto.split(" ");
-                var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
-                console.log(asunto);
+            
+
 
                 // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
                 evento = {
@@ -1165,10 +1271,9 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "image": "",
                     "location": entrada.Detalles.Direccion,
                     "month": entrada.FechaInicio.substring(5, 7),
-                    "name": asunto,
+                    "name": entrada.Asunto,
                     "time": entrada.FechaInicio.substring(11, 16),
                     "year": entrada.FechaInicio.substring(0, 4),
-                    "_icono": icono,
                     "_tipo": entrada.Tipo
                 };
 

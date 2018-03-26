@@ -605,6 +605,7 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     border: 1px solid black;
     padding: 1vh 1vw;
     text-align: center;
+    box-shadow: 0.3vw 0.3vw #999999;
     
 }
 .event__cabecera{
