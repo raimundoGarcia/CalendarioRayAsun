@@ -47,19 +47,19 @@
 
             <!-- MODAL MDB -->
        
-       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalLG">FichaDetalle </button>
+    <!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalLG">FichaDetalle </button>
        <br>
-       <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#centralModalFluid">FichaLista </button>
+       <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#centralModalFluid">FichaLista </button> -->
                           
        
         <!-- Central Modal Large -->
-            <div class="modal fade" id="centralModalLG" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <!--Content-->
                     <div class="modal-content">
                         <!--Header-->
-                        <div class="modal-header tren">
-                            <h4 class="modal-title w-100" id="myModalLabel"> <i class="fas fa-train fa-2x"></i> BILLETE TREN (Asunto)</h4>
+                        <div id="asunto" class="modal-header">
+                            <h4 class="modal-title w-100"></h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <!--  <span aria-hidden="true">&times;</span> -->
                             </button>
@@ -67,24 +67,36 @@
                         <!--Body-->
                         <div class="modal-body modal-cuerpo">
                             <div class="modal-content">
-                                <div class="view logo"> <img src="assets/images/logorenfeinverso.png" alt="Logo Renfe"/></div> 
+                                <div class="view logo"></div> 
 
                                 <div class="horario">
                                     <div class="origen"> 
-                                        <div class="ciudad">ORIGEN</div>
-                                        <div class="fecha">dd/mm/aaaa</div>
-                                        <div class="hora">hh:mm</div> 
+                                        <div id="ciudad-o" class="ciudad-o">ORIGEN</div>
+                                        <div id="fecha-o" class="fecha-o">dd/mm/aaaa</div>
+                                        <div id="hora-o" class="hora-o">hh:mm</div> 
                                     </div>
                                     <div class="linea"></div>
                                     <div class="destino"> 
-                                        <div class="ciudad">DESTINO</div>
-                                        <div class="fecha">dd/mm/aaaa</div>
-                                        <div class="hora">hh:mm</div>    
+                                        <div id="ciudad-d" class="ciudad-d">DESTINO</div>
+                                        <div id="fecha-d" class="fecha-d">dd/mm/aaaa</div>
+                                        <div id="hora-d" class="hora-d">hh:mm</div>    
                                     </div>
                                 </div>
                                 <div class="descripcion">
                                     <h4>Descripción:</h4>
-                                    <!-- <div class="listaviajeros">COMPARTE CON: </div> -->
+                                        <h5 id="numpedido"> </h5>
+                                        <h5 id="localizador"> </h5>
+                                        <div id="descripcion" >
+                                        
+                                    </div>
+                                    
+                                    <div class="seguirvuelo">
+                                        <br/> <button  id="googlesearchvuelo" class="btn btn-success">Seguimiento online</button>
+                                    </div> 
+                                    
+                                    <div id="compartecon" class="listaviajeros">
+                                        
+                                    </div>
                                 </div>
                                 
                                 <div class="ubicacion">
@@ -100,10 +112,8 @@
                                 <div class="adjuntos">
                                     <h4>Documentos adjuntos:</h4>
                                     <!--    <div><i class="far fa-file-pdf"></i></div> -->
-                                    <div class="imgpdf">
-                                        <a href="">
-                                            <img class="pdf" src="assets/images/pdf-2127829_960_720.png" alt="" >
-                                        </a>
+                                    <div id="docs" class="docs">
+                                        
                                     </div>
                                 </div>
                                 <div class="ics">
@@ -129,7 +139,7 @@
                     <div class="modal-content">
                          <!--Header-->
                         <div class="modal-header tren">
-                            <h4 class="modal-title w-100" id="myModalLabel"> <i class="fas fa-train fa-2x"></i> BILLETE TREN (Asunto)</h4>
+                            <h4 class="modal-title w-100" id="myModalLabel"> <i class="fas fa-train fa-2x"></i>  (Asunto)</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <!--  <span aria-hidden="true">&times;</span> -->
                             </button>
@@ -173,8 +183,7 @@
            
             <!-- BOTON PRUEBAS -->
             
-           <br/> <button  id="googlesearchvuelo" class="btn btn-danger">DETALLES VUELO</button>
-           <script>
+            <script>
                //BUSQUEDA VUELO GOOGLE
                window.onload = function(){
                    

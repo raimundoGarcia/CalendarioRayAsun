@@ -947,8 +947,8 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
-    jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
-    jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide();
+  /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
+    jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); */
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
 
@@ -1014,7 +1014,7 @@ function showEventDetail(id, layout, day, month, year) {
         } else {
             var event_desc = '';
         }
-
+/*
         jQuery('.tiva-event-detail-full').html('<div class="event-item">'
                 + '<div class="event-image">' + event_image + '</div>'
                 + '<div class="event-name">' + tiva_events[id].name + '</div>'
@@ -1024,8 +1024,69 @@ function showEventDetail(id, layout, day, month, year) {
                 + event_desc
                 + '</div>'
                 );
-    } else {
-        jQuery('.tiva-event-detail-compact').html('');
+*/
+
+//RELLENAR Y MOSTRAR VENTANA MODAL //TODO: MODAL
+        var tipoReserva = tiva_events[id]._tipo; //Aereo , Hotel
+        var icon = tiva_events[id]._icono;
+        var colorfondo = tiva_events[id].color;
+        console.log(colorfondo);
+     //  var listadoclases = document.getElementById("asunto").classList; //TODO: CAMBIAR FONDO ASUNTO SEGÚN COLOR DE EVENTO
+     //  listadoclases.add(colorfondo);
+        document.getElementById("numpedido").innerHTML = "Referencia: " + tiva_events[id]._refPedido + "<br/>";
+        document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
+        document.getElementById("descripcion").innerHTML = ""; //reservado para incluir la descripción o apartados de la reserva que se quieran mostrar
+        //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva //TODO: PONER FUNCIONES DE RAI
+        document.getElementById("asunto").innerHTML = icon + " " + tiva_events[id].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5); 
+        
+        if (tipoReserva == "Aereo"){
+            document.getElementById("googlesearchvuelo").style.display = "block";
+            //TODO:buscar logo companyia aerea
+            document.getElementById("ciudad-o").innerHTML = tiva_events[id]._ciudadOrigen;
+            document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
+            document.getElementById("hora-o").innerHTML = tiva_events[id].time;
+            document.getElementById("ciudad-d").innerHTML = tiva_events[id]._ciudadDestino;
+            document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
+            document.getElementById("hora-d").innerHTML = tiva_events[id]._horaFin;
+            
+        }else{ //POSIBLE IF o SWITCH CON OTRAS OPCIONES QUE DIFIERAN
+            document.getElementById("googlesearchvuelo").style.display = "none";
+            document.getElementById("ciudad-o").innerHTML = "ENTRADA";
+            document.getElementById("ciudad-d").innerHTML = "SALIDA";
+            document.getElementById("hora-o").innerHTML = "" ;   //tiva_events[id].time
+            document.getElementById("hora-d").innerHTML = "" ; //tiva_events[id]._horaFin
+            document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
+            document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
+            
+            tiva_events[id]._direccion;
+        }
+            
+        
+        if(tiva_events[id]._adjuntos.length && tiva_events[id]._adjuntos[0].Tipo !== null){ //el vector de adjuntos siempre tiene al menos una posición, aunque sea nula
+            
+            var adjuntos = "";
+            var numdocs = tiva_events[id]._adjuntos.length;
+                        
+            for(n=0; n<numdocs; n++){
+                var tipodoc = tiva_events[id]._adjuntos[n].Tipo; //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
+                adjuntos += '<a id='+tiva_events[id]._adjuntos[n].idAdjunto+' href=""><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
+                console.log(tiva_events[id]._adjuntos[n].idAdjunto);
+            }
+           
+           
+            document.getElementById("docs").innerHTML = adjuntos;
+            
+        }else{
+            
+            document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar";  //TODO: REVISAR NO ADJUNTOS, AVISO
+        }
+            
+        
+      // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA
+       $("#fichaDetalle").modal("show");
+
+    } else { //compacto
+ /*       jQuery('.tiva-event-detail-compact').html('');
         if (day && month && year) {
             var events = getEvents(day, month, year);
         } else {
@@ -1101,8 +1162,9 @@ function showEventDetail(id, layout, day, month, year) {
                         + event_desc
                         + '</div>'
                         );
+
             }
-        }
+        }  */
     }
 }
 
@@ -1274,7 +1336,25 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "name": entrada.Asunto,
                     "time": entrada.FechaInicio.substring(11, 16),
                     "year": entrada.FechaInicio.substring(0, 4),
-                    "_tipo": entrada.Tipo
+                    "_icono": icono,
+                    "_tipo": entrada.Tipo,
+                    "_refPedido": entrada.idPedido,  //numero de referencia - hay otro campo que es idServicio 
+                    "_ciudadOrigen": entrada.Detalles.SalidaCiudad,
+                    "_ciudadDestino": entrada.Detalles.LlegadaCiudad,
+                    "_diaFin": entrada.FechaFin.substring(8, 10),
+                    "_mesFin": entrada.FechaFin.substring(5, 7),
+                    "_anyoFin": entrada.FechaFin.substring(0, 4),
+                    "_horaFin": entrada.FechaFin.substring(11, 16),
+                    "_adjuntos": entrada.Detalles.Adjuntos,  //array
+                                       
+                    //para hotel
+                    "_direccion": entrada.Detalles.Direccion,
+                    "_nombreHotel": entrada.Detalles.NombreHotel,
+                    "_latitud": entrada.Detalles.Latitud,
+                    "_longitud": entrada.Detalles.Longitud,
+                    "_regimen": entrada.Detalles.Regimen,
+                    "_tipohabita": entrada.Detalles.TipoHabitacion,
+                    "_localizador": entrada.Detalles.Localizador
                 };
 
                 if (!evento.duration) {

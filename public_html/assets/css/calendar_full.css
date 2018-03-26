@@ -500,7 +500,7 @@
     object-fit: contain;
 }
 
-/*COLORES FONDO TÍTULO FICHA*/
+/*COLORES FONDO TÍTULO FICHA
 
 .vuelo{
     background-color: #13baff;
@@ -521,7 +521,7 @@
 .otros{
     background-color: #2bbbad;
 }
-
+*/
 .info-clima{
     padding: 5px;
 }
@@ -535,6 +535,9 @@
 
 }
 
+.seguirvuelo{
+    margin-right: 10px;
+}
 /*MODIFICACIONES CLASES MDB*/
 
 .btn{
@@ -597,6 +600,7 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
      
 }
 
+
 /* CONFIGUARCION DE LOS EVENTOS EN FORMATO LISTA */
 
 .list__event{
@@ -616,4 +620,5 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 }
 .event__fecha, .event__hora, .event__ubicacion{
     font-size: 2vh;
+
 }
