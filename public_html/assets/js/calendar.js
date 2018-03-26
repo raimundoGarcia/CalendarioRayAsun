@@ -1108,7 +1108,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
 
     jQuery.ajax({
         // url: "./events/ejemplo_agenda.json",
-        url: "http://192.168.0.250:5556/api/Calendario",
+        url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2",
         dataType: 'json',
         type: "GET",
         beforeSend: function () {
