@@ -780,8 +780,8 @@ function showEventList(layout, max_events) {
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
-    jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
-    jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide();
+  /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
+    jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); */
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
 
