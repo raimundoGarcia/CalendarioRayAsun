@@ -1028,7 +1028,7 @@ function showEventDetail(id, layout, day, month, year) {
 
 //RELLENAR Y MOSTRAR VENTANA MODAL //TODO: MODAL
         var tipoReserva = tiva_events[id]._tipo; //Aereo , Hotel
-        var icon = tiva_events[id]._icono;
+       
         var colorfondo = tiva_events[id].color;
         console.log(colorfondo);
      //  var listadoclases = document.getElementById("asunto").classList; //TODO: CAMBIAR FONDO ASUNTO SEGÚN COLOR DE EVENTO
@@ -1037,7 +1037,7 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
         document.getElementById("descripcion").innerHTML = ""; //reservado para incluir la descripción o apartados de la reserva que se quieran mostrar
         //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva //TODO: PONER FUNCIONES DE RAI
-        document.getElementById("asunto").innerHTML = icon + " " + tiva_events[id].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5); 
+        document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal",null); 
         
         if (tipoReserva == "Aereo"){
             document.getElementById("googlesearchvuelo").style.display = "block";
@@ -1336,7 +1336,6 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "name": entrada.Asunto,
                     "time": entrada.FechaInicio.substring(11, 16),
                     "year": entrada.FechaInicio.substring(0, 4),
-                    "_icono": icono,
                     "_tipo": entrada.Tipo,
                     "_refPedido": entrada.idPedido,  //numero de referencia - hay otro campo que es idServicio 
                     "_ciudadOrigen": entrada.Detalles.SalidaCiudad,
