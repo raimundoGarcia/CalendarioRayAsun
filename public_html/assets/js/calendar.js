@@ -1028,11 +1028,12 @@ function showEventDetail(id, layout, day, month, year) {
 
 //RELLENAR Y MOSTRAR VENTANA MODAL //TODO: MODAL
         var tipoReserva = tiva_events[id]._tipo; //Aereo , Hotel
-       
         var colorfondo = tiva_events[id].color;
-        console.log(colorfondo);
-     //  var listadoclases = document.getElementById("asunto").classList; //TODO: CAMBIAR FONDO ASUNTO SEGÚN COLOR DE EVENTO
-     //  listadoclases.add(colorfondo);
+        //Colorear cabecera ventana según tipo reserva
+        var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
+        document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
+        document.getElementById("asunto").classList.add("color-" + colorfondo);
+       
         document.getElementById("numpedido").innerHTML = "Referencia: " + tiva_events[id]._refPedido + "<br/>";
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
         document.getElementById("descripcion").innerHTML = ""; //reservado para incluir la descripción o apartados de la reserva que se quieran mostrar
