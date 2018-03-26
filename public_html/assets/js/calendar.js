@@ -1034,15 +1034,29 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
         document.getElementById("asunto").classList.add("color-" + colorfondo);
        
-        document.getElementById("numpedido").innerHTML = "Referencia: " + tiva_events[id]._refPedido + "<br/>";
+       // document.getElementById("numpedido").innerHTML = "Referencia: " + tiva_events[id]._refPedido + "<br/>";
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
         document.getElementById("descripcion").innerHTML = ""; //reservado para incluir la descripción o apartados de la reserva que se quieran mostrar
         //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva //TODO: PONER FUNCIONES DE RAI
         document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal",null); 
-        
+          
         if (tipoReserva == "Aereo"){
             document.getElementById("googlesearchvuelo").style.display = "block";
+            var codigoV = tiva_events[id]._NVuelo;
+            var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo
             //TODO:buscar logo companyia aerea
+            codigoV = codigoV.replace("/",""); //para buscador google
+            
+            document.getElementById("numvuelo").innerHTML = codigoV;
+            
+            //funcionalidad botón seguimiento vuelo online google
+        
+            var q = codigoV + " " +( tiva_events[id].year + "/" +  tiva_events[id].month + "/" + tiva_events[id].day );
+
+            document.getElementById("googlesearchvuelo").onclick = function(){
+              window.open('http://www.google.com/search?q='+ q);  
+            };  
+            
             document.getElementById("ciudad-o").innerHTML = tiva_events[id]._ciudadOrigen;
             document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
             document.getElementById("hora-o").innerHTML = tiva_events[id].time;
@@ -1070,13 +1084,13 @@ function showEventDetail(id, layout, day, month, year) {
                         
             for(n=0; n<numdocs; n++){
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo; //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
-                adjuntos += '<a id='+tiva_events[id]._adjuntos[n].idAdjunto+' href=""><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
+                adjuntos += '<a id='+tiva_events[id]._adjuntos[n].idAdjunto+' class="linkadjunto" href=""><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
                 console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
            
            
             document.getElementById("docs").innerHTML = adjuntos;
-            
+                        
         }else{
             
             document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar";  //TODO: REVISAR NO ADJUNTOS, AVISO
@@ -1346,6 +1360,9 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "_anyoFin": entrada.FechaFin.substring(0, 4),
                     "_horaFin": entrada.FechaFin.substring(11, 16),
                     "_adjuntos": entrada.Detalles.Adjuntos,  //array
+                    
+                   //para Vuelo
+                   "_NVuelo": entrada.Detalles.NVuelo,
                                        
                     //para hotel
                     "_direccion": entrada.Detalles.Direccion,

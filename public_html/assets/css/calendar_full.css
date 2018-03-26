@@ -392,28 +392,41 @@
 
 @media (max-width: 768px ){  /*Para que en móviles se vea la ventana modal de detalles centrada*/
 
-    #centralModalLG{
-        padding-left: 0px;
-        position-left: 0px;
+    #fichaDetalle{
+      /*  padding-left: 0px;
+        position-left: 0px; */
     }
-    .logo{
-        width: 75px;
-        height: 40px;
-    }
+    
     .horario{
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column !important;  /*lo aplica hasta 691px*/ 
     }
 }
 
+#fichaDetalle{
+     padding-left: 0px !important;
+     padding-right: 0px !important; 
+    }
+
+.topcontent{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+   justify-content: space-around;
+    align-items: center;
+}
+
+.numvuelo{
+    padding: 2px;
+    font-weight: bold;
+    
+}
 
 .logo{
-
-    width: 150px;
-    height: 80px;
+    border: 1px solid grey;
+    margin-right: auto;
+    width: 10vw;
+    height: 5vw;
     padding: 5px;
 }
 .logo img{
@@ -421,34 +434,22 @@
     height: auto;
 }
 .horario{
-
+    margin-top: 10px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: wrap; 
     justify-content: center;
     align-items: center;
 }
 
-.ciudad, .fecha, .hora{
+.ciudad-o, .fecha-o, .hora-o,.ciudad-d, .fecha-d, .hora-d{
     padding: 2px; 
     margin: 2px;
-}
-
-.ciudad{
-
-}
-
-.fecha{
-
-}
-
-.hora{
-
+    font-size: 2vh;
 }
 
 .origen, .destino{
     /* border: 1px solid #e2e2e2; */
-    font-size: 18px;
     font-weight: bold;
     padding: 5px;
     display: flex;
@@ -460,14 +461,13 @@
 
 .linea{
     height: 2px;
-    width: 300px;
+    width: 20vh;
     border: 1px solid green;
     background-color: green;
-
     margin: 5px;
 
 }
-
+ 
 .descripcion{
     /* border: 1px solid #e2e2e2; */
     padding: 10px;
@@ -500,28 +500,6 @@
     object-fit: contain;
 }
 
-/*COLORES FONDO TÍTULO FICHA
-
-.vuelo{
-    background-color: #13baff;
-}
-
-.tren{
-    background-color: #9cb162;
-}
-
-.hotel{
-    background-color: orange;
-}
-
-.vehiculo{
-    background-color: orchid;
-}
-
-.otros{
-    background-color: #2bbbad;
-}
-*/
 .info-clima{
     padding: 5px;
 }
@@ -538,10 +516,16 @@
 .seguirvuelo{
     margin-right: 10px;
 }
+
+.textoboton{
+    font-size: 1.25vh !important;
+}
+
 /*MODIFICACIONES CLASES MDB*/
 
 .btn{
     border-radius: 2px !important;
+    margin: 0vw !important;
 }
 .modal-content{
     border-radius: 2px !important;
@@ -565,6 +549,11 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     color: white;
     padding: 5px;
 
+}
+
+.modal-header{
+      font-size: 3vh;
+      color: white;
 }
 
 /* CLASES LISTA DE EVENTOS */
@@ -618,7 +607,7 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     height: 4vh;
     font-size: 3vh;
 }
-.event__fecha, .event__hora, .event__ubicacion{
+.event__fecha, .event__hora, .event__ubicacion, .numvuelo, .origen, .destino, .h4 {
     font-size: 2vh;
 
 }
