@@ -1076,7 +1076,7 @@ function showEventDetail(id, layout, day, month, year) {
             tiva_events[id]._direccion;
         }
             
-        
+        //GESTIÓN DE LOS ADJUNTOS
         if(tiva_events[id]._adjuntos.length && tiva_events[id]._adjuntos[0].Tipo !== null){ //el vector de adjuntos siempre tiene al menos una posición, aunque sea nula
             
             var adjuntos = "";
@@ -1084,13 +1084,43 @@ function showEventDetail(id, layout, day, month, year) {
                         
             for(n=0; n<numdocs; n++){
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo; //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
-                adjuntos += '<a id='+tiva_events[id]._adjuntos[n].idAdjunto+' class="linkadjunto" href=""><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
+                var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
+                adjuntos += '<a id=' + idadjunto + ' class="linkadjunto" href="#"><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
                 console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
            
            
             document.getElementById("docs").innerHTML = adjuntos;
+            
+            var arrayAdjuntos = $('img.mimeType');
+            console.log(arrayAdjuntos);
+            
+            $.each(arrayAdjuntos, function(idx,val){  //para cada elemento de la clase linkadjunto
+                
+                var numadjunto = $(this).parent().attr("id");
+                console.log(numadjunto);
+                
+                $(this).click( function(){ //sintaxis clases delegadas sin punto
+                
+        /*       var numadjunto =  $(this).parent().id;
+               console.log(numadjunto);
+                
+                $.ajax({
+                    
+                    url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto ,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(churro){
                         
+                        console.log(churro);
+                    }
+                    
+                    
+                });  */
+                
+            });
+          });   
+                                
         }else{
             
             document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar";  //TODO: REVISAR NO ADJUNTOS, AVISO
