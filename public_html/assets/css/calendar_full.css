@@ -503,7 +503,7 @@ body{
      object-fit: contain;
 }
 
-/*COLORES FONDO TÍTULO FICHA*/
+/*COLORES FONDO TÍTULO FICHA
 
 .vuelo{
     background-color: #13baff;
@@ -524,7 +524,7 @@ body{
 .otros{
     background-color: #2bbbad;
 }
-
+*/
 .info-clima{
     padding: 5px;
 }
@@ -536,6 +536,10 @@ body{
 .info-interes{
     padding: 10px;
     
+}
+
+.seguirvuelo{
+    margin-right: 10px;
 }
 
 /*MODIFICACIONES CLASES MDB*/
@@ -565,4 +569,7 @@ modal-body{
     color: white;
     padding: 5px;
      
+}
+.modal{
+    height: 100vh !important;
 }
