@@ -846,13 +846,20 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
                     texto = '<i class="fas fa-h-square"></i>&nbsp;' + getShortText(asunto, maxCaracter);
                     break;
                 case "Tren":
-
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-train"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
                     break;
                 case "Barco":
-
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-ship"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
                     break;
-                case "Coche":
 
+                case "Coche":
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-car"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
                     break;
                 case "Otros":
 
@@ -944,6 +951,18 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
     }
     return texto;
 }
+
+//función deshabilitar enlace de <a>  y anyadir este atributo a la etiqueta: onclick="deshabilitar(this)"
+        
+        function deshabilitar( link ){
+            link.style.pointerEvents = 'none';
+            link.style.color = '#bbb';
+
+            setTimeout(function(){
+                link.style.pointerEvents = null;
+                link.style.color = 'blue';
+            }, 3000);
+        }
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
@@ -1117,43 +1136,46 @@ function showEventDetail(id, layout, day, month, year) {
             for(n=0; n<numdocs; n++){
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
                 var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
-                adjuntos += '<a id=' + idadjunto + ' class="linkadjunto" href="#"><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
+                adjuntos += '<a id=' + idadjunto + ' class="linkadjunto" href=""><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
                 console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
                       
             document.getElementById("docs").innerHTML = adjuntos;
             
-            var arrayAdjuntos = $('img.mimeType');
+            var arrayAdjuntos = $('a.linkadjunto');
             console.log(arrayAdjuntos);
             
             $.each(arrayAdjuntos, function(idx,val){  //para cada elemento de la clase linkadjunto
                 
-                var numadjunto = $(this).parent().attr("id");
+                var numadjunto = $(this).attr("id");
                 console.log(numadjunto);
                 
                 $(this).click( function(){ 
                                
-                $.ajax({
-                    
-                    url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto ,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(churro){
-                        
-                        console.log(churro);
-                        window.open(churro, "Archivo Adjunto");
-                        
-                        
-                    },
-                    error: function(){
-                        console.log("Se ha producido un error API adjuntos u otra causa.");
-                    }
-                    
-                    
-                }); 
+                        $.ajax({
+
+                            url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto ,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(churro){
+
+                              console.log(churro);
+                                
+                           //    function abrirUrlAdjunto(churro){
+                                   window.open(churro, "Archivo Adjunto", "width:500, height:500");
+                            //   };
+
+                               // $(this).attr("href", "javascript:"+ abrirUrlAdjunto(churro) );
+                            },
+                            error: function(){
+                                console.log("Se ha producido un error API adjuntos u otra causa.");
+                            }
+
+
+                        }); 
                 
-            });
-          });   
+                });  
+            });   
                                 
         }else if(tiva_events[id]._adjuntos == null || tiva_events[id]._adjuntos == 'undefined'){
             
