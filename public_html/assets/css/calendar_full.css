@@ -88,7 +88,7 @@
 }
 .tiva-calendar-full .calendar-event-name {
     color: #ffffff;
-    background: #567BD2;
+    /*background: #567BD2;*/
     font-size: 11px;
     margin-top: 5px;
     text-align: left;
@@ -115,16 +115,31 @@
     background: #567BD2;
 }*/
 .color-1{
-    background: #567BD2;
+    background-color:  #40d4e2;
 }
 .color-2 {
-    background: #13baff;
+    background-color: #12a652;
 }
 .color-3 {
-    background: #669933;
+    background-color: #5311af;
 }
 .color-4 {
-    background: #ff8a23;
+    background-color: #1440ad;
+}
+.color-5{
+    background:#cb0b22;
+}
+.color-6{
+    background:greenyellow;
+}
+.color-7{
+    background:purple;
+}
+.color-8{
+    background:brown;
+}
+.color-9{
+    background:pink;
 }
 .tiva-calendar-full .calendar-event-name.first-day {
     margin-right: -11px;
@@ -379,6 +394,13 @@
     padding-right:  2vw !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    
+}
+@media (max-aspect-ratio: 1/1){
+    .container{
+        overflow:scroll;
+        
+    }
 }
 
 .boton-oculto{
@@ -621,4 +643,14 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 .event__fecha, .event__hora, .event__ubicacion{
     font-size: 2vh;
 
+}
+.listado-eventos-pendientes{
+    display:block;
+}
+.listado-eventos-terminados{
+    display:none;
+}
+/* DATE PICKER */
+.datepicker{
+    width: 30vw;
 }

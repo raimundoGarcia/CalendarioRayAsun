@@ -150,9 +150,9 @@ function getShortText(text, num) {
 
         }
         // Get num of caracters
-        console.log(text);
+
         var textArray = text.substring(0, caracteres);
-        console.log(textArray);
+
 
         return textArray + "...";
 
@@ -378,7 +378,8 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                             break;
                                         case "first-day":
                                             // Delimita el máximo de palabras que puede mostrar un evento y el tamaño del div, según la duración del evento
-                                            duracion = tiva_events[t].duration;
+                                           var duracion = events[t].duracion;
+                                          
                                             palabrasSegunDuracion = duracion;
 
                                             divSize = " length-" + duracion;
@@ -416,6 +417,10 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                     divMaxSegunDiaSemana = 1;
                                                     maxDiv = 1;
                                                     break;
+                                                default:
+                                                    divMaxSegunDiaSemana = 1;
+                                                    maxDiv = 1;
+                                                    break;
                                             }
                                             maxDiv = " maxlength-" + Math.min(duracion, maxDiv);
                                             break;
@@ -435,10 +440,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                 formatCabecera(events[t].name, events[t].tipo, "calendario", palabrasEvento) +
                                                 //    getShortText(events[t].name, palabrasEvento).replace("-", '<i class="fas fa-arrow-right"></i>') + //limita el número de caractres y cambia el "-" por una ->
                                                 '</span><\/div>';
-                                        console.log(events[t].name);
-                                        console.log(events[t].tipo);
-                                        console.log(palabrasEvento);
-                                        console.log(formatCabecera(events[t].name, events[t].tipo, "calendario", palabrasEvento));
+
                                     } else {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
                                                 '\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
@@ -521,7 +523,8 @@ function getOrderNumber(id, day, month, year) {  //TODO OBTIENE EL NÚMERO
         var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1); //FECHA FIN EVENTO = fecha inicio + duración - 1
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) { //si la FECHA ACTUAL está entre la INICIO y la FIN del evento
             var first_day = (start_date.getTime() == date_check.getTime()) ? true : false; //si la fecha inicio coincide con la fecha actual, first_day es TRUE
-            var event = {id: tiva_events[i].id, name: tiva_events[i].name, day: tiva_events[i].day, month: tiva_events[i].month, year: tiva_events[i].year, first_day: first_day}; //se crea el evento  y se insertará en la lista
+            var event = {id: tiva_events[i].id, name: tiva_events[i].name, day: tiva_events[i].day, month: tiva_events[i].month,
+                year: tiva_events[i].year, first_day: first_day}; //se crea el evento  y se insertará en la lista
             events.push(event);
         }
     }
@@ -557,7 +560,7 @@ function getEvents(day, month, year) {
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) {
             var first_day = (start_date.getTime() == date_check.getTime()) ? true : false;
             var last_day = (end_date.getTime() == date_check.getTime()) ? true : false;
-            var event = {id: tiva_events[i].id, name: tiva_events[i].name, first_day: first_day, last_day: last_day, color: tiva_events[i].color, tipo: tiva_events[i]._tipo}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
+            var event = {id: tiva_events[i].id, name: tiva_events[i].name, first_day: first_day, last_day: last_day, color: tiva_events[i].color, tipo: tiva_events[i]._tipo, duracion:tiva_events[i].duration}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
 
             if (!first_day) {
                 n = getOrderNumber(tiva_events[i].id, tiva_events[i].day, tiva_events[i].month, tiva_events[i].year);
@@ -659,6 +662,23 @@ function showEventList(layout, max_events) {
 
     if (layout == 'full') {
         jQuery('.tiva-event-list-full').html('');
+        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-pendientes">');
+        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-terminados">');
+        jQuery('.tiva-event-list-full').append('<button id="cambiarEventos" class="btn btn-primary">Eventos pasados/pendientes</button>');
+        $("#cambiarEventos").on("click", function () {
+
+            if ($(".listado-eventos-pendientes").css("display") === "none") {
+
+                $(".listado-eventos-pendientes").css("display", "block");
+                $(".listado-eventos-terminados").css("display", "none");
+            } else {
+
+                $(".listado-eventos-pendientes").css("display", "none");
+                $(".listado-eventos-terminados").css("display", "block");
+            }
+        });
+
+
         for (var i = 0; i < tiva_list_events.length; i++) {
             // Start date
             var day = new Date(tiva_list_events[i].year, Number(tiva_list_events[i].month) - 1, tiva_list_events[i].day);
@@ -705,25 +725,28 @@ function showEventList(layout, max_events) {
                 var event_image = '';
             }
 
-            var today = new Date;
 
-            var resta = (day.getTime() - today.getTime());
-            console.log(resta);
-            if (resta >= 0) {
-                console.log("lista presente/futuro");
-            } else {
-                console.log("lista pasado");
-            }
-            jQuery('.tiva-event-list-full').append('<div class="listado-eventos">' +
-                    '<div class="list__event" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
+
+            var eventoListado = '<div class="list__event" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
                     '<div class="event__cabecera color-' + tiva_list_events[i].color + ' " >' +
                     formatCabecera(tiva_list_events[i].name, tiva_list_events[i]._tipo, "lista", null) +
                     '</div>' +
                     '<div class=event__fecha><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time + '</div>' +
                     '<div class=event__hora>' + event_time + '</div>' +
-                    '<div class=event__ubicacion> RELLENAR CUANDO ESTE EN LA API</div>' +
-                    '</div>' +
-                    '</div>');
+                    '<div class=event__ubicacion>' + tiva_list_events[i]._ubicacion + '</div>' +
+                    '</div>';
+            var today = new Date;
+
+            var ultimoDia = Date.parse(tiva_list_events[i]._fechaFin);
+
+            var resta = (ultimoDia - today.getTime());
+
+//            if (resta >= 0) {
+            $(".listado-eventos-pendientes").append(eventoListado);
+//            } else {
+//                $(".listado-eventos-terminados").append(eventoListado);
+//            }
+
 
             ////'<div class="event-item">' +
 //                    '  <div class="card" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
@@ -846,14 +869,25 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
                     texto = '<i class="fas fa-h-square"></i>&nbsp;' + getShortText(asunto, maxCaracter);
                     break;
                 case "Tren":
-
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-train"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
                     break;
                 case "Barco":
+//                    var fragmentosAsunto = asunto.split(" ");
+//                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+//                    texto = '<i class="fas fa-ship"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
+                    asunto.replace("-->", "-");
 
+                    texto = '<i class="fas fa-ship"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
                     break;
+
                 case "Coche":
-
+                    var fragmentosAsunto = asunto.split(" ");
+                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
+                    texto = '<i class="fas fa-car"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
                     break;
+
                 case "Otros":
 
                     break;
@@ -871,23 +905,19 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
         case "lista":
             switch (tipo) {
                 case "Aereo":
-                    var fragmentosAsunto = asunto.split(" ");
-                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
-                    texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5);
+                    texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-- >", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
                 case "Hotel":
                     texto = '<i class="fas fa-h-square"></i>&nbsp;' + asunto;
-
                     break;
                 case "Tren":
-                    //    '<i class="fas fa-train"></i>';
-
+                    texto = '<i class="fas fa-train"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>');
                     break;
                 case "Barco":
-                    //  '<i class="fas fa-ship"></i>'
+                    texto = '<i class="fas fa-ship"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
                 case "Coche":
-                    //   '<i class="fas fa-car"></i>'
+                    texto = '<i class="fas fa-car"></i>&nbsp;' + asunto.substring(8);
                     break;
                 case "Otros":
                     // '<i class="fas fa-asterisk"></i>'
@@ -907,21 +937,19 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
         case "modal":
             switch (tipo) {
                 case "Aereo":
-                    var fragmentosAsunto = asunto.split(" ");
-                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
-                    texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5);
+                    texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-- >", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
                 case "Hotel":
                     texto = '<i class="fas fa-h-square"></i>&nbsp;' + asunto;
                     break;
                 case "Tren":
-
+                    texto = '<i class="fas fa-train"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>');
                     break;
                 case "Barco":
-
+                    texto = '<i class="fas fa-ship"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
                 case "Coche":
-
+                    texto = '<i class="fas fa-car"></i>&nbsp;' + asunto.substring(8);
                     break;
                 case "Otros":
 
@@ -947,8 +975,8 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
-  /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
-    jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); */
+    /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
+     jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); */
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
 
@@ -1014,17 +1042,17 @@ function showEventDetail(id, layout, day, month, year) {
         } else {
             var event_desc = '';
         }
-/*
-        jQuery('.tiva-event-detail-full').html('<div class="event-item">'
-                + '<div class="event-image">' + event_image + '</div>'
-                + '<div class="event-name">' + tiva_events[id].name + '</div>'
-                + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
-                + '<div class="event-time">' + event_time + '</div>'
-                + '<div class="event-location">' + event_location + '</div>'
-                + event_desc
-                + '</div>'
-                );
-*/
+        /*
+         jQuery('.tiva-event-detail-full').html('<div class="event-item">'
+         + '<div class="event-image">' + event_image + '</div>'
+         + '<div class="event-name">' + tiva_events[id].name + '</div>'
+         + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
+         + '<div class="event-time">' + event_time + '</div>'
+         + '<div class="event-location">' + event_location + '</div>'
+         + event_desc
+         + '</div>'
+         );
+         */
 
 //RELLENAR Y MOSTRAR VENTANA MODAL //TODO: MODAL
         var tipoReserva = tiva_events[id]._tipo; //Aereo , Hotel
@@ -1033,14 +1061,14 @@ function showEventDetail(id, layout, day, month, year) {
         var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
         document.getElementById("asunto").classList.add("color-" + colorfondo);
-       
+
         document.getElementById("numpedido").innerHTML = "Referencia: " + tiva_events[id]._refPedido + "<br/>";
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
         document.getElementById("descripcion").innerHTML = ""; //reservado para incluir la descripción o apartados de la reserva que se quieran mostrar
         //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva //TODO: PONER FUNCIONES DE RAI
-        document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal",null); 
-        
-        if (tipoReserva == "Aereo"){
+        document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal", null);
+
+        if (tipoReserva == "Aereo") {
             document.getElementById("googlesearchvuelo").style.display = "block";
             //TODO:buscar logo companyia aerea
             document.getElementById("ciudad-o").innerHTML = tiva_events[id]._ciudadOrigen;
@@ -1049,123 +1077,123 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("ciudad-d").innerHTML = tiva_events[id]._ciudadDestino;
             document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
             document.getElementById("hora-d").innerHTML = tiva_events[id]._horaFin;
-            
-        }else{ //POSIBLE IF o SWITCH CON OTRAS OPCIONES QUE DIFIERAN
+
+        } else { //POSIBLE IF o SWITCH CON OTRAS OPCIONES QUE DIFIERAN
             document.getElementById("googlesearchvuelo").style.display = "none";
             document.getElementById("ciudad-o").innerHTML = "ENTRADA";
             document.getElementById("ciudad-d").innerHTML = "SALIDA";
-            document.getElementById("hora-o").innerHTML = "" ;   //tiva_events[id].time
-            document.getElementById("hora-d").innerHTML = "" ; //tiva_events[id]._horaFin
+            document.getElementById("hora-o").innerHTML = "";   //tiva_events[id].time
+            document.getElementById("hora-d").innerHTML = ""; //tiva_events[id]._horaFin
             document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
             document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
-            
+
             tiva_events[id]._direccion;
         }
-            
-        
-        if(tiva_events[id]._adjuntos.length && tiva_events[id]._adjuntos[0].Tipo !== null){ //el vector de adjuntos siempre tiene al menos una posición, aunque sea nula
-            
+
+
+        if (tiva_events[id]._adjuntos.length && tiva_events[id]._adjuntos[0].Tipo !== null) { //el vector de adjuntos siempre tiene al menos una posición, aunque sea nula
+
             var adjuntos = "";
             var numdocs = tiva_events[id]._adjuntos.length;
-                        
-            for(n=0; n<numdocs; n++){
+
+            for (n = 0; n < numdocs; n++) {
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo; //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
-                adjuntos += '<a id='+tiva_events[id]._adjuntos[n].idAdjunto+' href=""><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
-                console.log(tiva_events[id]._adjuntos[n].idAdjunto);
+                adjuntos += '<a id=' + tiva_events[id]._adjuntos[n].idAdjunto + ' href=""><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+
             }
-           
-           
+
+
             document.getElementById("docs").innerHTML = adjuntos;
-            
-        }else{
-            
+
+        } else {
+
             document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar";  //TODO: REVISAR NO ADJUNTOS, AVISO
         }
-            
-        
-      // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA
-       $("#fichaDetalle").modal("show");
+
+
+        // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA
+        $("#fichaDetalle").modal("show");
 
     } else { //compacto
- /*       jQuery('.tiva-event-detail-compact').html('');
-        if (day && month && year) {
-            var events = getEvents(day, month, year);
-        } else {
-            var events = [{id: id}];
-        }
-        for (var i = 0; i < events.length; i++) {
-            if (typeof events[i] != "undefined") {
-                // Start date
-                var day = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, tiva_events[events[i].id].day);
-                if (date_start == 'sunday') {
-                    var event_day = wordDay[day.getDay()];
-                } else {
-                    if (day.getDay() > 0) {
-                        var event_day = wordDay[day.getDay() - 1];
-                    } else {
-                        var event_day = wordDay[6];
-                    }
-                }
-                var event_date = wordMonth[Number(tiva_events[events[i].id].month) - 1] + ' ' + tiva_events[events[i].id].day + ', ' + tiva_events[events[i].id].year;
-
-                // End date
-                var event_end_time = '';
-                if (tiva_events[events[i].id].duration > 1) {
-                    var end_date = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, Number(tiva_events[events[i].id].day) + Number(tiva_events[events[i].id].duration) - 1);
-
-                    if (date_start == 'sunday') {
-                        var event_end_day = wordDay[end_date.getDay()];
-                    } else {
-                        if (end_date.getDay() > 0) {
-                            var event_end_day = wordDay[end_date.getDay() - 1];
-                        } else {
-                            var event_end_day = wordDay[6];
-                        }
-                    }
-                    var event_end_date = wordMonth[Number(end_date.getMonth())] + ' ' + end_date.getDate() + ', ' + end_date.getFullYear();
-                    event_end_time = ' - ' + event_end_day + ', ' + event_end_date;
-                }
-
-                // Event time
-                if (tiva_events[events[i].id].time) {
-                    var event_time = '<i class="fa fa-clock-o"></i>' + tiva_events[events[i].id].time;
-                } else {
-                    var event_time = '';
-                }
-
-                // Event image
-                if (tiva_events[events[i].id].image) {
-                    var event_image = '<img src="' + tiva_events[events[i].id].image + '" alt="' + tiva_events[events[i].id].name + '" />';
-                } else {
-                    var event_image = '';
-                }
-
-                // Event location
-                if (tiva_events[events[i].id].location) {
-                    var event_location = '<i class="fa fa-map-marker"></i>' + tiva_events[events[i].id].location;
-                } else {
-                    var event_location = '';
-                }
-
-                // Event description
-                if (tiva_events[events[i].id].description) {
-                    var event_desc = '<div class="event-desc">' + tiva_events[events[i].id].description + '</div>';
-                } else {
-                    var event_desc = '';
-                }
-
-                jQuery('.tiva-event-detail-compact').append('<div class="event-item">'
-                        + '<div class="event-image">' + event_image + '</div>'
-                        + '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
-                        + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
-                        + '<div class="event-time">' + event_time + '</div>'
-                        + '<div class="event-location">' + event_location + '</div>'
-                        + event_desc
-                        + '</div>'
-                        );
-
-            }
-        }  */
+        /*       jQuery('.tiva-event-detail-compact').html('');
+         if (day && month && year) {
+         var events = getEvents(day, month, year);
+         } else {
+         var events = [{id: id}];
+         }
+         for (var i = 0; i < events.length; i++) {
+         if (typeof events[i] != "undefined") {
+         // Start date
+         var day = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, tiva_events[events[i].id].day);
+         if (date_start == 'sunday') {
+         var event_day = wordDay[day.getDay()];
+         } else {
+         if (day.getDay() > 0) {
+         var event_day = wordDay[day.getDay() - 1];
+         } else {
+         var event_day = wordDay[6];
+         }
+         }
+         var event_date = wordMonth[Number(tiva_events[events[i].id].month) - 1] + ' ' + tiva_events[events[i].id].day + ', ' + tiva_events[events[i].id].year;
+         
+         // End date
+         var event_end_time = '';
+         if (tiva_events[events[i].id].duration > 1) {
+         var end_date = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, Number(tiva_events[events[i].id].day) + Number(tiva_events[events[i].id].duration) - 1);
+         
+         if (date_start == 'sunday') {
+         var event_end_day = wordDay[end_date.getDay()];
+         } else {
+         if (end_date.getDay() > 0) {
+         var event_end_day = wordDay[end_date.getDay() - 1];
+         } else {
+         var event_end_day = wordDay[6];
+         }
+         }
+         var event_end_date = wordMonth[Number(end_date.getMonth())] + ' ' + end_date.getDate() + ', ' + end_date.getFullYear();
+         event_end_time = ' - ' + event_end_day + ', ' + event_end_date;
+         }
+         
+         // Event time
+         if (tiva_events[events[i].id].time) {
+         var event_time = '<i class="fa fa-clock-o"></i>' + tiva_events[events[i].id].time;
+         } else {
+         var event_time = '';
+         }
+         
+         // Event image
+         if (tiva_events[events[i].id].image) {
+         var event_image = '<img src="' + tiva_events[events[i].id].image + '" alt="' + tiva_events[events[i].id].name + '" />';
+         } else {
+         var event_image = '';
+         }
+         
+         // Event location
+         if (tiva_events[events[i].id].location) {
+         var event_location = '<i class="fa fa-map-marker"></i>' + tiva_events[events[i].id].location;
+         } else {
+         var event_location = '';
+         }
+         
+         // Event description
+         if (tiva_events[events[i].id].description) {
+         var event_desc = '<div class="event-desc">' + tiva_events[events[i].id].description + '</div>';
+         } else {
+         var event_desc = '';
+         }
+         
+         jQuery('.tiva-event-detail-compact').append('<div class="event-item">'
+         + '<div class="event-image">' + event_image + '</div>'
+         + '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
+         + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
+         + '<div class="event-time">' + event_time + '</div>'
+         + '<div class="event-location">' + event_location + '</div>'
+         + event_desc
+         + '</div>'
+         );
+         
+         }
+         }  */
     }
 }
 
@@ -1183,7 +1211,7 @@ function timeTo12HrFormat(time) //convierte el formato de 24 horas, en formato d
         time_part_array[0] = time_part_array[0] - 12;// el +2 es por la franja horaria, 
     }
 
-    formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + ampm;
+    var formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + ampm;
 
     return formatted_time;
 }
@@ -1199,18 +1227,21 @@ function dayDifference(entrada, salida) {
     date2 = new Date(date2[0], date2[1], date2[2]);
 
 // We use the getTime() method and get the unixtime (in milliseconds, but we want seconds, therefore we divide it through 1000)
-    date1_unixtime = parseInt(date1.getTime() / 1000);
-    date2_unixtime = parseInt(date2.getTime() / 1000);
+//    date1_unixtime = date1.getTime() / 1000;
+//    date2_unixtime = date2.getTime() / 1000;
 
 // This is the calculated difference in seconds
-    var timeDifference = date2_unixtime - date1_unixtime;
+//    var timeDifference = date2_unixtime - date1_unixtime;
+    var timeDifference = date2 - date1;
 
 // in Hours
-    var timeDifferenceInHours = timeDifference / 60 / 60;
+    var timeDifferenceInHours = timeDifference / 3600000;
 
 // and finaly, in days :)
     var timeDifferenceInDays = timeDifferenceInHours / 24;
+
     return timeDifferenceInDays;
+
 
 }
 
@@ -1220,6 +1251,35 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
         jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
                 + '<span class="bar-btn calendar-view calendar-btn boton-oculto active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
                 + '<span class="bar-btn list-view calendar-btn  boton-oculto"><i class="fa fa-list"></i>' + list_view + '</span>'
+                + ' <!--Grid row-->'
+                + ' <div class="row">'
+
+                + ' <!--Grid column-->'
+                + ' <div class="col-md-6 mb-4">'
+
+                + '   <div class="md-form">'
+                + '  <!--The "from" Date Picker -->'
+                + '   <input placeholder="Selected starting date" type="text" id="startingDate" class="form-control datepicker">'
+                + '   <label for="startingDate">start</label>'
+                + '   </div>'
+
+                + ' </div>'
+                + ' <!--Grid column-->'
+
+                + ' <!--Grid column-->'
+                + ' <div class="col-md-6 mb-4">'
+
+                + '  <div class="md-form">'
+                + '   <!--The "to" Date Picker -->'
+                + ' <input placeholder="Selected ending date" type="text" id="endingDate" class="form-control datepicker">'
+                + '  <label for="endingDate">end</label>'
+                + '  </div>'
+
+                + ' </div>'
+                + ' <!--Grid column-->'
+
+                + ' </div>'
+                + ' <!--Grid row-->'
                 + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
@@ -1275,7 +1335,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
     }
 
     jQuery.ajax({
-        // url: "./events/ejemplo_agenda.json",
+       // url: "./events/ejemplo_agenda.json",
         url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2",
         dataType: 'json',
         type: "GET",
@@ -1283,13 +1343,13 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
             jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
         },
         success: function (entradas) {
-            console.log(entradas);
+
             j = -1; //contador para asignar las IP a los eventos
             entradas.forEach(entrada => {
                 j++;
                 var color = "1";
                 tipo = entrada.Tipo;
-               
+
                 // Asigna un color  cada evento, dependiendo del tipo de evento 
                 switch (tipo) {
                     case "Aereo":
@@ -1299,13 +1359,13 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                         color = "2";
                         break;
                     case "Tren":
-                        color = "4";
+                        color = "3";
                         break;
                     case "Barco":
-                        color = "5";
+                        color = "4";
                         break;
                     case "Coche":
-                        color = "6";
+                        color = "5";
                         break;
                     case "Otros":
                         color = "6";
@@ -1321,7 +1381,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                         break;
 
                 }
-            
+
 
 
                 // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
@@ -1330,7 +1390,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "color": color,
                     "day": entrada.FechaInicio.substring(8, 10),
                     "description": "",
-                    "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
+                    "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin)+1,
                     "image": "",
                     "location": entrada.Detalles.Direccion,
                     "month": entrada.FechaInicio.substring(5, 7),
@@ -1338,15 +1398,17 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "time": entrada.FechaInicio.substring(11, 16),
                     "year": entrada.FechaInicio.substring(0, 4),
                     "_tipo": entrada.Tipo,
-                    "_refPedido": entrada.idPedido,  //numero de referencia - hay otro campo que es idServicio 
+                    "_refPedido": entrada.idPedido, //numero de referencia - hay otro campo que es idServicio 
                     "_ciudadOrigen": entrada.Detalles.SalidaCiudad,
                     "_ciudadDestino": entrada.Detalles.LlegadaCiudad,
                     "_diaFin": entrada.FechaFin.substring(8, 10),
                     "_mesFin": entrada.FechaFin.substring(5, 7),
                     "_anyoFin": entrada.FechaFin.substring(0, 4),
                     "_horaFin": entrada.FechaFin.substring(11, 16),
-                    "_adjuntos": entrada.Detalles.Adjuntos,  //array
-                                       
+                    "_adjuntos": entrada.Detalles.Adjuntos, //array
+                    "_fechaFin": entrada.FechaFin,
+                    "_fechaInicio": entrada.FechaInicio,
+                    "_ubicacion": entrada.Ubicacion,
                     //para hotel
                     "_direccion": entrada.Detalles.Direccion,
                     "_nombreHotel": entrada.Detalles.NombreHotel,
@@ -1355,11 +1417,18 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "_regimen": entrada.Detalles.Regimen,
                     "_tipohabita": entrada.Detalles.TipoHabitacion,
                     "_localizador": entrada.Detalles.Localizador
-                };
 
-                if (!evento.duration) {
-                    evento.duration = 1;
-                }
+                };
+            
+               
+//                if (!evento.duration) {
+//                    evento.duration = 1;
+//                }
+                   if(evento.duration === 1){
+                   console.log(evento.duration);
+                   console.log(evento._fechaInicio);
+                   console.log(evento._fechaFin);
+               }
 
                 var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
 
@@ -1368,6 +1437,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                 evento.date = event_date.getTime();
 
                 tiva_events.push(evento);
+              
             });
 
             tiva_events.sort(sortEventsByDate);
