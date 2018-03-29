@@ -521,6 +521,10 @@
     font-size: 1.25vh !important;
 }
 
+.mimeType{
+    cursor: pointer;
+}
+
 /*MODIFICACIONES CLASES MDB*/
 
 .btn{

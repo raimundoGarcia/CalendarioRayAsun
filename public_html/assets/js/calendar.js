@@ -150,9 +150,9 @@ function getShortText(text, num) {
 
         }
         // Get num of caracters
-        console.log(text);
+       
         var textArray = text.substring(0, caracteres);
-        console.log(textArray);
+        
 
         return textArray + "...";
 
@@ -380,7 +380,9 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                             // Delimita el máximo de palabras que puede mostrar un evento y el tamaño del div, según la duración del evento
                                             duracion = tiva_events[t].duration;
                                             palabrasSegunDuracion = duracion;
-
+console.log(duracion);
+console.log(tiva_events[t].name);
+console.log(tiva_events[t]._fechaInicio);
                                             divSize = " length-" + duracion;
                                             if (duracion > 7) {
                                                 divSize = " length-7 ";
@@ -435,10 +437,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                                 formatCabecera(events[t].name, events[t].tipo, "calendario", palabrasEvento) +
                                                 //    getShortText(events[t].name, palabrasEvento).replace("-", '<i class="fas fa-arrow-right"></i>') + //limita el número de caractres y cambia el "-" por una ->
                                                 '</span><\/div>';
-                                        console.log(events[t].name);
-                                        console.log(events[t].tipo);
-                                        console.log(palabrasEvento);
-                                        console.log(formatCabecera(events[t].name, events[t].tipo, "calendario", palabrasEvento));
+                                        
                                     } else {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
                                                 '\" onclick=\"showEventDetail(' + events[t].id + ', \'full\', ' +
@@ -708,7 +707,7 @@ function showEventList(layout, max_events) {
             var today = new Date;
 
             var resta = (day.getTime() - today.getTime());
-            console.log(resta);
+           
             if (resta >= 0) {
                 console.log("lista presente/futuro");
             } else {
@@ -1065,7 +1064,7 @@ function showEventDetail(id, layout, day, month, year) {
         if (tipoReserva == "Aereo"){
             document.getElementById("googlesearchvuelo").style.display = "block";
             var codigoV = tiva_events[id]._NVuelo;
-            var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo
+            var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo
             //TODO:buscar logo companyia aerea
             codigoV = codigoV.replace("/",""); //para buscador google el código debe salir sin slash
             
@@ -1128,7 +1127,7 @@ function showEventDetail(id, layout, day, month, year) {
         
             
         //GESTIÓN DE LOS ADJUNTOS
-        if(tiva_events[id]._adjuntos.length && tiva_events[id]._adjuntos[0].Tipo !== null){ //TODO: el vector de adjuntos siempre tiene al menos una posición???, aunque sea nula
+        if(tiva_events[id]._adjuntos !== null){ //TODO: el vector de adjuntos siempre tiene al menos una posición???, aunque sea nula
             
             var adjuntos = "";
             var numdocs = tiva_events[id]._adjuntos.length;
@@ -1136,19 +1135,20 @@ function showEventDetail(id, layout, day, month, year) {
             for(n=0; n<numdocs; n++){
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
                 var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
-                adjuntos += '<a id=' + idadjunto + ' class="linkadjunto" href=""><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
+                //adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" href="#"><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
+                adjuntos += '<img id="' + idadjunto + '" class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" >'; 
                 console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
                       
             document.getElementById("docs").innerHTML = adjuntos;
             
-            var arrayAdjuntos = $('a.linkadjunto');
-            console.log(arrayAdjuntos);
+            var arrayAdjuntos = $('img.mimeType');
+     
             
             $.each(arrayAdjuntos, function(idx,val){  //para cada elemento de la clase linkadjunto
                 
                 var numadjunto = $(this).attr("id");
-                console.log(numadjunto);
+               
                 
                 $(this).click( function(){ 
                                
@@ -1158,11 +1158,16 @@ function showEventDetail(id, layout, day, month, year) {
                             type: 'GET',
                             dataType: 'json',
                             success: function(churro){
-
-                              console.log(churro);
+                                 var tamanyo = churro.length;
+                                 console.log(tamanyo);
+                              /* La longitud máxima de la dirección URL es variable, 
+                               *  Internet Explorer es de 2083 caracteres. 
+                               *   Firefox: 65, 536 carácteres. Safari: 80.000 carácteres. 
+                               *   Opera: 190.000 carácteres. 
+                               *   y por servidor web: Apache: 4,000 carácteres Microsoft Internet ..*/
                                 
                            //    function abrirUrlAdjunto(churro){
-                                   window.open(churro, "Archivo Adjunto", "width:500, height:500");
+                                   window.open(churro);
                             //   };
 
                                // $(this).attr("href", "javascript:"+ abrirUrlAdjunto(churro) );
@@ -1179,7 +1184,7 @@ function showEventDetail(id, layout, day, month, year) {
                                 
         }else if(tiva_events[id]._adjuntos == null || tiva_events[id]._adjuntos == 'undefined'){
             
-            document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar";  //TODO: REVISAR NO ADJUNTOS, AVISO
+            document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";  //TODO: REVISAR NO ADJUNTOS, AVISO
         }
             
         
@@ -1383,7 +1388,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
             jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
         },
         success: function (entradas) {
-            console.log(entradas);
+            
             j = -1; //contador para asignar las IP a los eventos
             entradas.forEach(entrada => {
                 j++;
@@ -1446,6 +1451,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "_anyoFin": entrada.FechaFin.substring(0, 4),
                     "_horaFin": entrada.FechaFin.substring(11, 16),
                     "_adjuntos": entrada.Detalles.Adjuntos,  //array
+                    "_fechaInicio": entrada.FechaInicio,
                     
                    //para Vuelo
                    "_NVuelo": entrada.Detalles.NVuelo,
