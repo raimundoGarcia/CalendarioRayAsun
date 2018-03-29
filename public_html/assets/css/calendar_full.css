@@ -114,31 +114,31 @@
 /*.tiva-calendar-full .calendar-event-name.color-1 {
     background: #567BD2;
 }*/
-.color-1{
+.color-1{/* avion */
     background-color:  #40d4e2;
 }
-.color-2 {
+.color-2 {/* hotel */
     background-color: #12a652;
 }
-.color-3 {
-    background-color: #5311af;
+.color-3 { /* tren */
+    background-color: #756BB7;
 }
-.color-4 {
-    background-color: #1440ad;
+.color-4 { /* barco */
+    background-color: #327EE7;
 }
-.color-5{
-    background:#cb0b22;
+.color-5{ /* coche */
+    background:#E8412A;
 }
-.color-6{
+.color-6{ /* otros */
     background:greenyellow;
 }
-.color-7{
+.color-7{ /* parking */
     background:purple;
 }
-.color-8{
+.color-8{ /*seguro */
     background:brown;
 }
-.color-9{
+.color-9{/* default */ 
     background:pink;
 }
 .tiva-calendar-full .calendar-event-name.first-day {

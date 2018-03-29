@@ -153,8 +153,10 @@ function getShortText(text, num) {
 
         var textArray = text.substring(0, caracteres);
 
-
-        return textArray + "...";
+        if(text.length > textArray.length){
+            textArray = textArray + "...";
+        }
+        return textArray;
 
         return text;
     }
@@ -743,11 +745,11 @@ function showEventList(layout, max_events) {
 
             var resta = (ultimoDia - today.getTime());
 
-//            if (resta >= 0) {
+            if (resta >= 0) {
             $(".listado-eventos-pendientes").append(eventoListado);
-//            } else {
-//                $(".listado-eventos-terminados").append(eventoListado);
-//            }
+            } else {
+                $(".listado-eventos-terminados").append(eventoListado);
+            }
 
 
             ////'<div class="event-item">' +
@@ -862,34 +864,24 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
     switch (formato) {
         case "calendario":
             switch (tipo) {
-                case "Aereo":
-                    var fragmentosAsunto = asunto.split(" ");
-                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
-                    texto = '<i class="fas fa-plane"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
+                case "Aereo":      
+                    var cabecera = asunto.replace("-- >","$");
+                    texto = '<i class="fas fa-plane"></i>&nbsp;' + getShortText(cabecera, maxCaracter).replace("$", '<i class="fas fa-arrow-right"></i>');
                     break;
                 case "Hotel":
                     texto = '<i class="fas fa-h-square"></i>&nbsp;' + getShortText(asunto, maxCaracter);
                     break;
                 case "Tren":
-                    var fragmentosAsunto = asunto.split(" ");
-                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
-                    texto = '<i class="fas fa-train"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
+                    var cabecera = asunto.replace("-->","$");
+                    texto = '<i class="fas fa-train"></i>&nbsp;' + getShortText(cabecera, maxCaracter).replace("$", '<i class="fas fa-arrow-right"></i>');
                     break;
                 case "Barco":
-//                    var fragmentosAsunto = asunto.split(" ");
-//                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
-//                    texto = '<i class="fas fa-ship"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
-                    asunto.replace("-->", "-");
-
-                    texto = '<i class="fas fa-ship"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
+                   var cabecera = asunto.replace("-->","$"); 
+                    texto = '<i class="fas fa-ship"></i>&nbsp;'  + getShortText(cabecera, maxCaracter).replace("$", '<i class="fas fa-arrow-right"></i>');
                     break;
-
                 case "Coche":
-                    var fragmentosAsunto = asunto.split(" ");
-                    var asunto = fragmentosAsunto[0] + " " + fragmentosAsunto[1] + " - " + fragmentosAsunto[4];
-                    texto = '<i class="fas fa-car"></i>&nbsp;' + getShortText(asunto, maxCaracter).replace("-", '<i class="fas fa-arrow-right"></i>');
+                    texto = '<i class="fas fa-car"></i>&nbsp;' + getShortText(asunto, maxCaracter);
                     break;
-
                 case "Otros":
 
                     break;
@@ -1366,8 +1358,9 @@ function dayDifference(entrada, salida) {
     date2 = fin.split('-');
 
 // Now we convert the array to a Date object, which has several helpful methods
-    date1 = new Date(date1[0], date1[1], date1[2]);
-    date2 = new Date(date2[0], date2[1], date2[2]);
+    date1 = new Date(date1[0], date1[1]-1, date1[2]);
+    date2 = new Date(date2[0], date2[1]-1, date2[2]);
+  
 
 // We use the getTime() method and get the unixtime (in milliseconds, but we want seconds, therefore we divide it through 1000)
 //    date1_unixtime = date1.getTime() / 1000;
@@ -1383,7 +1376,7 @@ function dayDifference(entrada, salida) {
 // and finaly, in days :)
     var timeDifferenceInDays = timeDifferenceInHours / 24;
 
-    return timeDifferenceInDays;
+    return Math.round(timeDifferenceInDays);
 
 
 }
@@ -1478,7 +1471,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
     }
 
     jQuery.ajax({
-       // url: "./events/ejemplo_agenda.json",
+     // url: "./events/ejemplo_agenda.json",
         url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2",
         dataType: 'json',
         type: "GET",
@@ -1533,7 +1526,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "color": color,
                     "day": entrada.FechaInicio.substring(8, 10),
                     "description": "",
-                    "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin)+1,
+                    "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
                     "image": "",
                     "location": entrada.Detalles.Direccion,
                     "month": entrada.FechaInicio.substring(5, 7),
@@ -1571,25 +1564,31 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "_acompanyantes": entrada.Viajeros, //array
 
                 };
+            // Adapta la duracion a cada evento, fijando el valor a 1 en caso de que sea un evento que implique un billete
+            // y contemplando el dia de salida/devolucion en los eventos de alquiler de habitaciones en hoteles o coches
             
-               
-//                if (!evento.duration) {
-//                    evento.duration = 1;
-//                }
-                   if(evento.duration === 1){
-                   console.log(evento.duration);
+            
+               if ( evento._tipo === "Aereo" || evento._tipo === "Barco" || evento._tipo === "Tren"){
+                   evento.duration = 1;
+               }else{
+                   evento.duration = evento.duration + 1 ;
+                   console.log(evento.name);
                    console.log(evento._fechaInicio);
                    console.log(evento._fechaFin);
                }
+          
+            
 
                 var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
 
-
+                
 
                 evento.date = event_date.getTime();
 
                 tiva_events.push(evento);
-              
+                
+               
+             
             });
 
             tiva_events.sort(sortEventsByDate);
@@ -1601,13 +1600,13 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
             // Create calendar
             changedate('current', 'full');
             //  changedate('current', 'compact'); crea el calendario en forma compacta
-            if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta 
+            if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
                 $(".list-view").click();
                 returnView = "lista";
 
             } else {
-                $(".calendar-btn").removeClass("boton-oculto");
-
+                $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
+                el tipo de vista entre calendario o vista */
             }
 
 
