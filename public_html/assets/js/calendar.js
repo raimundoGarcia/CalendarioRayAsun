@@ -1176,15 +1176,14 @@ function showEventDetail(id, layout, day, month, year) {
             var proveedor = tiva_events[id]._proveedor;
             var tipotren = tiva_events[id]._TipoTren;
             var clase = tiva_events[id]._Clase;
-               
-            
+                        
             document.getElementById("descripcion").innerHTML = "<h5>Proveedor: " + proveedor + 
                     "</h5><h5>Tipo de Tren: " + tipotren +
                     "</h5><h5>Clase: " + clase;
                         
         } else if(tipoReserva === "Barco"){
             document.getElementById("googlesearchvuelo").style.display = "none";
-            
+                       
         } else if(tipoReserva === "Otros"){
             document.getElementById("googlesearchvuelo").style.display = "none";
             
