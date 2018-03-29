@@ -1199,7 +1199,7 @@ function showEventDetail(id, layout, day, month, year) {
             });   
                                 
         }else if(tiva_events[id]._adjuntos == null || tiva_events[id]._adjuntos == 'undefined'){
-            
+             
             document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";  //TODO: REVISAR NO ADJUNTOS, AVISO
         }
             
