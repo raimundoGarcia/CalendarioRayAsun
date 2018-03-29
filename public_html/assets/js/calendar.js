@@ -1081,7 +1081,7 @@ function showEventDetail(id, layout, day, month, year) {
         //Fechas salida-llegada / origen-destino
         document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
         document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
-       // document.getElementById("numpedido").innerHTML = "Referencia: " + tiva_events[id]._refPedido + "<br/>";
+       
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
         
         //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva 
@@ -1167,12 +1167,21 @@ function showEventDetail(id, layout, day, month, year) {
             
         } else if(tipoReserva === "Tren"){
             document.getElementById("googlesearchvuelo").style.display = "none";
-            document.getElementById("ciudad-o").innerHTML = tiva_events[id]._ciudadOrigen;
+            document.getElementById("ciudad-o").innerHTML = tiva_events[id]._EstacionOrigen;
             document.getElementById("hora-o").innerHTML = tiva_events[id].time;
-            document.getElementById("ciudad-d").innerHTML = tiva_events[id]._ciudadDestino;
+            document.getElementById("ciudad-d").innerHTML = tiva_events[id]._EstacionDestino;
             document.getElementById("hora-d").innerHTML = tiva_events[id]._horaFin;
             
+            //bloque descripción
+            var proveedor = tiva_events[id]._proveedor;
+            var tipotren = tiva_events[id]._TipoTren;
+            var clase = tiva_events[id]._Clase;
+               
             
+            document.getElementById("descripcion").innerHTML = "<h5>Proveedor: " + proveedor + 
+                    "</h5><h5>Tipo de Tren: " + tipotren +
+                    "</h5><h5>Clase: " + clase;
+                        
         } else if(tipoReserva === "Barco"){
             document.getElementById("googlesearchvuelo").style.display = "none";
             
@@ -1562,6 +1571,14 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "_tipohabita": entrada.Detalles.TipoHabitacion,
                     "_localizador": entrada.Detalles.Localizador,
                     "_acompanyantes": entrada.Viajeros, //array
+                    
+                    //para Tren
+                    "_proveedor": entrada.Detalles.Proveedor,
+                    "_TipoTren": entrada.Detalles.TipoTren,
+                    "_Clase": entrada.Detalles.Clase,
+                    "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
+                    "_EstacionDestino": entrada.Detalles.EstacionDestino
+                    
 
                 };
             // Adapta la duracion a cada evento, fijando el valor a 1 en caso de que sea un evento que implique un billete
