@@ -943,7 +943,7 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
                     texto = '<i class="fas fa-ship"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
                 case "Coche":
-                    texto = '<i class="fas fa-car"></i>&nbsp;' + asunto.substring(8);
+                    texto = '<i class="fas fa-car"></i>&nbsp;' + asunto.substring(5);
                     break;
                 case "Otros":
 
@@ -1274,21 +1274,8 @@ function showEventDetail(id, layout, day, month, year) {
                             type: 'GET',
                             dataType: 'json',
                             success: function(churro){
-                                 var tamanyo = churro.length;
-                                 console.log(tamanyo);
-                              /* La longitud máxima de la dirección URL es variable, 
-                               *  Internet Explorer es de 2083 caracteres. 
-                               *   Firefox: 65, 536 carácteres. Safari: 80.000 carácteres. 
-                               *   Opera: 190.000 carácteres. 
-                               *   y por servidor web: Apache: 4,000 carácteres Microsoft Internet ..*/
-                                
-                           //    function abrirUrlAdjunto(churro){
-                                   // window.open(churro);  NO SOPORTADA NAVEGACIÓN TOP-FRAME 
-                                   $('#'+numadjunto).attr("href", churro);
-                                   
-                            //   };
-
-                            // $(this).attr("href", "javascript:"+ abrirUrlAdjunto(churro) );
+                                                
+                                 $('#'+numadjunto).attr("href", churro);                    
                         },
                         error: function () {
                             console.log("Se ha producido un error API adjuntos u otra causa.");
@@ -1308,6 +1295,31 @@ function showEventDetail(id, layout, day, month, year) {
         }
         
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
+             
+        var urlclima = 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518';
+                
+        $("#info-clima").on('click',function(){
+            
+                       
+            $.ajax({
+                
+                url: urlclima,
+                type: 'get',
+                dataType: 'json',
+                success: function(datosClima){
+                    console.log(datosClima);
+                },
+                error: function () {
+                            console.log("Se ha producido un error API adjuntos u otra causa.");
+                        }
+                               
+                
+            });
+            
+        });
+        
+       // $("#info-interes").append('<a id="info-clima" href="' + urlclima + '" class ="info-clima"><i class="fas fa-cloud"></i> Clima</a><br/><br/>');
+        
             
         
       // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
