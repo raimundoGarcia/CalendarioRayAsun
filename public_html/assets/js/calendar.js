@@ -982,8 +982,8 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
     /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
-     jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); */
-    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
+     jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); 
+    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();*/
     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
 
     jQuery('.tiva-events-calendar.' + layout + ' .list-view').removeClass('active');
@@ -1066,14 +1066,18 @@ function showEventDetail(id, layout, day, month, year) {
        
        document.getElementById("descripcion").innerHTML= "";
        document.getElementById("compartecon").innerHTML= "";
-       
-        
-        
+         
         
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = tiva_events[id]._tipo; 
         var colorfondo = tiva_events[id].color;
-        
+        //Coordenadas (ahora sólo punto destino, donde haya que comprobar el clima
+        var lat = tiva_events[id]._latitud;
+        var lon = tiva_events[id]._longitud;
+        console.log("Latitud: " + lat + " y Longitud: "+ lon);
+        //Ubicación en sección Mapa
+        var ubicacion = tiva_events[id]._ubicacion;
+        document.getElementById("ubicacion").innerHTML = "<h5>" + ubicacion + "</h5>";
         //Colorear cabecera ventana según tipo reserva
         var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
@@ -1081,13 +1085,18 @@ function showEventDetail(id, layout, day, month, year) {
         //Fechas salida-llegada / origen-destino
         document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
         document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
-       
+        //Variables para las horas
+        var horaOrigen = tiva_events[id].time; //siempre hora inicio
+        var horaDestino = tiva_events[id]._horaFin;
+        //Localizador de la reserva
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
         
         //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva 
         document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal",null); 
+        
 //BLOQUES PARTICULARIDADES POR TIPO DE RESERVA          
         if (tipoReserva == "Aereo"){
+            
             document.getElementById("googlesearchvuelo").style.display = "block";
             var codigoV = tiva_events[id]._NVuelo;
             var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo
@@ -1109,9 +1118,9 @@ function showEventDetail(id, layout, day, month, year) {
             var llegadaIata = tiva_events[id]._LlegadaIATA;
             
             document.getElementById("ciudad-o").innerHTML = tiva_events[id]._ciudadOrigen + " (" + salidaIata + ")";
-            document.getElementById("hora-o").innerHTML = tiva_events[id].time;
+            document.getElementById("hora-o").innerHTML = horaOrigen;
             document.getElementById("ciudad-d").innerHTML = tiva_events[id]._ciudadDestino + " (" + llegadaIata + ")";
-            document.getElementById("hora-d").innerHTML = tiva_events[id]._horaFin;
+            document.getElementById("hora-d").innerHTML = horaDestino;
             
             //Bloque descripción
             var aeropuertoSalida = tiva_events[id]._AeropuertoSalida;
@@ -1127,6 +1136,7 @@ function showEventDetail(id, layout, day, month, year) {
                     "<h5>Duración vuelo: " + horas + " horas y "+ minutos + " minutos. </h5><h5> NOTA: Las horas mostradas corresponden a la hora local.</h5>";
             
         } else if(tipoReserva === "Hotel"){ //POSIBLE IF o SWITCH CON TODAS LAS OPCIONES QUE DIFIERAN
+            
             document.getElementById("googlesearchvuelo").style.display = "none";
             document.getElementById("ciudad-o").innerHTML = "ENTRADA";
             document.getElementById("ciudad-d").innerHTML = "SALIDA";
@@ -1147,11 +1157,18 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("descripcion").innerHTML = "<h5>Hotel: " + nombreHotel + 
                     "</h5><h5>Dirección: " + direccionHotel +
                     "</h5><h5>Régimen: " + regimen + "</h5><h5>Tipo Habitación: " + 
-                    tipoHabitacion + "</h5>"; //reservado para incluir la descripción o apartados de la reserva que se quieran mostrar
+                    tipoHabitacion + "</h5>"; 
             document.getElementById("compartecon").innerHTML = html;
            
         } else if(tipoReserva === "Coche"){
+            
             document.getElementById("googlesearchvuelo").style.display = "none";
+            //horas
+            document.getElementById("hora-o").innerHTML = horaOrigen; //recogida
+            document.getElementById("hora-d").innerHTML = horaDestino; //entrega
+            //para la cabecera            
+            document.getElementById("ciudad-o").innerHTML = "RECOGIDA";
+            document.getElementById("ciudad-d").innerHTML = "ENTREGA";
             
             var acompanyantes = tiva_events[id]._acompanyantes;
             console.log(acompanyantes);
@@ -1159,18 +1176,29 @@ function showEventDetail(id, layout, day, month, year) {
             for (i=0; i<acompanyantes.length; i++){
                 html += "<h5>Acompañante "+(i+1)+": "  + acompanyantes[i].Nombre + "</h5>";
             }
-            document.getElementById("descripcion").innerHTML = "<h5>Hotel: " + nombreHotel + 
-                    "</h5><h5>Dirección: " + direccionHotel +
-                    "</h5><h5>Régimen: " + regimen + "</h5><h5>Tipo Habitación: " + 
-                    tipoHabitacion + "</h5>"; //reservado para incluir la descripción o apartados de la reserva que se quieran mostrar
+            //Bloque Descripción
+            var proveedor = tiva_events[id]._proveedor;
+            var categoria = tiva_events[id]._categoria;
+            var transmision = tiva_events[id]._transmision;
+            var combustible = tiva_events[id]._combustible;
+            var direccionRecogida = tiva_events[id]._direccionRecogida;
+            var direccionEntrega = tiva_events[id]._direccionEntrega;
+            
+            document.getElementById("descripcion").innerHTML = "<h5>Proveedor: " + proveedor + 
+                    "</h5><h5>Categoría: " + categoria +
+                    "</h5><h5>Transmisión: " + transmision + "</h5><h5>Combustible: " + 
+                    combustible + "</h5><h5>Dirección Recogida: " + 
+                    direccionRecogida + "</h5><h5>Dirección Entrega: " + 
+                    direccionEntrega + "</h5>"; 
             document.getElementById("compartecon").innerHTML = html;
             
         } else if(tipoReserva === "Tren"){
+            
             document.getElementById("googlesearchvuelo").style.display = "none";
             document.getElementById("ciudad-o").innerHTML = tiva_events[id]._EstacionOrigen;
-            document.getElementById("hora-o").innerHTML = tiva_events[id].time;
+            document.getElementById("hora-o").innerHTML = horaOrigen;
             document.getElementById("ciudad-d").innerHTML = tiva_events[id]._EstacionDestino;
-            document.getElementById("hora-d").innerHTML = tiva_events[id]._horaFin;
+            document.getElementById("hora-d").innerHTML = horaDestino;
             
             //bloque descripción
             var proveedor = tiva_events[id]._proveedor;
@@ -1183,6 +1211,27 @@ function showEventDetail(id, layout, day, month, year) {
                         
         } else if(tipoReserva === "Barco"){
             document.getElementById("googlesearchvuelo").style.display = "none";
+            //horas
+            document.getElementById("hora-o").innerHTML = horaOrigen; 
+            document.getElementById("hora-d").innerHTML = horaDestino;
+            //Bloque descripción          
+            var proveedor = tiva_events[id]._proveedor;
+            var origen = tiva_events[id]._origen;
+            var destino = tiva_events[id]._destino;
+            document.getElementById("ciudad-o").innerHTML = origen;
+            document.getElementById("ciudad-d").innerHTML = destino;
+            var acomodacion = tiva_events[id]._acomodacion;
+            var vehiculos = tiva_events[id]._vehiculos;
+            var matriculas = " ";
+            for (i=0; i<vehiculos.length; i++){
+                matriculas += "<span class=\"matricula\">"  + vehiculos[i].Matricula + "</span>";
+            }
+                        
+            document.getElementById("descripcion").innerHTML = "<h5>Proveedor: " + proveedor + 
+                    "</h5><h5>Origen: " + origen +
+                    "</h5><h5>Destino: " + destino +"<h5>Acomodación: " + acomodacion + 
+                    "</h5><span>Vehículos (" + vehiculos.length + "): </span>" + matriculas;
+            
                        
         } else if(tipoReserva === "Otros"){
             document.getElementById("googlesearchvuelo").style.display = "none";
@@ -1252,6 +1301,8 @@ function showEventDetail(id, layout, day, month, year) {
             
             document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";  
         }
+        
+        //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
             
         
       // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
@@ -1551,6 +1602,11 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "_horaFin": entrada.FechaFin.substring(11, 16),
                     "_adjuntos": entrada.Detalles.Adjuntos,  //array
                     "_fechaInicio": entrada.FechaInicio,
+                    "_fechaFin": entrada.FechaFin,
+                    "_ubicacion": entrada.Ubicacion, //dirección postal
+                    "_latitud": entrada.Detalles.Latitud,
+                    "_longitud": entrada.Detalles.Longitud,
+                    
                     
                    //para Vuelo
                    "_NVuelo": entrada.Detalles.NVuelo,
@@ -1564,7 +1620,7 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     //para hotel
                     "_direccion": entrada.Detalles.Direccion,
                     "_nombreHotel": entrada.Detalles.NombreHotel,
-                    "_latitud": entrada.Detalles.Latitud,
+                    "_latitud": entrada.Detalles.Latitud, //siempre del destino o de la ubicación cuando es única
                     "_longitud": entrada.Detalles.Longitud,
                     "_regimen": entrada.Detalles.Regimen,
                     "_tipohabita": entrada.Detalles.TipoHabitacion,
@@ -1572,11 +1628,25 @@ jQuery(document).ready(function () {  //TODO: código en $(document).ready()
                     "_acompanyantes": entrada.Viajeros, //array
                     
                     //para Tren
-                    "_proveedor": entrada.Detalles.Proveedor,
+                    "_proveedor": entrada.Detalles.Proveedor, //común con Coche y barco
                     "_TipoTren": entrada.Detalles.TipoTren,
                     "_Clase": entrada.Detalles.Clase,
                     "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
-                    "_EstacionDestino": entrada.Detalles.EstacionDestino
+                    "_EstacionDestino": entrada.Detalles.EstacionDestino,
+                    
+                    //para Coche
+                    
+                    "_categoria": entrada.Detalles.Categoria,
+                    "_transmision": entrada.Detalles.Transmision,
+                    "_combustible": entrada.Detalles.Combustible_AC,
+                    "_direccionRecogida": entrada.Detalles.DireccionRecogida,
+                    "_direccionEntrega": entrada.Detalles.DireccionEntrega,
+                    
+                    //para Barco
+                    "_vehiculos": entrada.Detalles.Vehiculos, //array
+                    "_origen": entrada.Detalles.Origen,
+                    "_destino": entrada.Detalles.Destino,
+                    "_acomodacion": entrada.Detalles.Acomodacion                  
                     
 
                 };
