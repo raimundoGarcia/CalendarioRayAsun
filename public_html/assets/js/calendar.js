@@ -1250,22 +1250,22 @@ function showEventDetail(id, layout, day, month, year) {
             for(n=0; n<numdocs; n++){
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
                 var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
-                //adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" href="#"><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
-                adjuntos += '<img id="' + idadjunto + '" class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" >'; 
+                adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" download><img class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" ></a>'; 
+                //adjuntos += '<img id="' + idadjunto + '" class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" >'; 
                 console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
                       
             document.getElementById("docs").innerHTML = adjuntos;
             
-            var arrayAdjuntos = $('img.mimeType');
-     
-            
+           // var arrayAdjuntos = $('img.mimeType');
+            var arrayAdjuntos = $('a.linkadjunto');
+                 
             $.each(arrayAdjuntos, function(idx,val){  //para cada elemento de la clase linkadjunto
                 
                 var numadjunto = $(this).attr("id");
-               
+                               
                 
-                $(this).click( function(){ 
+                $(this).ready( function(){ 
                                
                         $.ajax({
 
@@ -1282,7 +1282,9 @@ function showEventDetail(id, layout, day, month, year) {
                                *   y por servidor web: Apache: 4,000 carácteres Microsoft Internet ..*/
                                 
                            //    function abrirUrlAdjunto(churro){
-                                   window.open(churro);
+                                   // window.open(churro);  NO SOPORTADA NAVEGACIÓN TOP-FRAME 
+                                   $('#'+numadjunto).attr("href", churro);
+                                   
                             //   };
 
                                // $(this).attr("href", "javascript:"+ abrirUrlAdjunto(churro) );
@@ -1295,7 +1297,9 @@ function showEventDetail(id, layout, day, month, year) {
                         }); 
                 
                 });  
-            });   
+            });  
+            
+            
                                 
         }else if(tiva_events[id]._adjuntos == null || tiva_events[id]._adjuntos == 'undefined'){
             
