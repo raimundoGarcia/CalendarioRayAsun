@@ -30,7 +30,7 @@
     text-align: center !important;
     background: #5AA4A3;
     color: #ffffff;
-    height: 30px;
+  /*  height: 30px;*/
     vertical-align: middle !important;
 }
 .tiva-calendar-full .calendar-btn {
@@ -362,7 +362,7 @@
 /* Responsive */
 @media (min-width: 768px) {
     .tiva-event-list-full .event-item-left {
-         margin-right: 2% !important;
+        margin-right: 2% !important;
     }
     .tiva-event-list-full .event-item-left.pull-left, .tiva-event-list-full .event-item-right.pull-left {
         float: left !important;
@@ -394,12 +394,12 @@
     padding-right:  2vw !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
-    
+
 }
 @media (max-aspect-ratio: 1/1){
     .container{
         overflow:scroll;
-        
+
     }
 }
 
@@ -415,10 +415,10 @@
 @media (max-width: 768px ){  /*Para que en móviles se vea la ventana modal de detalles centrada*/
 
     #fichaDetalle{
-      /*  padding-left: 0px;
-        position-left: 0px; */
+        /*  padding-left: 0px;
+          position-left: 0px; */
     }
-    
+
     .horario{
 
         flex-direction: column !important;  /*lo aplica hasta 691px*/ 
@@ -426,22 +426,22 @@
 }
 
 #fichaDetalle{
-     padding-left: 0px !important;
-     padding-right: 0px !important; 
-    }
+    padding-left: 0px !important;
+    padding-right: 0px !important; 
+}
 
 .topcontent{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-   justify-content: space-around;
+    justify-content: space-around;
     align-items: center;
 }
 
 .numvuelo{
     padding: 2px;
     font-weight: bold;
-    
+
 }
 
 .logo{
@@ -489,7 +489,7 @@
     margin: 5px;
 
 }
- 
+
 .descripcion{
     /* border: 1px solid #e2e2e2; */
     padding: 10px;
@@ -578,22 +578,56 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 }
 
 .modal-header{
-      font-size: 3vh;
-      color: white;
+    font-size: 3vh;
+    color: white;
 }
 
 /* CLASES LISTA DE EVENTOS */
 
 .lista__item{
-    
     width: 100vw;
-
     height: 100%;
-   
     /*  padding-left: 15px;*/
 }
-/*.events-calendar-bar{
-    padding-left: 15px;
+/* BARRA DE NAVEGACION */
+.events-calendar-bar{
+    /* padding-left: 15px;*/
+    display:flex;
+    flex-flow: row wrap;
+    text-align: center;
+    align-items: center;
+
+}
+.list-view{
+    margin-right: auto !important;
+     margin-left: 1vw !important;
+}
+.row {
+    margin-right:auto !important;
+   /* margin-left: auto !important;*/
+}
+.calendar-bar__item{
+    max-height: 5vh;
+    font-size: 1em;
+   
+}
+.md-form{
+     margin-top: 0 !important;
+}
+/* DATE PICKER */
+.datepicker{
+    width: 30vw;
+}
+
+table td{
+    font-size: 1em;
+}
+
+/*.calendar-bar__item{ 
+    margin-right: auto; 
+}
+.calendar-bar__item:last-of-type{
+    margin-left: auto;
 }*/
 
 /*@media(max-width:768px){
@@ -612,7 +646,7 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     width: 96vw;
     height: 500vh;
     background-color: red;
-     
+
 }
 
 
@@ -625,7 +659,7 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     padding: 1vh 1vw;
     text-align: center;
     box-shadow: 0.3vw 0.3vw #999999;
-    
+
 }
 .event__cabecera{
     border-radius: 5px;
@@ -643,7 +677,4 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 .listado-eventos-terminados{
     display:none;
 }
-/* DATE PICKER */
-.datepicker{
-    width: 30vw;
-}
+

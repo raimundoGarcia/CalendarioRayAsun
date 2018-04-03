@@ -1,21 +1,21 @@
 $(document).ready(function () {
-    
-  $('.datepicker').pickadate({
-        monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        weekdaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+
+    $('.datepicker').pickadate({
+        monthsFull: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+        monthsShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+        weekdaysFull: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+        weekdaysShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
         showMonthsShort: undefined,
         showWeekdaysFull: undefined,
 // Buttons
-        today: 'Today',
-        clear: 'Clear',
-        close: 'Close',
+        today: 'Hoy',
+        clear: 'Borrar',
+        close: 'Cerrar',
 // Accessibility labels
-        labelMonthNext: 'Next month',
-        labelMonthPrev: 'Previous month',
-        labelMonthSelect: 'Select a month',
-        labelYearSelect: 'Select a year',
+        labelMonthNext: 'Siguiente mes',
+        labelMonthPrev: 'Mes anteror',
+        labelMonthSelect: 'Selecciona un mes',
+        labelYearSelect: 'Selecciona un año',
 // Formats
         format: 'd mmmm, yyyy',
         formatSubmit: undefined,
@@ -28,7 +28,7 @@ $(document).ready(function () {
         selectYears: undefined,
         selectMonths: undefined,
 // First day of the week
-        firstDay: undefined,
+        firstDay: 1,
 // Date limits
         min: undefined,
         max: undefined,
@@ -95,6 +95,14 @@ $(document).ready(function () {
             buttonClose: 'picker__button--close',
             buttonToday: 'picker__button--today'
         }
+    });
+    $("#startingDate").on("change", function () {
+        currentDate = $("#startingDate").val();
+        var $input = $("#endingDate").pickadate();
+        var ban = $input.pickadate('picker');
+        ban.set('min', currentDate);
+
+
     });
 
 });
