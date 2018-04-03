@@ -1072,23 +1072,29 @@ function showEventDetail(id, layout, day, month, year) {
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = tiva_events[id]._tipo; 
         var colorfondo = tiva_events[id].color;
+        
         //Coordenadas (ahora sólo punto destino, donde haya que comprobar el clima
         var lat = tiva_events[id]._latitud;
         var lon = tiva_events[id]._longitud;
         console.log("Latitud: " + lat + " y Longitud: "+ lon);
+        
         //Ubicación en sección Mapa
         var ubicacion = tiva_events[id]._ubicacion;
         document.getElementById("ubicacion").innerHTML = "<h5>" + ubicacion + "</h5>";
+        
         //Colorear cabecera ventana según tipo reserva
         var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
         document.getElementById("asunto").classList.add("color-" + colorfondo);
+        
         //Fechas salida-llegada / origen-destino
         document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
         document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
+        
         //Variables para las horas
         var horaOrigen = tiva_events[id].time; //siempre hora inicio
         var horaDestino = tiva_events[id]._horaFin;
+        
         //Localizador de la reserva
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
 
@@ -1296,7 +1302,7 @@ function showEventDetail(id, layout, day, month, year) {
         
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
              
-        var urlclima = 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518';
+        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat='+ lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';
                 
         $("#info-clima").on('click',function(){
             

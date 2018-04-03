@@ -483,10 +483,10 @@
 }
 
 .linea{
-    height: 2px;
-    width: 20vh;
-    border: 1px solid green;
-    background-color: green;
+    height: 0.05vh;
+    width: 30vh;
+    border: 0.2vh solid lightcoral;
+    background-color: lightcoral;
     margin: 5px;
  
 }
