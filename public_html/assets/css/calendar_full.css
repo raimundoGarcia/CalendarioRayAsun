@@ -459,7 +459,7 @@
     margin-top: 10px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; 
+    flex-wrap: nowrap; 
     justify-content: center;
     align-items: center;
 }
@@ -468,6 +468,7 @@
     padding: 2px; 
     margin: 2px;
     font-size: 2vh;
+    text-align:center;
 }
 
 .origen, .destino{
@@ -487,16 +488,23 @@
     border: 1px solid green;
     background-color: green;
     margin: 5px;
-
+ 
 }
 
-.descripcion{
+
+.localizacion{
+    margin: 20px 0px 20px;
+    
+}
+ 
+.descripcion, .compartecon{
+
     /* border: 1px solid #e2e2e2; */
     padding: 10px;
 }
 .listaviajeros{
 
-    padding: 10px;
+    
 }
 .ubicacion{
     /*  border: 1px solid #e2e2e2; */
