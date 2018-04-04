@@ -980,22 +980,26 @@ function deshabilitar(link) {
 }
 //calcula la diferencia de días entre el día de consulta de la previsión del tiempo con el día de inicio del viaje
 // se llama dentro de la función para mostrar detalle evento (ventana modal)
-function diferenciaDiasClima(hoy, inicioViaje){
-   //obtener fecha hoy en milisegundos    
-   var ms_hoy = hoy.getTime(); console.log("Función hoy: " + ms_hoy);
-   
-  //obtener fecha inicio viaje en ms
-   var inicio = new Date(inicioViaje); 
-   var ms_inicio = inicio.getTime(); console.log("Función inicioViaje: "+ms_inicio);
-   
-  //diferencia entre fechas en ms
-   var timeDifference = ms_inicio - ms_hoy; console.log("Función diferencia: "+timeDifference);
-    
+function diferenciaDiasClima(hoy, inicioViaje) {
+    //obtener fecha hoy en milisegundos    
+    var ms_hoy = hoy.getTime();
+    console.log("Función hoy: " + ms_hoy);
+
+    //obtener fecha inicio viaje en ms
+    var inicio = new Date(inicioViaje);
+    var ms_inicio = inicio.getTime();
+    console.log("Función inicioViaje: " + ms_inicio);
+
+    //diferencia entre fechas en ms
+    var timeDifference = ms_inicio - ms_hoy;
+    console.log("Función diferencia: " + timeDifference);
+
     // en horas
-    var timeDifferenceInHours = timeDifference / 3600000; 
+    var timeDifferenceInHours = timeDifference / 3600000;
 
     // and finaly, in days :)
-    var timeDifferenceInDays = timeDifferenceInHours / 24; console.log("Función dif en días: "+timeDifferenceInDays);
+    var timeDifferenceInDays = timeDifferenceInHours / 24;
+    console.log("Función dif en días: " + timeDifferenceInDays);
 
     return Math.round(timeDifferenceInDays);
 }
@@ -1010,7 +1014,97 @@ function showEventDetail(id, layout, day, month, year) {
 
     jQuery('.tiva-events-calendar.' + layout + ' .list-view').removeClass('active');
     jQuery('.tiva-events-calendar.' + layout + ' .calendar-view').removeClass('active');
-
+    var myvar = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+'            <div class="modal-dialog modal-lg" role="document">'+
+'                <!--Content-->'+
+'                <div class="modal-content">'+
+'                    <!--Header-->'+
+'                    <div id="asunto" class="modal-header">'+
+'                        <h4 class="modal-title w-100 h4"></h4>'+
+'                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+'                            <!--  <span aria-hidden="true">×</span> -->'+
+'                        </button>'+
+'                    </div>'+
+'                    <!--Body-->'+
+'                    <div class="modal-body modal-cuerpo">'+
+'                        <div class="modal-content">'+
+'                            <div id="topcontent" class="topcontent">'+
+'                                <div class="view logo">'+
+''+
+'                                </div>'+
+'                                <div class="relleno"></div>'+
+''+
+'                            </div> '+
+''+
+'                            <div class="horario">'+
+'                                <div class="origen"> '+
+'                                    <div id="ciudad-o" class="ciudad-o">ORIGEN</div>'+
+'                                    <div id="fecha-o" class="fecha-o">dd/mm/aaaa</div>'+
+'                                    <div id="hora-o" class="hora-o">hh:mm</div> '+
+'                                </div>'+
+'                                <div class="linea">'+
+''+
+'                                </div>'+
+'                                <div class="destino"> '+
+'                                    <div id="ciudad-d" class="ciudad-d">DESTINO</div>'+
+'                                    <div id="fecha-d" class="fecha-d">dd/mm/aaaa</div>'+
+'                                    <div id="hora-d" class="hora-d">hh:mm</div>    '+
+'                                </div>'+
+'                            </div>'+
+'                            <div class="descripcion">'+
+'                                <h4 class="h4">Descripción:</h4>'+
+'                                <h5 id="localizador"> </h5>'+
+'                                <div id="descripcion" >'+
+''+
+''+
+'                                </div>'+
+'                                <div id="compartecon" class="listaviajeros">'+
+''+
+'                                </div>'+
+''+
+'                                <div class="seguirvuelo">'+
+'                                    <br/> <button  id="googlesearchvuelo" class="btn btn-success textoboton">Seguimiento online</button>'+
+'                                </div> '+
+''+
+''+
+'                            </div>'+
+''+
+'                            <div class="ubicacion">'+
+'                                <h4 class="h4">Ubicación:</h4>'+
+'                                <h5 id="ubicacion" class=""></h5>'+
+'                                <button id="verMapa" class="ubicacion-maps btn btn-success textoboton"><i class="fas fa-search"></i> Ver mapa</button>'+
+'                            </div>'+
+'                            <div class="info-interes">'+
+'                                <h4 class="h4">Información de interés: </h4>'+
+''+
+'                                <a  href="#iconos" id="info-clima" class=" btn btn-success btn-sm textoboton"><i class="fas fa-cloud"></i> Clima</a><br/>'+
+'                                <div  class="iconos"></div>'+
+'                                <br/>'+
+'                                <button id="info-lugar" class=" btn btn-success btn-sm textoboton "><i class="fas fa-info-circle"></i> Información adicional</button>'+
+'                            </div>'+
+'                            <div class="adjuntos">'+
+'                                <h4 class="h4">Documentos adjuntos:</h4>'+
+'                                <!--    <div><i class="far fa-file-pdf"></i></div> -->'+
+'                                <div id="docs" class="docs">'+
+''+
+'                                </div>'+
+'                            </div>'+
+'                            <div class="ics">'+
+'                                <h4 class="h4">Descarga ICS:</h4>'+
+'                                <button class="btn btn-info btn-lg descargaics textoboton">descargar ICS</button></div>'+
+'                        </div>'+
+'                    </div>'+
+'                    <!--Footer-->'+
+'                    <div class="modal-footer">'+
+'                        <button type="button" class="btn btn-primary btn-lg textoboton" data-dismiss="modal">Cerrar</button>'+
+'                        <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->'+
+'                    </div>'+
+'                </div>'+
+'                <!--/.Content-->'+
+'            </div>'+
+'        </div>';
+$("#espacioModal").html("");
+$("#espacioModal").append(myvar);
     if (layout == 'full') {
         // Start date
         var day = new Date(tiva_events[id].year, Number(tiva_events[id].month) - 1, tiva_events[id].day);
@@ -1093,7 +1187,7 @@ function showEventDetail(id, layout, day, month, year) {
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = tiva_events[id]._tipo;
         var colorfondo = tiva_events[id].color;
-        
+
         //Coordenadas (ahora sólo punto destino, donde haya que comprobar el clima
         var lat = tiva_events[id]._latitud;
         var lon = tiva_events[id]._longitud;
@@ -1105,15 +1199,7 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("verMapa").addEventListener("click", function () {
             window.open('http://maps.google.es/?q=' + coordenadas);
         });
-        document.getElementById("info-clima").addEventListener("click",function(){
-          if( $(".iconos").attr("id") === "iconos"){
-            $(".iconos").attr("id","noMostrar");
-        }else{
-          $(".iconos").attr("id","iconos");
-        }
-          
-               
-       });
+
         // Mostrar la información recomendada según el pais de destino 
 
         document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
@@ -1134,15 +1220,15 @@ function showEventDetail(id, layout, day, month, year) {
         var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
         document.getElementById("asunto").classList.add("color-" + colorfondo);
-        
+
         //Fechas salida-llegada / origen-destino
         document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
         document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
-        
+
         //Variables para las horas
         var horaOrigen = tiva_events[id].time; //siempre hora inicio
         var horaDestino = tiva_events[id]._horaFin;
-        
+
         //Localizador de la reserva
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
 
@@ -1318,14 +1404,14 @@ function showEventDetail(id, layout, day, month, year) {
 
 
                 $(this).ready(function () {
-            
-                        $.ajax({
-                            url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto ,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function(churro){
-                                                
-                                 $('#'+numadjunto).attr("href", churro);                    
+
+                    $.ajax({
+                        url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (churro) {
+
+                            $('#' + numadjunto).attr("href", churro);
                         },
                         error: function () {
                             console.log("Se ha producido un error API adjuntos u otra causa.");
@@ -1345,43 +1431,50 @@ function showEventDetail(id, layout, day, month, year) {
         }
 
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
-             
-        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat='+ lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
-       
-        var fechaInicioViaje =  tiva_events[id]._fechaInicio; 
+
+        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
+
+        var fechaInicioViaje = tiva_events[id]._fechaInicio;
         var hoy = new Date();
-            
-         diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); console.log("diferencia (llamada función): " + diasDif);
-      //Asignar evento al botón del clima
-        $("#info-clima").on('click',function(){
-            
-                    //si la diferencia es menor de 5 días, llamar a API del clima
-                    if (diasDif <= 5){
-                        console.log("Es menor de 5 días");
-                                                
-                        $.ajax({
 
-                            url: urlclima,
-                            type: 'get',
-                            dataType: 'json',
-                            success: function (datosClima) {
-                                console.log(datosClima);
+        diasDif = diferenciaDiasClima(hoy, fechaInicioViaje);
+        console.log("diferencia (llamada función): " + diasDif);
+        //Asignar evento al botón del clima
+        $("#info-clima").on('click', function () {
 
-                            },
-                            error: function () {
-                                alert("Se ha producido un error API u otra causa.");
-                            }
-                        });
-                        
-                      //si no, aviso al usuario 
-                    }else{
-                        alert("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
-                    }       
+            //si la diferencia es menor de 5 días, llamar a API del clima
+            if (diasDif <= 5) {
+                console.log("Es menor de 5 días");
+                if ($(".iconos").attr("id") === "iconos") {
+                    $(".iconos").attr("id", "noMostrar");
+                } else {
+                    $(".iconos").attr("id", "iconos");
+                }
+
+                $.ajax({
+
+                    url: urlclima,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (datosClima) {
+                        console.log(datosClima);
+
+                    },
+                    error: function () {
+                        alert("Se ha producido un error API u otra causa.");
+                    }
+                });
+
+                //si no, aviso al usuario 
+            } else {
+                alert("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
+            }
         });
-        
-               
-      // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
-       $("#fichaDetalle").modal("show");
+
+
+        // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
+      
+        $("#fichaDetalle").modal("show");
 
     } else { //compacto
         /*       jQuery('.tiva-event-detail-compact').html('');

@@ -53,6 +53,7 @@
             <div class="tiva-events-calendar full" data-source="json"></div> 
 
         </div>
+        <div id="espacioModal"></div>
 
 
         <!-- MODAL MDB -->
@@ -63,94 +64,7 @@
 
 
         <!-- Central Modal Large -->
-        <div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <!--Content-->
-                <div class="modal-content">
-                    <!--Header-->
-                    <div id="asunto" class="modal-header">
-                        <h4 class="modal-title w-100 h4"></h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <!--  <span aria-hidden="true">&times;</span> -->
-                        </button>
-                    </div>
-                    <!--Body-->
-                    <div class="modal-body modal-cuerpo">
-                        <div class="modal-content">
-                            <div id="topcontent" class="topcontent">
-                                <div class="view logo">
-
-                                </div>
-                                <div class="relleno"></div>
-
-                            </div> 
-
-                            <div class="horario">
-                                <div class="origen"> 
-                                    <div id="ciudad-o" class="ciudad-o">ORIGEN</div>
-                                    <div id="fecha-o" class="fecha-o">dd/mm/aaaa</div>
-                                    <div id="hora-o" class="hora-o">hh:mm</div> 
-                                </div>
-                                <div class="linea">
-
-                                </div>
-                                <div class="destino"> 
-                                    <div id="ciudad-d" class="ciudad-d">DESTINO</div>
-                                    <div id="fecha-d" class="fecha-d">dd/mm/aaaa</div>
-                                    <div id="hora-d" class="hora-d">hh:mm</div>    
-                                </div>
-                            </div>
-                            <div class="descripcion">
-                                <h4 class="h4">Descripción:</h4>
-                                <h5 id="localizador"> </h5>
-                                <div id="descripcion" >
-
-
-                                </div>
-                                <div id="compartecon" class="listaviajeros">
-
-                                </div>
-
-                                <div class="seguirvuelo">
-                                    <br/> <button  id="googlesearchvuelo" class="btn btn-success textoboton">Seguimiento online</button>
-                                </div> 
-
-
-                            </div>
-
-                            <div class="ubicacion">
-                                <h4 class="h4">Ubicación:</h4>
-                                <h5 id="ubicacion" class=""></h5>
-                                <button id="verMapa" class="ubicacion-maps btn btn-success textoboton"><i class="fas fa-search"></i> Ver mapa</button>
-                            </div>
-                            <div class="info-interes">
-                                <h4 class="h4">Información de interés: </h4>
-
-                                <a  href="#iconos" id="info-clima" class=" btn btn-success btn-sm textoboton"><i class="fas fa-cloud"></i> Clima</a><br/>
-                                <div  class="iconos"></div>
-                                <br/>
-                                <button id="info-lugar" class=" btn btn-success btn-sm textoboton "><i class="fas fa-info-circle"></i> Información adicional</button>
-                            </div>
-                            <div class="adjuntos">
-                                <h4 class="h4">Documentos adjuntos:</h4>
-                                <!--    <div><i class="far fa-file-pdf"></i></div> -->
-                                <div id="docs" class="docs">
-
-                                </div>
-                            </div>
-                            <div class="ics">
-                                <h4 class="h4">Descarga ICS:</h4>
-                                <button class="btn btn-info btn-lg descargaics textoboton">descargar ICS</button></div>
-                        </div>
-                    </div>
-                    <!--Footer-->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-lg textoboton" data-dismiss="modal">Cerrar</button>
-                        <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->
-                    </div>
-                </div>
-                <!--/.Content-->
-            </div>
+       
             <!-- Central Modal Fluid -->
             <script>var fecha = new Date(); </script>
            <!-- api key wheather station: eb49663a0809388193782a1fa7698518 -->
