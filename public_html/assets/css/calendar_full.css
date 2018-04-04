@@ -30,7 +30,7 @@
     text-align: center !important;
     background: #5AA4A3;
     color: #ffffff;
-  /*  height: 30px;*/
+    /*  height: 30px;*/
     vertical-align: middle !important;
 }
 .tiva-calendar-full .calendar-btn {
@@ -488,15 +488,15 @@
     border: 0.2vh solid lightcoral;
     background-color: lightcoral;
     margin: 5px;
- 
+
 }
 
 
 .localizacion{
     margin: 20px 0px 20px;
-    
+
 }
- 
+
 .descripcion, .compartecon{
 
     /* border: 1px solid #e2e2e2; */
@@ -504,7 +504,7 @@
 }
 .listaviajeros{
 
-    
+
 }
 .ubicacion{
     /*  border: 1px solid #e2e2e2; */
@@ -615,19 +615,19 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 }
 .list-view{
     margin-right: auto !important;
-     margin-left: 1vw !important;
+    margin-left: 1vw !important;
 }
 .row {
     margin-right:auto !important;
-   /* margin-left: auto !important;*/
+    /* margin-left: auto !important;*/
 }
 .calendar-bar__item{
     max-height: 5vh;
     font-size: 1em;
-   
+
 }
 .md-form{
-     margin-top: 0 !important;
+    margin-top: 0 !important;
 }
 /* DATE PICKER */
 .datepicker{
@@ -692,4 +692,17 @@ table td{
 .listado-eventos-terminados{
     display:none;
 }
+/* ICONOS TIEMPO MODAL */
+.iconos{
+    transition: height 1.5s;
+    height: 0px ;
+}
+.iconos:target{
+  
+    height: 200px ;
+}
+
+
+
+
 
