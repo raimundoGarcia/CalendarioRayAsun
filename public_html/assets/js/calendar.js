@@ -498,7 +498,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
          */
     }
     thisDate = 1;
-}
+}//fin create calendar
 
 // Check day has events or not  TODO: comprobar SI el día HAY EVENTOS
 function checkEvents(day, month, year) {
@@ -978,6 +978,27 @@ function deshabilitar(link) {
         link.style.color = 'blue';
     }, 3000);
 }
+//calcula la diferencia de días entre el día de consulta de la previsión del tiempo con el día de inicio del viaje
+// se llama dentro de la función para mostrar detalle evento (ventana modal)
+function diferenciaDiasClima(hoy, inicioViaje){
+   //obtener fecha hoy en milisegundos    
+   var ms_hoy = hoy.getTime(); console.log("Función hoy: " + ms_hoy);
+   
+  //obtener fecha inicio viaje en ms
+   var inicio = new Date(inicioViaje); 
+   var ms_inicio = inicio.getTime(); console.log("Función inicioViaje: "+ms_inicio);
+   
+  //diferencia entre fechas en ms
+   var timeDifference = ms_inicio - ms_hoy; console.log("Función diferencia: "+timeDifference);
+    
+    // en horas
+    var timeDifferenceInHours = timeDifference / 3600000; 
+
+    // and finaly, in days :)
+    var timeDifferenceInDays = timeDifferenceInHours / 24; console.log("Función dif en días: "+timeDifferenceInDays);
+
+    return Math.round(timeDifferenceInDays);
+}
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
@@ -1242,7 +1263,7 @@ function showEventDetail(id, layout, day, month, year) {
                        
         } else if(tipoReserva === "Otros"){
             document.getElementById("googlesearchvuelo").style.display = "none";
-            
+            //TODO: por determinar la estructura y optimización en general
         }
 
 
@@ -1302,32 +1323,40 @@ function showEventDetail(id, layout, day, month, year) {
         
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
              
-        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat='+ lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';
-                
+        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat='+ lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
+       
+        var fechaInicioViaje =  tiva_events[id]._fechaInicio; 
+        var hoy = new Date();
+            
+         diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); console.log("diferencia (llamada función): " + diasDif);
+      //Asignar evento al botón del clima
         $("#info-clima").on('click',function(){
             
-                       
-            $.ajax({
-                
-                url: urlclima,
-                type: 'get',
-                dataType: 'json',
-                success: function(datosClima){
-                    console.log(datosClima);
-                },
-                error: function () {
-                            console.log("Se ha producido un error API adjuntos u otra causa.");
-                        }
-                               
-                
-            });
-            
+                    //si la diferencia es menor de 5 días, llamar a API del clima
+                    if (diasDif <= 5){
+                        console.log("Es menor de 5 días");
+                                                
+                        $.ajax({
+
+                            url: urlclima,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function (datosClima) {
+                                console.log(datosClima);
+
+                            },
+                            error: function () {
+                                console.log("Se ha producido un error API u otra causa.");
+                            }
+                        });
+                      //si no, aviso al usuario 
+                    }else{
+                        console.log("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
+                    }
+         
         });
         
-       // $("#info-interes").append('<a id="info-clima" href="' + urlclima + '" class ="info-clima"><i class="fas fa-cloud"></i> Clima</a><br/><br/>');
-        
-            
-        
+               
       // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
        $("#fichaDetalle").modal("show");
 
