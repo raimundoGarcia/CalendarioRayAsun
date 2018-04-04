@@ -498,7 +498,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
          */
     }
     thisDate = 1;
-}
+}//fin create calendar
 
 // Check day has events or not  TODO: comprobar SI el día HAY EVENTOS
 function checkEvents(day, month, year) {
@@ -978,6 +978,27 @@ function deshabilitar(link) {
         link.style.color = 'blue';
     }, 3000);
 }
+//calcula la diferencia de días entre el día de consulta de la previsión del tiempo con el día de inicio del viaje
+// se llama dentro de la función para mostrar detalle evento (ventana modal)
+function diferenciaDiasClima(hoy, inicioViaje){
+   //obtener fecha hoy en milisegundos    
+   var ms_hoy = hoy.getTime(); console.log("Función hoy: " + ms_hoy);
+   
+  //obtener fecha inicio viaje en ms
+   var inicio = new Date(inicioViaje); 
+   var ms_inicio = inicio.getTime(); console.log("Función inicioViaje: "+ms_inicio);
+   
+  //diferencia entre fechas en ms
+   var timeDifference = ms_inicio - ms_hoy; console.log("Función diferencia: "+timeDifference);
+    
+    // en horas
+    var timeDifferenceInHours = timeDifference / 3600000; 
+
+    // and finaly, in days :)
+    var timeDifferenceInDays = timeDifferenceInHours / 24; console.log("Función dif en días: "+timeDifferenceInDays);
+
+    return Math.round(timeDifferenceInDays);
+}
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
@@ -1072,6 +1093,7 @@ function showEventDetail(id, layout, day, month, year) {
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = tiva_events[id]._tipo;
         var colorfondo = tiva_events[id].color;
+        
         //Coordenadas (ahora sólo punto destino, donde haya que comprobar el clima
         var lat = tiva_events[id]._latitud;
         var lon = tiva_events[id]._longitud;
@@ -1112,12 +1134,15 @@ function showEventDetail(id, layout, day, month, year) {
         var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
         document.getElementById("asunto").classList.add("color-" + colorfondo);
+        
         //Fechas salida-llegada / origen-destino
         document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
         document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
+        
         //Variables para las horas
         var horaOrigen = tiva_events[id].time; //siempre hora inicio
         var horaDestino = tiva_events[id]._horaFin;
+        
         //Localizador de la reserva
         document.getElementById("localizador").innerHTML = "Localizador reserva: " + tiva_events[id]._localizador;
 
@@ -1265,10 +1290,8 @@ function showEventDetail(id, layout, day, month, year) {
 
         } else if (tipoReserva === "Otros") {
             document.getElementById("googlesearchvuelo").style.display = "none";
-
+            //TODO: por determinar la estructura y optimización en general
         }
-
-
 
 
         //GESTIÓN DE LOS ADJUNTOS
@@ -1284,7 +1307,6 @@ function showEventDetail(id, layout, day, month, year) {
                 //adjuntos += '<img id="' + idadjunto + '" class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" >'; 
                 console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
-
             document.getElementById("docs").innerHTML = adjuntos;
 
             // var arrayAdjuntos = $('img.mimeType');
@@ -1296,28 +1318,14 @@ function showEventDetail(id, layout, day, month, year) {
 
 
                 $(this).ready(function () {
-
-                    $.ajax({
-
-                        url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (churro) {
-                            var tamanyo = churro.length;
-                            console.log(tamanyo);
-                            /* La longitud máxima de la dirección URL es variable, 
-                             *  Internet Explorer es de 2083 caracteres. 
-                             *   Firefox: 65, 536 carácteres. Safari: 80.000 carácteres. 
-                             *   Opera: 190.000 carácteres. 
-                             *   y por servidor web: Apache: 4,000 carácteres Microsoft Internet ..*/
-
-                            //    function abrirUrlAdjunto(churro){
-                            // window.open(churro);  NO SOPORTADA NAVEGACIÓN TOP-FRAME 
-                            $('#' + numadjunto).attr("href", churro);
-
-                            //   };
-
-                            // $(this).attr("href", "javascript:"+ abrirUrlAdjunto(churro) );
+            
+                        $.ajax({
+                            url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto ,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(churro){
+                                                
+                                 $('#'+numadjunto).attr("href", churro);                    
                         },
                         error: function () {
                             console.log("Se ha producido un error API adjuntos u otra causa.");
@@ -1337,10 +1345,43 @@ function showEventDetail(id, layout, day, month, year) {
         }
 
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
+             
+        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat='+ lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
+       
+        var fechaInicioViaje =  tiva_events[id]._fechaInicio; 
+        var hoy = new Date();
+            
+         diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); console.log("diferencia (llamada función): " + diasDif);
+      //Asignar evento al botón del clima
+        $("#info-clima").on('click',function(){
+            
+                    //si la diferencia es menor de 5 días, llamar a API del clima
+                    if (diasDif <= 5){
+                        console.log("Es menor de 5 días");
+                                                
+                        $.ajax({
 
+                            url: urlclima,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function (datosClima) {
+                                console.log(datosClima);
 
-        // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
-        $("#fichaDetalle").modal("show");
+                            },
+                            error: function () {
+                                alert("Se ha producido un error API u otra causa.");
+                            }
+                        });
+                        
+                      //si no, aviso al usuario 
+                    }else{
+                        alert("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
+                    }       
+        });
+        
+               
+      // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
+       $("#fichaDetalle").modal("show");
 
     } else { //compacto
         /*       jQuery('.tiva-event-detail-compact').html('');

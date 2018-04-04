@@ -483,10 +483,10 @@
 }
 
 .linea{
-    height: 2px;
-    width: 20vh;
-    border: 1px solid green;
-    background-color: green;
+    height: 0.05vh;
+    width: 30vh;
+    border: 0.2vh solid lightcoral;
+    background-color: lightcoral;
     margin: 5px;
 
 }
@@ -553,6 +553,13 @@
 
 .mimeType{
     cursor: pointer;
+}
+
+.capa{
+    visibility: hidden;
+    border: 1px dotted #756BB7;
+    width: 100%;
+    height: auto;
 }
 
 /*MODIFICACIONES CLASES MDB*/
