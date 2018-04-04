@@ -104,5 +104,13 @@ $(document).ready(function () {
 
 
     });
+        $("#endingDate").on("change", function () {
+        currentDate = $("#endingDate").val();
+        var $input = $("#startingDate").pickadate();
+        var ban = $input.pickadate('picker');
+        ban.set('max', currentDate);
+
+
+    });
 
 });

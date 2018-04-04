@@ -1,210 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		<title>Tiva Events Calendar</title>
-		
-		<!-- Include events calendar css file -->
-		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-                
-                <!-- MDB -->
-                <link href="assets/css/mdb.css" rel="stylesheet" type="text/css"/>
-                
-               
-		<!-- <link rel="stylesheet" href="assets/css/font-awesome.min.css"> -->
-                <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-		<link rel="stylesheet" href="assets/css/calendar_full.css">
-		<link rel="stylesheet" href="assets/css/calendar_compact.css">
-		
-		<!-- Include config file -->
-		<script src="config/config.js"></script>
-		
-		<!-- Include events calendar language file -->
-		<!--<script src="assets/languages/en.js"></script>-->
-                <script src="assets/languages/es.js"></script>
-		
-		<!-- Include events calendar js file -->
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/calendar.js"></script>
-		<script src="assets/js/tiva.js" id="7v9unltgzi85v5clohp95z2500w3ozvy"></script> <!-- TODO: averiguar -->
-                <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
-                <script src="assets/js/mdb.js" type="text/javascript"></script>
-                <!-- DataPicker          -- -->
-                <link href="assets/js/datapicker/themes/default.css" rel="stylesheet" type="text/css"/>
-                <link href="assets/js/datapicker/themes/default.date.css" rel="stylesheet" type="text/css"/>
-                <script src="assets/js/datapicker/picker.js" type="text/javascript"></script>
-                <script src="assets/js/datapicker/picker.date.js" type="text/javascript"></script>
-                <script src="assets/js/datapicker/datapicker.js" type="text/javascript"></script>
-		<!-- Example css -->
-		<link rel="stylesheet" href="assets/css/style.css">
-		<link rel="stylesheet" href="assets/css/bootstrap-responsive.css">
-	</head>
-	
-	<body>
-            <div class="container">
-                <div class="tiva-events-calendar full" data-source="json"></div> 
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-            </div>
-        
+        <title>Tiva Events Calendar</title>
 
-            <!-- MODAL MDB -->
-       
-    <!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalLG">FichaDetalle </button>
-       <br>
-       <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#centralModalFluid">FichaLista </button> -->
-                          
-       
+        <!-- Include events calendar css file -->
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+        <!-- MDB -->
+        <link href="assets/css/mdb.css" rel="stylesheet" type="text/css"/>
+
+
+        <!-- <link rel="stylesheet" href="assets/css/font-awesome.min.css"> -->
+        <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+        <link rel="stylesheet" href="assets/css/calendar_full.css">
+        <link rel="stylesheet" href="assets/css/calendar_compact.css">
+
+        <!-- Include config file -->
+        <script src="config/config.js"></script>
+
+        <!-- Include events calendar language file -->
+        <!--<script src="assets/languages/en.js"></script>-->
+        <script src="assets/languages/es.js"></script>
+
+        <!-- Include events calendar js file -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/calendar.js"></script>
+        <script src="assets/js/tiva.js" id="7v9unltgzi85v5clohp95z2500w3ozvy"></script> <!-- TODO: averiguar -->
+        <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="assets/js/mdb.js" type="text/javascript"></script>
+        <!-- DataPicker          -- -->
+        <link href="assets/js/datapicker/themes/default.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/js/datapicker/themes/default.date.css" rel="stylesheet" type="text/css"/>
+        <script src="assets/js/datapicker/picker.js" type="text/javascript"></script>
+        <script src="assets/js/datapicker/picker.date.js" type="text/javascript"></script>
+        <script src="assets/js/datapicker/datapicker.js" type="text/javascript"></script>
+        <!--Google Maps // Geocode -->
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBiTt0JoSwwww7v-t8xbt_40Ph6MvxeTMY&callback=initMap">
+        </script>
+        <!-- Example css -->
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="assets/css/bootstrap-responsive.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="tiva-events-calendar full" data-source="json"></div> 
+
+        </div>
+
+
+        <!-- MODAL MDB -->
+
+        <!--   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalLG">FichaDetalle </button>
+           <br>
+           <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#centralModalFluid">FichaLista </button> -->
+
+
         <!-- Central Modal Large -->
-            <div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <!--Content-->
-                    <div class="modal-content">
-                        <!--Header-->
-                        <div id="asunto" class="modal-header">
-                            <h4 class="modal-title w-100 h4"></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <!--  <span aria-hidden="true">&times;</span> -->
-                            </button>
-                        </div>
-                        <!--Body-->
-                        <div class="modal-body modal-cuerpo">
-                            <div class="modal-content">
-                                <div id="topcontent" class="topcontent">
-                                    <div class="view logo">
-                                        
-                                    </div>
-                                    <div class="relleno"></div>
-                                    
+        <div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <!--Content-->
+                <div class="modal-content">
+                    <!--Header-->
+                    <div id="asunto" class="modal-header">
+                        <h4 class="modal-title w-100 h4"></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <!--  <span aria-hidden="true">&times;</span> -->
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body modal-cuerpo">
+                        <div class="modal-content">
+                            <div id="topcontent" class="topcontent">
+                                <div class="view logo">
+
+                                </div>
+                                <div class="relleno"></div>
+
+                            </div> 
+
+                            <div class="horario">
+                                <div class="origen"> 
+                                    <div id="ciudad-o" class="ciudad-o">ORIGEN</div>
+                                    <div id="fecha-o" class="fecha-o">dd/mm/aaaa</div>
+                                    <div id="hora-o" class="hora-o">hh:mm</div> 
+                                </div>
+                                <div class="linea">
+
+                                </div>
+                                <div class="destino"> 
+                                    <div id="ciudad-d" class="ciudad-d">DESTINO</div>
+                                    <div id="fecha-d" class="fecha-d">dd/mm/aaaa</div>
+                                    <div id="hora-d" class="hora-d">hh:mm</div>    
+                                </div>
+                            </div>
+                            <div class="descripcion">
+                                <h4 class="h4">Descripción:</h4>
+                                <h5 id="localizador"> </h5>
+                                <div id="descripcion" >
+
+
+                                </div>
+                                <div id="compartecon" class="listaviajeros">
+
+                                </div>
+
+                                <div class="seguirvuelo">
+                                    <br/> <button  id="googlesearchvuelo" class="btn btn-success textoboton">Seguimiento online</button>
                                 </div> 
 
-                                <div class="horario">
-                                    <div class="origen"> 
-                                        <div id="ciudad-o" class="ciudad-o">ORIGEN</div>
-                                        <div id="fecha-o" class="fecha-o">dd/mm/aaaa</div>
-                                        <div id="hora-o" class="hora-o">hh:mm</div> 
-                                    </div>
-                                    <div class="linea">
-                                        
-                                    </div>
-                                    <div class="destino"> 
-                                        <div id="ciudad-d" class="ciudad-d">DESTINO</div>
-                                        <div id="fecha-d" class="fecha-d">dd/mm/aaaa</div>
-                                        <div id="hora-d" class="hora-d">hh:mm</div>    
-                                    </div>
-                                </div>
-                                <div class="descripcion">
-                                    <h4 class="h4">Descripción:</h4>
-                                     <h5 id="localizador"> </h5>
-                                     <div id="descripcion" >
-                                        
-                                         
-                                     </div>
-                                     <div id="compartecon" class="listaviajeros">
-                                        
-                                     </div>
-                                    
-                                     <div class="seguirvuelo">
-                                        <br/> <button  id="googlesearchvuelo" class="btn btn-success textoboton">Seguimiento online</button>
-                                     </div> 
-                                    
-                                    
-                                </div>
-                                
-                                <div class="ubicacion">
-                                    <h4 class="h4">Ubicación:</h4>
-                                    <h5 id="ubicacion" class=""></h5>
-                                    <a href="" class ="ubicacion-maps"><i class="fas fa-search"></i> Ver mapa</a>
-                                </div>
-                                <div class="info-interes">
-                                    <h4 class="h4">Información de interés: </h4>
-                                    
-                                    <a href="" class ="info-clima"><i class="fas fa-cloud"></i> Clima</a><br/><br/>
-                                    <a href="" class ="info-lugar"><i class="fas fa-info-circle"></i> Información adicional</a>
-                                </div>
-                                <div class="adjuntos">
-                                    <h4 class="h4">Documentos adjuntos:</h4>
-                                    <!--    <div><i class="far fa-file-pdf"></i></div> -->
-                                    <div id="docs" class="docs">
-                                        
-                                    </div>
-                                </div>
-                                <div class="ics">
-                                    <h4 class="h4">Descarga ICS:</h4>
-                                    <button class="btn btn-info btn-lg descargaics textoboton">descargar ICS</button></div>
-                            </div>
-                        </div>
-                        <!--Footer-->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary btn-lg textoboton" data-dismiss="modal">Cerrar</button>
-                           <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->
-                        </div>
-                    </div>
-                    <!--/.Content-->
-                </div>
-            </div>
-            <!-- Central Modal Large -->
-            
-            <!-- Central Modal Fluid -->
-            <div class="modal fade" id="centralModalFluid" tabindex="-1" role="dialog" aria-labelledby="myModalLabelF" aria-hidden="true">
-                <div class="modal-dialog modal-fluid" role="document">
-                    <!--Content-->
-                    <div class="modal-content">
-                         <!--Header-->
-                        <div class="modal-header tren">
-                            <h4 class="modal-title w-100" id="myModalLabel"> <i class="fas fa-train fa-2x"></i>  (Asunto)</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <!--  <span aria-hidden="true">&times;</span> -->
-                            </button>
-                        </div>
-                        <!--Body-->
-                        <div class="modal-body modal-cuerpo">
-                            <div class="modal-content">
-                                <div class="view logo"> <img src="assets/images/logorenfeinverso.png" alt="Logo Renfe"/></div> 
 
-                                <div class="horario">
-                                    <div class="origen"> 
-                                        <div class="ciudad">ORIGEN</div>
-                                        <div class="fecha">dd/mm/aaaa</div>
-                                        <div class="hora">hh:mm</div> 
-                                    </div>
-                                    <div class="linea"></div>
-                                    <div class="destino"> 
-                                        <div class="ciudad">DESTINO</div>
-                                        <div class="fecha">dd/mm/aaaa</div>
-                                        <div class="hora">hh:mm</div>    
-                                    </div>
-                                </div>
-                                <div class="descripcion">
-                                    <h4>Descripción:</h4>
-                                    <!-- <div class="listaviajeros">COMPARTE CON: </div> -->
-                                </div>
-                                                                              
-                               
                             </div>
-                        </div>
-                        <!--Footer-->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Ver</button>
-                            <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->
+
+                            <div class="ubicacion">
+                                <h4 class="h4">Ubicación:</h4>
+                                <h5 id="ubicacion" class=""></h5>
+                                <button id="verMapa" class="ubicacion-maps btn btn-success textoboton"><i class="fas fa-search"></i> Ver mapa</button>
+                            </div>
+                            <div class="info-interes">
+                                <h4 class="h4">Información de interés: </h4>
+
+                                <a  href="#iconos" id="info-clima" class=" btn btn-success btn-sm textoboton"><i class="fas fa-cloud"></i> Clima</a><br/>
+                                <div  class="iconos"></div>
+                                <br/>
+                                <button id="info-lugar" class=" btn btn-success btn-sm textoboton "><i class="fas fa-info-circle"></i> Información adicional</button>
+                            </div>
+                            <div class="adjuntos">
+                                <h4 class="h4">Documentos adjuntos:</h4>
+                                <!--    <div><i class="far fa-file-pdf"></i></div> -->
+                                <div id="docs" class="docs">
+
+                                </div>
+                            </div>
+                            <div class="ics">
+                                <h4 class="h4">Descarga ICS:</h4>
+                                <button class="btn btn-info btn-lg descargaics textoboton">descargar ICS</button></div>
                         </div>
                     </div>
-                    <!--/.Content-->
+                    <!--Footer-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-lg textoboton" data-dismiss="modal">Cerrar</button>
+                        <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->
+                    </div>
                 </div>
+                <!--/.Content-->
             </div>
-            <!-- Central Modal Fluid -->
-           
-            <!-- BOTON PRUEBAS -->
-            
-            <script>
-               //BUSQUEDA VUELO GOOGLE
-               window.onload = function(){
-                   
-                 
-               }; 
-            </script>
-		
-        </body>
+        </div>
+        <!-- Central Modal Large -->
+
+        <!-- Central Modal Fluid -->
+        <div class="modal fade" id="centralModalFluid" tabindex="-1" role="dialog" aria-labelledby="myModalLabelF" aria-hidden="true">
+            <div class="modal-dialog modal-fluid" role="document">
+                <!--Content-->
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header tren">
+                        <h4 class="modal-title w-100" id="myModalLabel"> <i class="fas fa-train fa-2x"></i>  (Asunto)</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <!--  <span aria-hidden="true">&times;</span> -->
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body modal-cuerpo">
+                        <div class="modal-content">
+                            <div class="view logo"> <img src="assets/images/logorenfeinverso.png" alt="Logo Renfe"/></div> 
+
+                            <div class="horario">
+                                <div class="origen"> 
+                                    <div class="ciudad">ORIGEN</div>
+                                    <div class="fecha">dd/mm/aaaa</div>
+                                    <div class="hora">hh:mm</div> 
+                                </div>
+                                <div class="linea"></div>
+                                <div class="destino"> 
+                                    <div class="ciudad">DESTINO</div>
+                                    <div class="fecha">dd/mm/aaaa</div>
+                                    <div class="hora">hh:mm</div>    
+                                </div>
+                            </div>
+                            <div class="descripcion">
+                                <h4>Descripción:</h4>
+                                <!-- <div class="listaviajeros">COMPARTE CON: </div> -->
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!--Footer-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Ver</button>
+                        <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!-- Central Modal Fluid -->
+
+        <!-- BOTON PRUEBAS -->
+
+        <script>
+            //BUSQUEDA VUELO GOOGLE
+            window.onload = function () {
+
+
+            };
+        </script>
+
+    </body>
 </html>
