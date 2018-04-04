@@ -1182,6 +1182,8 @@ function showEventDetail(id, layout, day, month, year) {
 
         document.getElementById("descripcion").innerHTML = "";
         document.getElementById("compartecon").innerHTML = "";
+        document.getElementsByClassName("iconos")[0].innerHTML = "";
+        //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
 
 
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
@@ -1437,20 +1439,20 @@ function showEventDetail(id, layout, day, month, year) {
         var fechaInicioViaje = tiva_events[id]._fechaInicio;
         var hoy = new Date();
 
+
         diasDif = diferenciaDiasClima(hoy, fechaInicioViaje);
         console.log("diferencia (llamada función): " + diasDif);
         //Asignar evento al botón del clima
         $("#info-clima").on('click', function () {
 
             //si la diferencia es menor de 5 días, llamar a API del clima
-            if (diasDif <= 5) {
+            if ((diasDif >= 0) && (diasDif <= 5)) {
                 console.log("Es menor de 5 días");
                 if ($(".iconos").attr("id") === "iconos") {
                     $(".iconos").attr("id", "noMostrar");
                 } else {
                     $(".iconos").attr("id", "iconos");
                 }
-
                 $.ajax({
 
                     url: urlclima,
@@ -1458,17 +1460,19 @@ function showEventDetail(id, layout, day, month, year) {
                     dataType: 'json',
                     success: function (datosClima) {
                         console.log(datosClima);
+                        $('.iconos').append("<div>" + datosClima.list[0] + "</div>");
 
                     },
                     error: function () {
-                        alert("Se ha producido un error API u otra causa.");
+                        console.log("Se ha producido un error API u otra causa.");
                     }
                 });
 
                 //si no, aviso al usuario 
             } else {
-                alert("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
+                console.log("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
             }
+
         });
 
 
