@@ -555,6 +555,13 @@
     cursor: pointer;
 }
 
+.capa{
+    visibility: hidden;
+    border: 1px dotted #756BB7;
+    width: 100%;
+    height: auto;
+}
+
 /*MODIFICACIONES CLASES MDB*/
 
 .btn{

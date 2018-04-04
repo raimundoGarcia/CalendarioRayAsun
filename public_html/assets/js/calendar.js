@@ -1267,8 +1267,6 @@ function showEventDetail(id, layout, day, month, year) {
         }
 
 
-
-
         //GESTIÓN DE LOS ADJUNTOS
         if(tiva_events[id]._adjuntos !== null){ //TODO: el campo Adjuntos o es null o es un array con una posición mínimo
             
@@ -1346,14 +1344,14 @@ function showEventDetail(id, layout, day, month, year) {
 
                             },
                             error: function () {
-                                console.log("Se ha producido un error API u otra causa.");
+                                alert("Se ha producido un error API u otra causa.");
                             }
                         });
+                        
                       //si no, aviso al usuario 
                     }else{
-                        console.log("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
-                    }
-         
+                        alert("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
+                    }       
         });
         
                
