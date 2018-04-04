@@ -124,7 +124,6 @@
                             </div>
                             <div class="info-interes">
                                 <h4 class="h4">Información de interés: </h4>
-
                                 <a  href="#iconos" id="info-clima" class=" btn btn-success btn-sm textoboton"><i class="fas fa-cloud"></i> Clima</a><br/>
                                 <div  class="iconos"></div>
                                 <br/>
@@ -139,12 +138,13 @@
                             </div>
                             <div class="ics">
                                 <h4 class="h4">Descarga ICS:</h4>
-                                <button class="btn btn-info btn-lg descargaics textoboton">descargar ICS</button></div>
+                                <button class="btn btn-info btn-lg descargaics textoboton">descargar ICS</button>
+                            </div>
                         </div>
                     </div>
                     <!--Footer-->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-lg textoboton" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary btn-lg textoboton" data-dismiss="modal" onclick="eliminarEvento()">Cerrar</button>
                         <!-- <button type="button" class="btn btn-secondary btn-lg disabled">Otra Acción</button> -->
                     </div>
                 </div>
@@ -153,5 +153,6 @@
             <!-- Central Modal Fluid -->
             <script>var fecha = new Date(); </script>
            <!-- api key wheather station: eb49663a0809388193782a1fa7698518 -->
+        </div>
         </body>
 </html>
