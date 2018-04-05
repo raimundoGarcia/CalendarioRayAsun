@@ -7,7 +7,7 @@ var wordDay_wed = "Miercoles";
 var wordDay_thu = "Jueves";
 var wordDay_fri = "Viernes";
 var wordDay_sat = "Sabado";
-
+var diasSemana = new Array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
 // View Button
 var calendar_view = "Calendario"
 var list_view = "Lista"

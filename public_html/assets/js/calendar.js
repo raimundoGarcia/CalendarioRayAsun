@@ -33,32 +33,17 @@ function getShortText(text, num) {
         var ancho = $(window).width();
         var caracteres = 1;
         switch (true) {
-//            case (ancho > 0 && ancho <= 320):
-//                caracteres = Math.floor(num * 0);
-//                break;
-//            case (ancho >= 321 && ancho <= 425):
-//                caracteres = Math.floor(num * 0);
-//                break;
-//            case (ancho >= 425 && ancho <= 500):
-//                caracteres = Math.floor(num * 2);
-//                break;
-//            case (ancho >= 501 && ancho <= 550):
-//                caracteres = Math.floor(num * 3);
-//                break;
-//            case (ancho >= 551 && ancho <= 600):
-//                caracteres = Math.floor(num * 4);
-//                break;
             case (ancho >= 601 && ancho <= 650):
-                caracteres = Math.floor(num * 8.5);
+                caracteres = Math.floor(num * 7.5);
                 break;
             case (ancho >= 651 && ancho <= 700):
-                caracteres = Math.floor(num * 9.5);
+                caracteres = Math.floor(num * 8.5);
                 break;
             case (ancho >= 701 && ancho <= 750):
-                caracteres = Math.floor(num * 10.5);
+                caracteres = Math.floor(num * 9.5);
                 break;
             case (ancho >= 751 && ancho <= 800):
-                caracteres = Math.floor(num * 10.5);
+                caracteres = Math.floor(num * 10);
                 break;
             case (ancho >= 801 && ancho <= 850):
                 caracteres = Math.floor(num * 10.5);
@@ -285,7 +270,12 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
     calendarString += '<tr class="active">';
     for (var m = 0; m < wordDay.length; m++) {
-        calendarString += '<th>' + wordDay[m].substring(0, 3) + '<\/th>';  //TODO: ACORTADOR STRING DÍAS DE LA SEMANA para cabecera días semana
+        if ($(window).width() < 600) {
+            calendarString += '<th>' + wordDay[m].substring(0, 3) + '<\/th>';  //TODO: ACORTADOR STRING DÍAS DE LA SEMANA para cabecera días semana
+        } else {
+            calendarString += '<th>' + wordDay[m] + '<\/th>';
+        }
+
     }
     calendarString += '<\/tr>';
 
@@ -1008,12 +998,12 @@ function diferenciaDiasClima(hoy, inicioViaje) {
 function showEventDetail(id, layout, day, month, year) {
     /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); 
+     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();*/
-    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
-    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
-
-    jQuery('.tiva-events-calendar.' + layout + ' .list-view').removeClass('active');
-    jQuery('.tiva-events-calendar.' + layout + ' .calendar-view').removeClass('active');
+//    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
+//
+//    jQuery('.tiva-events-calendar.' + layout + ' .list-view').removeClass('active');
+//    jQuery('.tiva-events-calendar.' + layout + ' .calendar-view').removeClass('active');
     var myvar = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '            <div class="modal-dialog modal-lg" role="document">' +
             '                <!--Content-->' +
@@ -1444,7 +1434,7 @@ function showEventDetail(id, layout, day, month, year) {
         console.log("diferencia (llamada función): " + diasDif);
         //Asignar evento al botón del clima
         $("#info-clima").on('click', function () {
-
+            $('.iconos').html("");
             //si la diferencia es menor de 5 días, llamar a API del clima
             if ((diasDif >= 0) && (diasDif <= 5)) {
                 console.log("Es menor de 5 días");
@@ -1453,15 +1443,67 @@ function showEventDetail(id, layout, day, month, year) {
                 } else {
                     $(".iconos").attr("id", "iconos");
                 }
+                var listadoMediciones= [];
+                var fechasUnicas=[];
+               
                 $.ajax({
 
                     url: urlclima,
                     type: 'get',
                     dataType: 'json',
                     success: function (datosClima) {
-                        console.log(datosClima);
+                      
+                        datosClima.list.forEach(medicion=>{
+                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));                           
+                        fechasUnicas = Array.from(new Set(listadoMediciones));
+                        });              
+                        for (var i = 0; i < fechasUnicas.length; i++) {
+                             var dias =[];
+                            for (var j = 0; j < datosClima.list.length; j++) {
+                               if ( datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]){
+                                   console.log("entra");
+                                   dias.push(datosClima.list[j]);
+                                  
+                               }
+                            }
+                            var temp_minima = 100;
+                            for (var k = 0; k < dias.length; k++) {
+                                if ( temp_minima >dias[k].main.temp_min){
+                               temp_minima = dias[k].main.temp_min;
+                            }
+                        }
+                             var diaSemana = new Date(fechasUnicas[i]);
+                              myvar += '   <div id="' + '1' + '" class="card card-cascade narrower">  ' +
+                                '                <!--Card image-->  ' +
+                                '                <div class="view overlay hm-white-slight">  ' +
+                                '                <img src="' + 'assets/images/Consultia.png' + '" class="img-fluid iconos__logo" alt="">  ' +
+                                '                <a>  ' +
+                                '                <div class="mask"></div>  ' +
+                                '                </a>  ' +
+                                '                </div>  ' +
+                                '                <!--/.Card image-->  ' +
+                                '                <!--Card content-->  ' +
+                                '                <div class="card-body">  ' +
+                                '                <h4 style="color:' + 'green' + '";><b>' +diasSemana[diaSemana.getDay()] +', '+ fechasUnicas[i].substring(8, 10)+ '</b></h4>  ' +
+                                '                <!--Title-->  ' +
+                                '                <h4 class="card-title">' + 'Pais Example' + ',&nbsp;&nbsp;' + 'Ciudad Example' + '</h4>  ' +
+                                '                <!--Text-->  ' +
+                                '                <p class="card-text"><b>Temperatura:' + 'Minima:'+temp_minima + '</b></p>  ' +
+                                '                <p class="card-text"><b> ' + 'Cielo claro' + '</b></p>  ' +
+                                '                <p class="card-text"><b>Humedad ' + '30%' + '</b></p>  ' +
+                                '                </div>  ' +
+                                '               </div>  ';
+                            console.log("nuevo dia");
+                            console.log(dias);
+                           
+                        }
+                          console.log(fechasUnicas);
                         $('.iconos').append("<div>" + datosClima.list[0] + "</div>");
 
+                      
+                       
+                        $(".iconos").html("");
+                        $(".iconos").append(myvar);
                     },
                     error: function () {
                         console.log("Se ha producido un error API u otra causa.");
@@ -1927,4 +1969,5 @@ function cargaCalendario() {
 }
 jQuery(document).ready(function () {
     cargaCalendario();
+    
 });
