@@ -1452,14 +1452,14 @@ function showEventDetail(id, layout, day, month, year) {
                     $(".iconos").attr("id", "noMostrar");
                 } else {
                     $(".iconos").attr("id", "iconos");
-                }
+                }          
                 $.ajax({
 
                     url: urlclima,
                     type: 'get',
                     dataType: 'json',
                     success: function (datosClima) {
-                        console.log(datosClima);
+                        console.log(datosClima);                   
                         $('.iconos').append("<div>" + datosClima.list[0] + "</div>");
 
                     },
