@@ -1454,29 +1454,58 @@ function showEventDetail(id, layout, day, month, year) {
                     success: function (datosClima) {
                       
                         datosClima.list.forEach(medicion=>{
-                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));                           
-                        fechasUnicas = Array.from(new Set(listadoMediciones));
+                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
+                        fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
                         });              
-                        for (var i = 0; i < fechasUnicas.length; i++) {
+                        for (var i = 0; i < fechasUnicas.length; i++) { 
                              var dias =[];
+                             var array_iconos = [];
+                             var array_id_meteo = [];
                             for (var j = 0; j < datosClima.list.length; j++) {
                                if ( datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]){
                                    console.log("entra");
-                                   dias.push(datosClima.list[j]);
+                                   dias.push(datosClima.list[j]); //genera un array por cada medición que pertenecen a un día concreto (fechasUnicas[i])
                                   
                                }
                             }
                             var temp_minima = 100;
-                            for (var k = 0; k < dias.length; k++) {
-                                if ( temp_minima >dias[k].main.temp_min){
+                            for (var k = 0; k < dias.length; k++) {  //recorre cada grupo de arrays para un día concreto
+                                if ( temp_minima >dias[k].main.temp_min){  //se van manipulando los datos objetivo
                                temp_minima = dias[k].main.temp_min;
                             }
+                            // array_iconos.push(dias[k].weather[0].icon); //construye un array (para cada día) con los nombres de los iconos para ese día
+                            var intId = parseInt(dias[k].weather[0].id);
+                            array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
+                                                                        
                         }
-                             var diaSemana = new Date(fechasUnicas[i]);
+                        console.log("Listado iconos: " + array_iconos);
+                        console.log("Listado ids: " + array_id_meteo);
+                        maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
+                        console.log("El máximo diario es: " + maximo);
+                        
+                      //  var img_icono = "";
+                        var descripcion = "";
+                       info_meteoro.forEach(medicion => {if (medicion.id == maximo){ descripcion = medicion.descripcion; icono_meteo = medicion.icono}});
+                        //En función de si aparece un icono en el array diario, se queda con el caso más desfavorable (simplificado)
+                    /*    switch(true){
+                            case(array_iconos.includes("13d") || array_iconos.includes("13n")): img_icono = '13d.png'; console.log("snow");  break;
+                            case(array_iconos.includes("11d") || array_iconos.includes("11n")): img_icono = '11d.png'; console.log("thunderstorm");  break;
+                            case(array_iconos.includes("09d") || array_iconos.includes("09n")): img_icono = '09d.png'; console.log("shower rain");  break;
+                            case(array_iconos.includes("10d") || array_iconos.includes("10n")): img_icono = '10d.png'; console.log("rain"); break;
+                            case(array_iconos.includes("50d") || array_iconos.includes("50n")): img_icono = '50d.png'; console.log("mist"); break;
+                            case(array_iconos.includes("04d") || array_iconos.includes("04n")): img_icono = '04d.png'; console.log("broken clouds"); break;
+                            case(array_iconos.includes("03d") || array_iconos.includes("03n")): img_icono = '03d.png'; console.log("scattered clouds"); break;
+                            case(array_iconos.includes("02d") || array_iconos.includes("02n")): img_icono = '02d.png'; console.log("few clouds"); break;
+                            case(array_iconos.includes("01d") || array_iconos.includes("01n")): img_icono = '01d.png'; console.log("clear sky"); break;
+                            
+                            default: console.log("Ha petao!"); break;
+                        } */
+                       
+                             var diaSemana = new Date(fechasUnicas[i]); //para mostrar el día de la semana en las tarjetas informativas que se renderizan a continuación:
                               myvar += '   <div id="' + '1' + '" class="card card-cascade narrower">  ' +
                                 '                <!--Card image-->  ' +
                                 '                <div class="view overlay hm-white-slight">  ' +
-                                '                <img src="' + 'assets/images/Consultia.png' + '" class="img-fluid iconos__logo" alt="">  ' +
+                                '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + ".png" + '" class="img-fluid iconos__logo" alt="">  ' +
                                 '                <a>  ' +
                                 '                <div class="mask"></div>  ' +
                                 '                </a>  ' +
@@ -1489,18 +1518,16 @@ function showEventDetail(id, layout, day, month, year) {
                                 '                <h4 class="card-title">' + 'Pais Example' + ',&nbsp;&nbsp;' + 'Ciudad Example' + '</h4>  ' +
                                 '                <!--Text-->  ' +
                                 '                <p class="card-text"><b>Temperatura:' + 'Minima:'+temp_minima + '</b></p>  ' +
-                                '                <p class="card-text"><b> ' + 'Cielo claro' + '</b></p>  ' +
+                                '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
                                 '                <p class="card-text"><b>Humedad ' + '30%' + '</b></p>  ' +
                                 '                </div>  ' +
                                 '               </div>  ';
-                            console.log("nuevo dia");
+                         //   console.log("nuevo dia");
                             console.log(dias);
                            
                         }
                           console.log(fechasUnicas);
-                        $('.iconos').append("<div>" + datosClima.list[0] + "</div>");
-
-                      
+                                             
                        
                         $(".iconos").html("");
                         $(".iconos").append(myvar);
