@@ -27,6 +27,8 @@ var order_num = 0;
 var wordDay;  //para nombre días largo o corto
 var date_start;
 var returnView = "calendario"; // asigna la vista a la que volver despues de mostrar los detalles de un evento
+// comprobacion de si es calendario con filtro de fechas o sin filtro
+var filtrar = false ;
 function getShortText(text, num) {
     if (text) {
 
@@ -1443,67 +1445,77 @@ function showEventDetail(id, layout, day, month, year) {
                 } else {
                     $(".iconos").attr("id", "iconos");
                 }
-                var listadoMediciones= [];
-                var fechasUnicas=[];
-               
+                var listadoMediciones = [];
+                var fechasUnicas = [];
+                var paneles="";
+
                 $.ajax({
 
                     url: urlclima,
                     type: 'get',
                     dataType: 'json',
                     success: function (datosClima) {
-                      
-                        datosClima.list.forEach(medicion=>{
-                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));                           
-                        fechasUnicas = Array.from(new Set(listadoMediciones));
-                        });              
+
+                        datosClima.list.forEach(medicion => {
+                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));
+                            fechasUnicas = Array.from(new Set(listadoMediciones));
+                        });
+                        paneles += ' <h2 class="card-tittle">' + datosClima.city.name + ',&nbsp;&nbsp;' + datosClima.city.country + '</h2>  ' ;
                         for (var i = 0; i < fechasUnicas.length; i++) {
-                             var dias =[];
+                            var dias = [];
                             for (var j = 0; j < datosClima.list.length; j++) {
-                               if ( datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]){
-                                   console.log("entra");
-                                   dias.push(datosClima.list[j]);
-                                  
-                               }
+                                if (datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]) {
+
+                                    dias.push(datosClima.list[j]);
+
+                                }
                             }
                             var temp_minima = 100;
+                            var temp_maxima = -200;
+                            var humedad = 0;
                             for (var k = 0; k < dias.length; k++) {
-                                if ( temp_minima >dias[k].main.temp_min){
-                               temp_minima = dias[k].main.temp_min;
+                                if (temp_minima > dias[k].main.temp_min) {
+                                    temp_minima = dias[k].main.temp_min;
+                                }
+                                if (temp_maxima < dias[k].main.temp_max) {
+                                    temp_maxima = dias[k].main.temp_max;
+                                }
+                                humedad += dias[k].main.humidity;
+
                             }
-                        }
-                             var diaSemana = new Date(fechasUnicas[i]);
-                              myvar += '   <div id="' + '1' + '" class="card card-cascade narrower">  ' +
-                                '                <!--Card image-->  ' +
-                                '                <div class="view overlay hm-white-slight">  ' +
-                                '                <img src="' + 'assets/images/Consultia.png' + '" class="img-fluid iconos__logo" alt="">  ' +
-                                '                <a>  ' +
-                                '                <div class="mask"></div>  ' +
-                                '                </a>  ' +
-                                '                </div>  ' +
-                                '                <!--/.Card image-->  ' +
-                                '                <!--Card content-->  ' +
-                                '                <div class="card-body">  ' +
-                                '                <h4 style="color:' + 'green' + '";><b>' +diasSemana[diaSemana.getDay()] +', '+ fechasUnicas[i].substring(8, 10)+ '</b></h4>  ' +
-                                '                <!--Title-->  ' +
-                                '                <h4 class="card-title">' + 'Pais Example' + ',&nbsp;&nbsp;' + 'Ciudad Example' + '</h4>  ' +
-                                '                <!--Text-->  ' +
-                                '                <p class="card-text"><b>Temperatura:' + 'Minima:'+temp_minima + '</b></p>  ' +
-                                '                <p class="card-text"><b> ' + 'Cielo claro' + '</b></p>  ' +
-                                '                <p class="card-text"><b>Humedad ' + '30%' + '</b></p>  ' +
-                                '                </div>  ' +
-                                '               </div>  ';
+                            var diaSemana = new Date(fechasUnicas[i]);
+                            var mediaHumedad = humedad / dias.length;
+                            paneles += '   <div id="' + dias + '" class="card card-cascade narrower">  ' +
+                                    '                <h4 style="color:' + 'green' + '";><b>' + diasSemana[diaSemana.getDay()] + ', ' + fechasUnicas[i].substring(8, 10) + '</b></h4>  ' +
+                                    '                <!--Card image-->  ' +
+                                    '                <div class="view overlay hm-white-slight">  ' +
+                                    '                <img src="' + 'assets/images/Consultia.png' + '" class="img-fluid iconos__logo" alt="">  ' +
+                                    '                <a>  ' +
+                                    '                <div class="mask"></div>  ' +
+                                    '                </a>  ' +
+                                    '                </div>  ' +
+                                    '                <!--/.Card image-->  ' +
+                                    '                <!--Card content-->  ' +
+                                    '                <div class="card-body">  ' +
+                                    '                <!--Title-->  ' +
+
+                                    '                <!--Text-->  ' +
+                                    '                <p class="card-text"><b>Temperatura: </b><br>' + '<b>Min </b>' + temp_minima + '<b> Max </b>' + temp_maxima + '</p>  ' +
+                                    '                <p class="card-text"><b> ' + 'Cielo claro' + '</b></p>  ' +
+                                    '                <p class="card-text"><b>Humedad: </b>' + mediaHumedad.toFixed(2) + '%</p>  ' +
+                                    '                </div>  ' +
+                                    '               </div>  ';
                             console.log("nuevo dia");
                             console.log(dias);
-                           
-                        }
-                          console.log(fechasUnicas);
-                        $('.iconos').append("<div>" + datosClima.list[0] + "</div>");
 
-                      
-                       
+                        }
+                        console.log(fechasUnicas);
+
+
+
+
                         $(".iconos").html("");
-                        $(".iconos").append(myvar);
+                        $(".iconos").append(paneles);
                     },
                     error: function () {
                         console.log("Se ha producido un error API u otra causa.");
@@ -1650,6 +1662,7 @@ function dayDifference(entrada, salida) {
 //TODO: código en $(document).ready()
 // Init calendar full
 function cargaCalendario() {
+   $('.tiva-events-calendar.full').html("");
     if (jQuery('.tiva-events-calendar.full').length) {
         jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
                 + '<button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
@@ -1684,7 +1697,7 @@ function cargaCalendario() {
                 + ' </div>'
                 + ' <!--Grid row-->'
                 //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
-                + '<button class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
+                + '<button id="filtro-fechas" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
                 + '<div class="tiva-events-calendar-wrap">'
@@ -1737,10 +1750,16 @@ function cargaCalendario() {
     } else { // Start with Monday
         wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun);
     }
-
+    tiva_events = []; //resetea los eventos, para que no se acumulen al realizar filtrados
+    if(filtrar){
+        var url = "./events/ejemplo_agenda.json";
+    }else{
+       var url= "http://192.168.0.250:5556/api/Calendario?idUsuario=2";
+    }
+    filtrar=false;
     jQuery.ajax({
         // url: "./events/ejemplo_agenda.json",
-        url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2",
+        url: url,
         dataType: 'json',
         type: "GET",
         beforeSend: function () {
@@ -1964,10 +1983,24 @@ function cargaCalendario() {
 //            jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
 //        }
 //    });
-
-
+controlesDataPicker();
+$("#filtro-fechas").on("click",function(){
+   
+   fechaIni= $("#startingDate").val();
+   fechaFin= $("#endingDate").val();
+   if ((fechaIni !== "")&& fechaFin !=="") {
+       alert ("mem vale");
+        filtrar= true;
+        cargaCalendario();
+   }else{
+       alert ("Selecciona fecha de inicio y fin para realizar una busqueda");
+         cargaCalendario();
+   }
+ 
+});
 }
+
 jQuery(document).ready(function () {
     cargaCalendario();
-    
+
 });

@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function controlesDataPicker() {
 
     $('.datepicker').pickadate({
         monthsFull: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
@@ -17,8 +17,8 @@ $(document).ready(function () {
         labelMonthSelect: 'Selecciona un mes',
         labelYearSelect: 'Selecciona un año',
 // Formats
-        format: 'd mmmm, yyyy',
-        formatSubmit: undefined,
+        format: 'dd-mm-yyyy',
+        formatSubmit: 'yyyy-MM-hh',
         hiddenPrefix: undefined,
         hiddenSuffix: '_submit',
         hiddenName: undefined,
@@ -113,4 +113,4 @@ $(document).ready(function () {
 
     });
 
-});
+};
