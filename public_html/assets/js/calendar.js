@@ -999,7 +999,7 @@ function diferenciaDiasClima(hoy, inicioViaje) {
     var timeDifferenceInDays = timeDifferenceInHours / 24;
     console.log("Función dif en días: " + timeDifferenceInDays);
 
-    return Math.round(timeDifferenceInDays);
+    return timeDifferenceInDays;
 }
 
 // Show event detail TODO: mostrar detalles de los eventos
@@ -1449,7 +1449,7 @@ function showEventDetail(id, layout, day, month, year) {
         $("#info-clima").on('click', function () {
             $('.iconos').html("");
             //si la diferencia es menor de 5 días, llamar a API del clima
-            if ((diasDif >= 0) && (diasDif <= 5)) {
+            if ((diasDif > -1) && (diasDif <= 5)) {
                 console.log("Es menor de 5 días");
                 if ($(".iconos").attr("id") === "iconos") {
                     $(".iconos").attr("id", "noMostrar");
@@ -1563,14 +1563,14 @@ function showEventDetail(id, layout, day, month, year) {
                 //si no, aviso al usuario 
             } else if(diasDif<0) {  //caso días anteriores a hoy
                 
-                variableTexto = '<div class="toast-text">Por favor, consulte la previsión máximo 5 días antes del inicio del viaje.</div>';
+                variableTexto = '<div class="toast-text">Evento pasado, no hay previsiones disponibles.</div>';
                 $('<div class="toaster toast-error">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
                 $('#info-clima').addClass('isDisabled');
                 setTimeout(function () {
                     $('.toaster').fadeOut('slow', 'linear');
                     $('#info-clima').removeClass('isDisabled');
                 }, 3000);
-               // $('#info-clima').on('click');      
+                    
             } else { //resto de casos, cuando la diferencia de días es mayor a 5 (días máximos previsión)
                 
                 variableTexto = '<div class="toast-text">La diferencia es mayor de 5 días (' + diasDif + '). Consulte la previsión máximo 5 días antes del inicio del viaje.</div>';
