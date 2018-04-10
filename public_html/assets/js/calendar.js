@@ -1435,7 +1435,8 @@ function showEventDetail(id, layout, day, month, year) {
         }
 
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
-
+        
+    if (latDestino!= null && lonDestino !=null ){
         var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
 
         var fechaInicioViaje = tiva_events[id]._fechaInicio;
@@ -1582,9 +1583,11 @@ function showEventDetail(id, layout, day, month, year) {
                       
             }
 
-});
+}); //fin información clima
 
-
+}  else {
+        $('#info-clima').addClass('isDisabled');
+}  
 // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
 
 $("#fichaDetalle").modal("show");
