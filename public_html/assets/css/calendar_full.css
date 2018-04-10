@@ -595,6 +595,7 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 .modal-header{
     font-size: 3vh;
     color: white;
+    text-align: center;
 }
 
 /* CLASES LISTA DE EVENTOS */
@@ -694,7 +695,7 @@ table td{
 }
 /* ICONOS TIEMPO MODAL */
 .iconos{
-    transition: height 1.5s;
+  /*  transition: height 1.5s;*/
     height: 0px ;
     display:none;
 }
@@ -703,16 +704,15 @@ table td{
     height:auto;
     text-align: center;
     overflow: auto;
+
 }
-
-
 .narrower{
     width: 30%;
     display: inline-block;
     margin: 10px;
 }
-.card-title{
-    font-size: 18px !important;
+.card-tittle{
+    font-size: 3vh !important;
     color: blue !important;
 }
 .card-text{
@@ -723,7 +723,7 @@ table td{
     .narrower{
         width: 36vw;
         margin-bottom: 15px;
-         margin: 1vw;
+        margin: 1vw;
     }
     .card-title{
         font-size: 2vw !important;
@@ -732,86 +732,86 @@ table td{
         font-size: 1.5vw !important;
     }
 }
-    @media  (max-width: 767px) {
+@media  (max-width: 767px) {
 
-        .narrower{
-            width: 37vw;
-            margin-bottom: 15px;
-        }
-        .card-title{
-            font-size: 3vw !important;
-        }
-        .card-text{
-            font-size: 2vw !important;
-        }
-
-
+    .narrower{
+        width: 37vw;
+        margin-bottom: 15px;
+    }
+    .card-title{
+        font-size: 3vw !important;
+    }
+    .card-text{
+        font-size: 2vw !important;
     }
 
 
-    @media(max-width: 699px) {
-        .narrower{
-            width: 34vw;
-            margin-bottom: 15px;
-        }
-        .card-title{
-            font-size: 3.5vw !important;
-        }
-        .card-text{
-            font-size: 2.5vw !important;
-        }
+}
 
 
+@media(max-width: 699px) {
+    .narrower{
+        width: 34vw;
+        margin-bottom: 15px;
     }
-    @media(max-width: 576px) {
-        .narrower{
-            width: 32vw;
-            margin-bottom: 15px;
-        }
+    .card-title{
+        font-size: 3.5vw !important;
+    }
+    .card-text{
+        font-size: 2.5vw !important;
+    }
+
+
+}
+@media(max-width: 576px) {
+    .narrower{
+        width: 32vw;
+        margin-bottom: 15px;
+    }
 
 
 
+}
+@media(max-width: 480px) {
+    .narrower{
+        width: 65vw;
+        margin-bottom: 10px;
     }
-    @media(max-width: 480px) {
-        .narrower{
-            width: 65vw;
-            margin-bottom: 10px;
-        }
-        .card-title{
-            font-size: 4vw !important;
-        }
-        .card-text{
-            font-size: 3vw !important;
-        }
+    .card-title{
+        font-size: 4vw !important;
+    }
+    .card-text{
+        font-size: 3vw !important;
+    }
 
+}
+@media(max-width: 350px) {
+    .info-interes{
+        padding: 1px;
     }
-    @media(max-width: 350px) {
-        .info-interes{
-            padding: 1px;
-        }
-        .modal-content{
-            padding:1px !important;
-        }
-        .card-title{
-            font-size: 4.5vw !important;
-            .modal-body{
-                padding: 3px !important;
-            }
-        }
-        .card-text{
-            font-size: 3.5vw !important;
+    .modal-content{
+        padding:1px !important;
+    }
+    .card-title{
+        font-size: 4.5vw !important;
+        .modal-body{
+            padding: 3px !important;
         }
     }
-    .iconos__logo{
-        margin:auto;
+    .card-text{
+        font-size: 3.5vw !important;
     }
-    @media (min-width: 768px){
-        .modal-dialog {
-            width: 90% !important; 
-            max-width: 1000px;
-            margin: 30px auto;
-        }
+}
+.iconos__logo{
+    margin:auto;
+}
+@media (min-width: 768px){
+    .modal-dialog {
+        width: 90% !important; 
+        max-width: 1000px;
+        margin: 30px auto;
+    }
 
-    }
+}
 
 

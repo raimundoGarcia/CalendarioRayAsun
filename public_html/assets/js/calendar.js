@@ -28,7 +28,13 @@ var wordDay;  //para nombre días largo o corto
 var date_start;
 var returnView = "calendario"; // asigna la vista a la que volver despues de mostrar los detalles de un evento
 // comprobacion de si es calendario con filtro de fechas o sin filtro
-var filtrar = false ;
+var filtrar = false;
+
+var fechaIniDefault = sumarDias(-15);
+var fechaFinDefault = sumarDias(30);
+
+var rangoFechaIni = "";
+var rangoFechaFin = "";
 function getShortText(text, num) {
     if (text) {
 
@@ -1182,9 +1188,13 @@ function showEventDetail(id, layout, day, month, year) {
         var tipoReserva = tiva_events[id]._tipo;
         var colorfondo = tiva_events[id].color;
 
-        //Coordenadas (ahora sólo punto destino, donde haya que comprobar el clima
-        var lat = tiva_events[id]._latitud;
-        var lon = tiva_events[id]._longitud;
+        //Coordenadas origen
+        var lat = tiva_events[id]._latitudOrigen;
+        var lon = tiva_events[id]._longitudOrigen;
+        // Coordenadas destino (clima)
+        var latDestino = tiva_events[id]._latitudDestino;
+        var lonDestino = tiva_events[id]._longitudDestino;
+
         console.log("Latitud: " + lat + " y Longitud: " + lon);
         var coordenadas = lat + "%20" + lon;
         //Ubicación en sección Mapa
@@ -1198,7 +1208,7 @@ function showEventDetail(id, layout, day, month, year) {
 
         document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
             var geocoder = new google.maps.Geocoder;
-            var localizacion = {lat: lat, lng: lon};
+            var localizacion = {lat: latDestino, lng: lonDestino};
             // var localizacion = {lat: 45.808123, lng: 3.085775};
 
             geocoder.geocode({'location': localizacion}, function (results, status) {
@@ -1447,22 +1457,28 @@ function showEventDetail(id, layout, day, month, year) {
                 }
                 var listadoMediciones = [];
                 var fechasUnicas = [];
-                var paneles="";
+                var paneles = "";
 
                 $.ajax({
 
                     url: urlclima,
                     type: 'get',
                     dataType: 'json',
-                    success: function (datosClima) {
 
+                    success: function (datosClima) {
+                        paneles += ' <h2 class="card-tittle">' + datosClima.city.name + ',&nbsp;&nbsp;' + datosClima.city.country + '</h2>  ';
                         datosClima.list.forEach(medicion => {
-                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));
-                            fechasUnicas = Array.from(new Set(listadoMediciones));
+                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
+                            fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
                         });
-                        paneles += ' <h2 class="card-tittle">' + datosClima.city.name + ',&nbsp;&nbsp;' + datosClima.city.country + '</h2>  ' ;
                         for (var i = 0; i < fechasUnicas.length; i++) {
                             var dias = [];
+
+                            var array_id_meteo = [];
+
+
+
+
                             for (var j = 0; j < datosClima.list.length; j++) {
                                 if (datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]) {
 
@@ -1481,15 +1497,28 @@ function showEventDetail(id, layout, day, month, year) {
                                     temp_maxima = dias[k].main.temp_max;
                                 }
                                 humedad += dias[k].main.humidity;
-
+                                var intId = parseInt(dias[k].weather[0].id);
+                                array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
                             }
+
+                            console.log("Listado ids: " + array_id_meteo);
+                            maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
+                            console.log("El máximo diario es: " + maximo);
+
+                            var descripcion = "";
+                            info_meteoro.forEach(medicion => {
+                                if (medicion.id == maximo) {
+                                    descripcion = medicion.descripcion;
+                                    icono_meteo = medicion.icono;
+                                }
+                            });
                             var diaSemana = new Date(fechasUnicas[i]);
                             var mediaHumedad = humedad / dias.length;
-                            paneles += '   <div id="' + dias + '" class="card card-cascade narrower">  ' +
+                            paneles += '   <div id="' + fechasUnicas[i] + '" class="card card-cascade narrower">  ' +
                                     '                <h4 style="color:' + 'green' + '";><b>' + diasSemana[diaSemana.getDay()] + ', ' + fechasUnicas[i].substring(8, 10) + '</b></h4>  ' +
                                     '                <!--Card image-->  ' +
                                     '                <div class="view overlay hm-white-slight">  ' +
-                                    '                <img src="' + 'assets/images/Consultia.png' + '" class="img-fluid iconos__logo" alt="">  ' +
+                                    '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + '.png' + '" class="img-fluid iconos__logo" alt="">  ' +
                                     '                <a>  ' +
                                     '                <div class="mask"></div>  ' +
                                     '                </a>  ' +
@@ -1498,15 +1527,15 @@ function showEventDetail(id, layout, day, month, year) {
                                     '                <!--Card content-->  ' +
                                     '                <div class="card-body">  ' +
                                     '                <!--Title-->  ' +
-
                                     '                <!--Text-->  ' +
-                                    '                <p class="card-text"><b>Temperatura: </b><br>' + '<b>Min </b>' + temp_minima + '<b> Max </b>' + temp_maxima + '</p>  ' +
-                                    '                <p class="card-text"><b> ' + 'Cielo claro' + '</b></p>  ' +
+                                    '                <p class="card-text"><b>Temperatura: </b><br>' + '<b>Min </b>' + temp_minima + '<b>ºC - Max </b>' + temp_maxima + 'ºC</p>  ' +
+                                    '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
                                     '                <p class="card-text"><b>Humedad: </b>' + mediaHumedad.toFixed(2) + '%</p>  ' +
                                     '                </div>  ' +
                                     '               </div>  ';
                             console.log("nuevo dia");
                             console.log(dias);
+
 
                         }
                         console.log(fechasUnicas);
@@ -1658,11 +1687,20 @@ function dayDifference(entrada, salida) {
 
 
 }
+function sumarDias(dias) {
+    fecha = new Date();
+    fecha.setDate(fecha.getDate() + dias);
+    var day = fecha.getDate();
+    var month = fecha.getMonth() + 1;
+    var year = fecha.getFullYear();
+    var result = year + "-" + month + "-" + day;
+    return result;
+}
 
 //TODO: código en $(document).ready()
 // Init calendar full
 function cargaCalendario() {
-   $('.tiva-events-calendar.full').html("");
+    $('.tiva-events-calendar.full').html("");
     if (jQuery('.tiva-events-calendar.full').length) {
         jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
                 + '<button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
@@ -1698,6 +1736,7 @@ function cargaCalendario() {
                 + ' <!--Grid row-->'
                 //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
                 + '<button id="filtro-fechas" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
+                + '<button id="limpiar-filtro" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
                 + '<div class="tiva-events-calendar-wrap">'
@@ -1751,12 +1790,13 @@ function cargaCalendario() {
         wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun);
     }
     tiva_events = []; //resetea los eventos, para que no se acumulen al realizar filtrados
-    if(filtrar){
-        var url = "./events/ejemplo_agenda.json";
-    }else{
-       var url= "http://192.168.0.250:5556/api/Calendario?idUsuario=2";
+    if (filtrar) {
+        /* var url = "./events/ejemplo_agenda.json";*/
+        var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + rangoFechaIni + "&FechaFin=" + rangoFechaFin;
+    } else {
+        var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + fechaIniDefault + "&FechaFin=" + fechaFinDefault;
     }
-    filtrar=false;
+    filtrar = false;
     jQuery.ajax({
         // url: "./events/ejemplo_agenda.json",
         url: url,
@@ -1832,8 +1872,10 @@ function cargaCalendario() {
                     "_fechaInicio": entrada.FechaInicio,
                     "_fechaFin": entrada.FechaFin,
                     "_ubicacion": entrada.Ubicacion, //dirección postal
-                    "_latitud": entrada.Detalles.Latitud,
-                    "_longitud": entrada.Detalles.Longitud,
+                    "_latitudDestino": entrada.Detalles.LatitudDestino,
+                    "_longitudDestino": entrada.Detalles.LongitudDestino,
+                    "_latitudOrigen": entrada.LatitudOrigen,
+                    "_longitudOrigen": entrada.LongitudOrigen,
 
                     //para Vuelo
                     "_NVuelo": entrada.Detalles.NVuelo,
@@ -1847,8 +1889,6 @@ function cargaCalendario() {
                     //para hotel
                     "_direccion": entrada.Detalles.Direccion,
                     "_nombreHotel": entrada.Detalles.NombreHotel,
-                    "_latitud": entrada.Detalles.Latitud, //siempre del destino o de la ubicación cuando es única
-                    "_longitud": entrada.Detalles.Longitud,
                     "_regimen": entrada.Detalles.Regimen,
                     "_tipohabita": entrada.Detalles.TipoHabitacion,
                     "_localizador": entrada.Detalles.Localizador,
@@ -1983,21 +2023,32 @@ function cargaCalendario() {
 //            jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
 //        }
 //    });
-controlesDataPicker();
-$("#filtro-fechas").on("click",function(){
-   
-   fechaIni= $("#startingDate").val();
-   fechaFin= $("#endingDate").val();
-   if ((fechaIni !== "")&& fechaFin !=="") {
-       alert ("mem vale");
-        filtrar= true;
+    controlesDataPicker();
+    $("#filtro-fechas").on("click", function () {
+
+        FechaIni = $("#startingDate").val();
+        FechaFin = $("#endingDate").val();
+        if ((FechaIni !== "") && FechaFin !== "") {
+            rangoFechaIni = FechaIni.split("-").reverse().join("-");
+            rangoFechaFin = FechaFin.split("-").reverse().join("-");
+            filtrar = true;
+
+
+            cargaCalendario();
+        } else {
+            alert("Selecciona fecha de inicio y fin para realizar una busqueda");
+            cargaCalendario();
+        }
+
+    });
+    $("#limpiar-filtro").on("click", function () {
+        filtrar = false;
+        console.log(returnView);
         cargaCalendario();
-   }else{
-       alert ("Selecciona fecha de inicio y fin para realizar una busqueda");
-         cargaCalendario();
-   }
- 
-});
+//        if (returnView === "lista") {
+//            $(".list-view").click();
+//        }
+    });
 }
 
 jQuery(document).ready(function () {
