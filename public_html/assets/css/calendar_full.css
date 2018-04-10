@@ -482,11 +482,10 @@
     align-items: center;
 }
 
-.linea{
-    height: 0.05vh;
+#linea{
+    height: 0.3vh;
     width: 30vh;
-    border: 0.2vh solid lightcoral;
-    background-color: lightcoral;
+  
     margin: 5px;
 
 }

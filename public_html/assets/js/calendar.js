@@ -1004,6 +1004,8 @@ function diferenciaDiasClima(hoy, inicioViaje) {
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
+    var pais= "";
+    var ciudad= "";
     /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); 
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
@@ -1040,7 +1042,7 @@ function showEventDetail(id, layout, day, month, year) {
             '                                    <div id="fecha-o" class="fecha-o">dd/mm/aaaa</div>' +
             '                                    <div id="hora-o" class="hora-o">hh:mm</div> ' +
             '                                </div>' +
-            '                                <div class="linea">' +
+            '                                <div id="linea">' +
             '' +
             '                                </div>' +
             '                                <div class="destino"> ' +
@@ -1203,20 +1205,24 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("verMapa").addEventListener("click", function () {
             window.open('http://maps.google.es/?q=' + coordenadas);
         });
-
-        // Mostrar la información recomendada según el pais de destino 
-
-        document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
-            var geocoder = new google.maps.Geocoder;
+         var geocoder = new google.maps.Geocoder;
             var localizacion = {lat: latDestino, lng: lonDestino};
             // var localizacion = {lat: 45.808123, lng: 3.085775};
 
             geocoder.geocode({'location': localizacion}, function (results, status) {
                 if (status === 'OK') {
                     pais = results[results.length - 1].formatted_address; // aqui se filtra el listado para obtener el pais
+                    var campoCiudad = results[results.length - 3].formatted_address;
+                    ciudad = campoCiudad.split(",")[0];
+                  
+                }
+        // Mostrar la información recomendada según el pais de destino 
+
+        document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
+           
                     buscarPais = "recomdaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
                     window.open('http://www.google.com/search?q=' + buscarPais);
-                }
+                
             });
 
         });
@@ -1224,6 +1230,7 @@ function showEventDetail(id, layout, day, month, year) {
         var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
         document.getElementById("asunto").classList.add("color-" + colorfondo);
+        document.getElementById("linea").classList.add("color-" + colorfondo);
 
         //Fechas salida-llegada / origen-destino
         document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
@@ -1466,7 +1473,9 @@ function showEventDetail(id, layout, day, month, year) {
                     dataType: 'json',
 
                     success: function (datosClima) {
-                        paneles += ' <h2 class="card-tittle">' + datosClima.city.name + ',&nbsp;&nbsp;' + datosClima.city.country + '</h2>  ';
+                        paneles += ' <h2 class="card-tittle">' + ciudad  + ',&nbsp;&nbsp;' + pais + '</h2>  ';
+                        console.log(pais);
+                        console.log(ciudad);
                         datosClima.list.forEach(medicion => {
                             listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
                             fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
@@ -1957,7 +1966,12 @@ function cargaCalendario() {
 
             } else {
                 $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
-                 el tipo de vista entre calendario o vista */
+                                 el tipo de vista entre calendario o vista */
+               if ( returnView === "lista"){
+                   $(".list-view").click();
+               }else{
+                   $(".calendar-view").click();
+               }
             }
 
 
@@ -2046,7 +2060,7 @@ function cargaCalendario() {
         console.log(returnView);
         cargaCalendario();
 //        if (returnView === "lista") {
-//            $(".list-view").click();
+
 //        }
     });
 }
