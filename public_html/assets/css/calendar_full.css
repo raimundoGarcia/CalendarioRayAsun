@@ -561,6 +561,58 @@
     width: 100%;
     height: auto;
 }
+/*TOASTS - AVISOS*/
+
+.toaster{
+    position: relative;
+    top: 0vw;
+    right: 0vw;
+    width: 100%;
+    margin-bottom: 2vw;
+    padding: 1vw;
+    opacity: .90;
+    
+}
+
+.toast-text{
+   color: #fff !important; 
+   font-size: 1.5vh;
+   
+}
+/*
+#toast-container {
+    position: absolute;
+    bottom: 13.25vw;
+    right: 0vw;
+    z-index: 999999;
+    
+}
+#toast-container>div{
+    overflow: hidden;
+    margin: 0 0 6px;
+    padding: 1vw 1vw 1vw 5vw;
+    
+    background-position: 15px center;
+    background-repeat: no-repeat;
+      
+}
+*/
+.toast-success {
+    background-color: #00c851;
+}
+
+.toast-error {
+    background-color: #ff3547;
+       
+}
+
+.toast-info {
+    background-color: #33b5e5;
+}
+
+.toast-warning {
+    background-color: #fb3;
+}
 
 /*MODIFICACIONES CLASES MDB*/
 

@@ -1180,9 +1180,13 @@ function showEventDetail(id, layout, day, month, year) {
         var tipoReserva = tiva_events[id]._tipo;
         var colorfondo = tiva_events[id].color;
 
-        //Coordenadas (ahora sólo punto destino, donde haya que comprobar el clima
-        var lat = tiva_events[id]._latitud;
-        var lon = tiva_events[id]._longitud;
+        //Coordenadas origen
+        var lat = tiva_events[id]._latitudOrigen;
+        var lon = tiva_events[id]._longitudOrigen;
+        //Coordenadas destino (clima)
+        var latDestino = tiva_events[id]._latitudDestino;
+        var lonDestino = tiva_events[id]._longitudDestino;
+        
         console.log("Latitud: " + lat + " y Longitud: " + lon);
         var coordenadas = lat + "%20" + lon;
         //Ubicación en sección Mapa
@@ -1424,7 +1428,7 @@ function showEventDetail(id, layout, day, month, year) {
 
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
 
-        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
+        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
 
         var fechaInicioViaje = tiva_events[id]._fechaInicio;
         var hoy = new Date();
@@ -1443,92 +1447,91 @@ function showEventDetail(id, layout, day, month, year) {
                 } else {
                     $(".iconos").attr("id", "iconos");
                 }
-                var listadoMediciones= [];
-                var fechasUnicas=[];
-               
+                var listadoMediciones = [];
+                var fechasUnicas = [];
+
                 $.ajax({
 
                     url: urlclima,
                     type: 'get',
                     dataType: 'json',
                     success: function (datosClima) {
-                      
-                        datosClima.list.forEach(medicion=>{
+
+                        datosClima.list.forEach(medicion => {
                             listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
-                        fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
-                        });              
-                        for (var i = 0; i < fechasUnicas.length; i++) { 
-                             var dias =[];
-                             var array_iconos = [];
-                             var array_id_meteo = [];
+                            fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
+                        });
+                        for (var i = 0; i < fechasUnicas.length; i++) {
+                            var dias = [];
+
+                            var array_id_meteo = [];
                             for (var j = 0; j < datosClima.list.length; j++) {
-                               if ( datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]){
-                                   console.log("entra");
-                                   dias.push(datosClima.list[j]); //genera un array por cada medición que pertenecen a un día concreto (fechasUnicas[i])
-                                  
-                               }
+                                if (datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]) {
+                                    console.log("entra");
+                                    dias.push(datosClima.list[j]); //genera un array por cada medición que pertenecen a un día concreto (fechasUnicas[i])
+
+                                }
                             }
                             var temp_minima = 100;
                             for (var k = 0; k < dias.length; k++) {  //recorre cada grupo de arrays para un día concreto
-                                if ( temp_minima >dias[k].main.temp_min){  //se van manipulando los datos objetivo
-                               temp_minima = dias[k].main.temp_min;
+                                if (temp_minima > dias[k].main.temp_min) {  //se van manipulando los datos objetivo
+                                    temp_minima = dias[k].main.temp_min;
+                                }
+                                var codClima = dias[k].weather[0].id;
+                                var codClima = codClima.toString();
+                                var cod = codClima.charAt(0);
+                                if ( cod === '8') {
+                                    codClima.replace('8', '1');
+                                }
+                                var intId = parseInt(codClima);
+                                array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
+
                             }
-                            // array_iconos.push(dias[k].weather[0].icon); //construye un array (para cada día) con los nombres de los iconos para ese día
-                            var intId = parseInt(dias[k].weather[0].id);
-                            array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
-                                                                        
-                        }
-                        console.log("Listado iconos: " + array_iconos);
-                        console.log("Listado ids: " + array_id_meteo);
-                        maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
-                        console.log("El máximo diario es: " + maximo);
-                        
-                      //  var img_icono = "";
-                        var descripcion = "";
-                       info_meteoro.forEach(medicion => {if (medicion.id == maximo){ descripcion = medicion.descripcion; icono_meteo = medicion.icono}});
-                        //En función de si aparece un icono en el array diario, se queda con el caso más desfavorable (simplificado)
-                    /*    switch(true){
-                            case(array_iconos.includes("13d") || array_iconos.includes("13n")): img_icono = '13d.png'; console.log("snow");  break;
-                            case(array_iconos.includes("11d") || array_iconos.includes("11n")): img_icono = '11d.png'; console.log("thunderstorm");  break;
-                            case(array_iconos.includes("09d") || array_iconos.includes("09n")): img_icono = '09d.png'; console.log("shower rain");  break;
-                            case(array_iconos.includes("10d") || array_iconos.includes("10n")): img_icono = '10d.png'; console.log("rain"); break;
-                            case(array_iconos.includes("50d") || array_iconos.includes("50n")): img_icono = '50d.png'; console.log("mist"); break;
-                            case(array_iconos.includes("04d") || array_iconos.includes("04n")): img_icono = '04d.png'; console.log("broken clouds"); break;
-                            case(array_iconos.includes("03d") || array_iconos.includes("03n")): img_icono = '03d.png'; console.log("scattered clouds"); break;
-                            case(array_iconos.includes("02d") || array_iconos.includes("02n")): img_icono = '02d.png'; console.log("few clouds"); break;
-                            case(array_iconos.includes("01d") || array_iconos.includes("01n")): img_icono = '01d.png'; console.log("clear sky"); break;
-                            
-                            default: console.log("Ha petao!"); break;
-                        } */
-                       
-                             var diaSemana = new Date(fechasUnicas[i]); //para mostrar el día de la semana en las tarjetas informativas que se renderizan a continuación:
-                              myvar += '   <div id="' + '1' + '" class="card card-cascade narrower">  ' +
-                                '                <!--Card image-->  ' +
-                                '                <div class="view overlay hm-white-slight">  ' +
-                                '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + ".png" + '" class="img-fluid iconos__logo" alt="">  ' +
-                                '                <a>  ' +
-                                '                <div class="mask"></div>  ' +
-                                '                </a>  ' +
-                                '                </div>  ' +
-                                '                <!--/.Card image-->  ' +
-                                '                <!--Card content-->  ' +
-                                '                <div class="card-body">  ' +
-                                '                <h4 style="color:' + 'green' + '";><b>' +diasSemana[diaSemana.getDay()] +', '+ fechasUnicas[i].substring(8, 10)+ '</b></h4>  ' +
-                                '                <!--Title-->  ' +
-                                '                <h4 class="card-title">' + 'Pais Example' + ',&nbsp;&nbsp;' + 'Ciudad Example' + '</h4>  ' +
-                                '                <!--Text-->  ' +
-                                '                <p class="card-text"><b>Temperatura:' + 'Minima:'+temp_minima + '</b></p>  ' +
-                                '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
-                                '                <p class="card-text"><b>Humedad ' + '30%' + '</b></p>  ' +
-                                '                </div>  ' +
-                                '               </div>  ';
-                         //   console.log("nuevo dia");
+
+                            console.log("Listado ids: " + array_id_meteo);
+                            maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
+                            console.log("El máximo diario es: " + maximo);
+
+
+                            var descripcion = "";
+                            info_meteoro.forEach(medicion => {
+                                if (medicion.id == maximo) {
+                                    descripcion = medicion.descripcion;
+                                    icono_meteo = medicion.icono;
+                                    if (icono_meteo == null || icono_meteo == "" || icono_meteo == 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
+                                        icono_meteo = 'Consultia';
+                                    }
+                                }
+                            });
+
+                            var diaSemana = new Date(fechasUnicas[i]); //para mostrar el día de la semana en las tarjetas informativas que se renderizan a continuación:
+                            myvar += '   <div id="' + '1' + '" class="card card-cascade narrower">  ' +
+                                    '                <!--Card image-->  ' +
+                                    '                <div class="view overlay hm-white-slight">  ' +
+                                    '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + ".png" + '" class="img-fluid iconos__logo" alt="">  ' +
+                                    '                <a>  ' +
+                                    '                <div class="mask"></div>  ' +
+                                    '                </a>  ' +
+                                    '                </div>  ' +
+                                    '                <!--/.Card image-->  ' +
+                                    '                <!--Card content-->  ' +
+                                    '                <div class="card-body">  ' +
+                                    '                <h4 style="color:' + 'green' + '";><b>' + diasSemana[diaSemana.getDay()] + ', ' + fechasUnicas[i].substring(8, 10) + '</b></h4>  ' +
+                                    '                <!--Title-->  ' +
+                                    '                <h4 class="card-title">' + 'Pais Example' + ',&nbsp;&nbsp;' + 'Ciudad Example' + '</h4>  ' +
+                                    '                <!--Text-->  ' +
+                                    '                <p class="card-text"><b>Temperatura:' + 'Minima:' + temp_minima + '</b></p>  ' +
+                                    '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
+                                    '                <p class="card-text"><b>Humedad ' + '30%' + '</b></p>  ' +
+                                    '                </div>  ' +
+                                    '               </div>  ';
+                            //   console.log("nuevo dia");
                             console.log(dias);
-                           
+
                         }
-                          console.log(fechasUnicas);
-                                             
-                       
+                        console.log(fechasUnicas);
+
+
                         $(".iconos").html("");
                         $(".iconos").append(myvar);
                     },
@@ -1538,138 +1541,155 @@ function showEventDetail(id, layout, day, month, year) {
                 });
 
                 //si no, aviso al usuario 
-            } else {
-                console.log("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
+            } else if(diasDif<0) {  //caso días anteriores a hoy
+                
+                variableTexto = '<div class="toast-text">Por favor, consulte la previsión máximo 5 días antes del inicio del viaje.</div>';
+                $('<div class="toaster toast-error">'+variableTexto+'</div>').insertBefore($('#info-lugar')); 
+                
+                setTimeout(function(){
+                    $('.info-clima').attr('disabled', 'disabled');
+                    $('.toaster').fadeOut('slow','linear');
+                    $('.info-clima').attr('disabled', '');
+                },3000);
+                      
+            } else { //resto de casos, cuando la diferencia de días es mayor a 5 (días máximos previsión)
+                
+                variableTexto = '<div class="toast-text">La diferencia es mayor de 5 días (' + diasDif + '). Consulte la previsión máximo 5 días antes del inicio del viaje.</div>';
+                $('.info-interes').append('<div class="toaster toast-error">'+variableTexto+'</div>'); 
+                setTimeout(function(){
+                    $('.toaster').fadeOut('slow','linear');
+                },4000);
+                      
             }
 
-        });
+});
 
 
-        // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
+// document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
 
-        $("#fichaDetalle").modal("show");
+$("#fichaDetalle").modal("show");
 
-    } else { //compacto
-        /*       jQuery('.tiva-event-detail-compact').html('');
-         if (day && month && year) {
-         var events = getEvents(day, month, year);
-         } else {
-         var events = [{id: id}];
-         }
-         for (var i = 0; i < events.length; i++) {
-         if (typeof events[i] != "undefined") {
-         // Start date
-         var day = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, tiva_events[events[i].id].day);
-         if (date_start == 'sunday') {
-         var event_day = wordDay[day.getDay()];
-         } else {
-         if (day.getDay() > 0) {
-         var event_day = wordDay[day.getDay() - 1];
-         } else {
-         var event_day = wordDay[6];
-         }
-         }
-         var event_date = wordMonth[Number(tiva_events[events[i].id].month) - 1] + ' ' + tiva_events[events[i].id].day + ', ' + tiva_events[events[i].id].year;
-         
-         // End date
-         var event_end_time = '';
-         if (tiva_events[events[i].id].duration > 1) {
-         var end_date = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, Number(tiva_events[events[i].id].day) + Number(tiva_events[events[i].id].duration) - 1);
-         
-         if (date_start == 'sunday') {
-         var event_end_day = wordDay[end_date.getDay()];
-         } else {
-         if (end_date.getDay() > 0) {
-         var event_end_day = wordDay[end_date.getDay() - 1];
-         } else {
-         var event_end_day = wordDay[6];
-         }
-         }
-         var event_end_date = wordMonth[Number(end_date.getMonth())] + ' ' + end_date.getDate() + ', ' + end_date.getFullYear();
-         event_end_time = ' - ' + event_end_day + ', ' + event_end_date;
-         }
-         
-         // Event time
-         if (tiva_events[events[i].id].time) {
-         var event_time = '<i class="fa fa-clock-o"></i>' + tiva_events[events[i].id].time;
-         } else {
-         var event_time = '';
-         }
-         
-         // Event image
-         if (tiva_events[events[i].id].image) {
-         var event_image = '<img src="' + tiva_events[events[i].id].image + '" alt="' + tiva_events[events[i].id].name + '" />';
-         } else {
-         var event_image = '';
-         }
-         
-         // Event location
-         if (tiva_events[events[i].id].location) {
-         var event_location = '<i class="fa fa-map-marker"></i>' + tiva_events[events[i].id].location;
-         } else {
-         var event_location = '';
-         }
-         
-         // Event description
-         if (tiva_events[events[i].id].description) {
-         var event_desc = '<div class="event-desc">' + tiva_events[events[i].id].description + '</div>';
-         } else {
-         var event_desc = '';
-         }
-         
-         jQuery('.tiva-event-detail-compact').append('<div class="event-item">'
-         + '<div class="event-image">' + event_image + '</div>'
-         + '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
-         + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
-         + '<div class="event-time">' + event_time + '</div>'
-         + '<div class="event-location">' + event_location + '</div>'
-         + event_desc
-         + '</div>'
-         );
-         
-         }
-         }  */
-    }
+} else { //compacto
+                            /*       jQuery('.tiva-event-detail-compact').html('');
+                             if (day && month && year) {
+                             var events = getEvents(day, month, year);
+                             } else {
+                             var events = [{id: id}];
+                             }
+                             for (var i = 0; i < events.length; i++) {
+                             if (typeof events[i] != "undefined") {
+                             // Start date
+                             var day = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, tiva_events[events[i].id].day);
+                             if (date_start == 'sunday') {
+                             var event_day = wordDay[day.getDay()];
+                             } else {
+                             if (day.getDay() > 0) {
+                             var event_day = wordDay[day.getDay() - 1];
+                             } else {
+                             var event_day = wordDay[6];
+                             }
+                             }
+                             var event_date = wordMonth[Number(tiva_events[events[i].id].month) - 1] + ' ' + tiva_events[events[i].id].day + ', ' + tiva_events[events[i].id].year;
+                             
+                             // End date
+                             var event_end_time = '';
+                             if (tiva_events[events[i].id].duration > 1) {
+                             var end_date = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, Number(tiva_events[events[i].id].day) + Number(tiva_events[events[i].id].duration) - 1);
+                             
+                             if (date_start == 'sunday') {
+                             var event_end_day = wordDay[end_date.getDay()];
+                             } else {
+                             if (end_date.getDay() > 0) {
+                             var event_end_day = wordDay[end_date.getDay() - 1];
+                             } else {
+                             var event_end_day = wordDay[6];
+                             }
+                             }
+                             var event_end_date = wordMonth[Number(end_date.getMonth())] + ' ' + end_date.getDate() + ', ' + end_date.getFullYear();
+                             event_end_time = ' - ' + event_end_day + ', ' + event_end_date;
+                             }
+                             
+                             // Event time
+                             if (tiva_events[events[i].id].time) {
+                             var event_time = '<i class="fa fa-clock-o"></i>' + tiva_events[events[i].id].time;
+                             } else {
+                             var event_time = '';
+                             }
+                             
+                             // Event image
+                             if (tiva_events[events[i].id].image) {
+                             var event_image = '<img src="' + tiva_events[events[i].id].image + '" alt="' + tiva_events[events[i].id].name + '" />';
+                             } else {
+                             var event_image = '';
+                             }
+                             
+                             // Event location
+                             if (tiva_events[events[i].id].location) {
+                             var event_location = '<i class="fa fa-map-marker"></i>' + tiva_events[events[i].id].location;
+                             } else {
+                             var event_location = '';
+                             }
+                             
+                             // Event description
+                             if (tiva_events[events[i].id].description) {
+                             var event_desc = '<div class="event-desc">' + tiva_events[events[i].id].description + '</div>';
+                             } else {
+                             var event_desc = '';
+                             }
+                             
+                             jQuery('.tiva-event-detail-compact').append('<div class="event-item">'
+                             + '<div class="event-image">' + event_image + '</div>'
+                             + '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
+                             + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
+                             + '<div class="event-time">' + event_time + '</div>'
+                             + '<div class="event-location">' + event_location + '</div>'
+                             + event_desc
+                             + '</div>'
+                             );
+                             
+                             }
+                             }  */
+}
 }
 
 //////////////////////
 function timeTo12HrFormat(time) //convierte el formato de 24 horas, en formato de 12 horas AM y PM
 {
-    var time_part_array = time.split(":");
-    var ampm = 'AM';
+                            var time_part_array = time.split(":");
+                            var ampm = 'AM';
 
-    if (time_part_array[0] >= 12) {
-        ampm = 'PM';
-    }
+                            if (time_part_array[0] >= 12) {
+                                            ampm = 'PM';
+}
 
-    if (time_part_array[0] > 12) {
-        time_part_array[0] = time_part_array[0] - 12;// el +2 es por la franja horaria, 
-    }
+if (time_part_array[0] > 12) {
+                                            time_part_array[0] = time_part_array[0] - 12;// el +2 es por la franja horaria, 
+}
 
-    var formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + ampm;
+var formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + ampm;
 
-    return formatted_time;
+return formatted_time;
 }
 function dayDifference(entrada, salida) {
-    var inicio = entrada.substring(0, 10);
-    var fin = salida.substring(0, 10);
-    // First we split the values to arrays date1[0] is the year, [1] the month and [2] the day
-    date1 = inicio.split('-');
-    date2 = fin.split('-');
+                                            var inicio = entrada.substring(0, 10);
+                                            var fin = salida.substring(0, 10);
+                                            // First we split the values to arrays date1[0] is the year, [1] the month and [2] the day
+                                            date1 = inicio.split('-');
+                                            date2 = fin.split('-');
 
 // Now we convert the array to a Date object, which has several helpful methods
-    date1 = new Date(date1[0], date1[1] - 1, date1[2]);
-    date2 = new Date(date2[0], date2[1] - 1, date2[2]);
+                                            date1 = new Date(date1[0], date1[1] - 1, date1[2]);
+                                            date2 = new Date(date2[0], date2[1] - 1, date2[2]);
 
-    var timeDifference = date2 - date1;
+                                            var timeDifference = date2 - date1;
 
 // en horas
-    var timeDifferenceInHours = timeDifference / 3600000;
+                                            var timeDifferenceInHours = timeDifference / 3600000;
 
 // and finaly, in days :)
-    var timeDifferenceInDays = timeDifferenceInHours / 24;
+                                            var timeDifferenceInDays = timeDifferenceInHours / 24;
 
-    return Math.round(timeDifferenceInDays);
+                                            return Math.round(timeDifferenceInDays);
 
 
 }
@@ -1677,302 +1697,302 @@ function dayDifference(entrada, salida) {
 //TODO: código en $(document).ready()
 // Init calendar full
 function cargaCalendario() {
-    if (jQuery('.tiva-events-calendar.full').length) {
-        jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
-                + '<button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
-                + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button>'
-                + ' <!--Grid row-->'
-                + ' <div class="row">'
+                                            if (jQuery('.tiva-events-calendar.full').length) {
+                                                        jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
+                                                                + '<button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
+                                                                + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button>'
+                                                                + ' <!--Grid row-->'
+                                                                + ' <div class="row">'
 
-                + ' <!--Grid column-->'
-                + ' <div class="col-md-6 mb-4 calendar-bar__item">'
+                                                                + ' <!--Grid column-->'
+                                                                + ' <div class="col-md-6 mb-4 calendar-bar__item">'
 
-                + '   <div class="md-form ">'
-                + '  <!--The "from" Date Picker -->'
-                + '   <input placeholder="Fecha de inicio" type="text" id="startingDate" class="form-control datepicker ">'
-                + '   <label for="startingDate"></label>'
-                + '   </div>'
+                                                                + '   <div class="md-form ">'
+                                                                + '  <!--The "from" Date Picker -->'
+                                                                + '   <input placeholder="Fecha de inicio" type="text" id="startingDate" class="form-control datepicker ">'
+                                                                + '   <label for="startingDate"></label>'
+                                                                + '   </div>'
 
-                + ' </div>'
-                + ' <!--Grid column-->'
+                                                                + ' </div>'
+                                                                + ' <!--Grid column-->'
 
-                + ' <!--Grid column-->'
-                + ' <div class="col-md-6 mb-4 calendar-bar__item">'
+                                                                + ' <!--Grid column-->'
+                                                                + ' <div class="col-md-6 mb-4 calendar-bar__item">'
 
-                + '  <div class="md-form">'
-                + '   <!--The "to" Date Picker -->'
-                + ' <input placeholder="Fecha final" type="text" id="endingDate" class="form-control datepicker">'
-                + '  <label for="endingDate"></label>'
-                + '  </div>'
+                                                                + '  <div class="md-form">'
+                                                                + '   <!--The "to" Date Picker -->'
+                                                                + ' <input placeholder="Fecha final" type="text" id="endingDate" class="form-control datepicker">'
+                                                                + '  <label for="endingDate"></label>'
+                                                                + '  </div>'
 
-                + ' </div>'
-                + ' <!--Grid column-->'
+                                                                + ' </div>'
+                                                                + ' <!--Grid column-->'
 
-                + ' </div>'
-                + ' <!--Grid row-->'
-                //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
-                + '<button class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
-                + '</div>'
-                + '<div class="cleardiv"></div>'
-                + '<div class="tiva-events-calendar-wrap">'
-                + '<div class="tiva-calendar-full tiva-calendar"></div>'
-                + '<div class="tiva-event-list-full tiva-event-list"></div>'
-                + '<div class="tiva-event-detail-full tiva-event-detail"></div>'
-                + '</div>'
-                );
-    }
+                                                                + ' </div>'
+                                                                + ' <!--Grid row-->'
+                                                                //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
+                                                                + '<button class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
+                                                                + '</div>'
+                                                                + '<div class="cleardiv"></div>'
+                                                                + '<div class="tiva-events-calendar-wrap">'
+                                                                + '<div class="tiva-calendar-full tiva-calendar"></div>'
+                                                                + '<div class="tiva-event-list-full tiva-event-list"></div>'
+                                                                + '<div class="tiva-event-detail-full tiva-event-detail"></div>'
+                                                                + '</div>'
+                                                                );
+}
 
-    // Init calendar compact
-    if (jQuery('.tiva-events-calendar.compact').length) {
-        jQuery('.tiva-events-calendar.compact').html('<div class="events-calendar-bar">'
-                + '<span class="bar-btn calendar-view calendar-btn active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
-                + '<span class="bar-btn list-view calendar-btn"><i class="fa fa-list"></i>' + list_view + '</span>'
-                //          + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
-                + '</div>'
-                + '<div class="cleardiv"></div>'
-                + '<div class="tiva-events-calendar-wrap">'
-                + '<div class="tiva-calendar-compact tiva-calendar"></div>'
-                + '<div class="tiva-event-list-compact tiva-event-list"></div>'
-                + '<div class="tiva-event-detail-compact tiva-event-detail"></div>'
-                + '</div>'
-                );
-    }
+// Init calendar compact
+if (jQuery('.tiva-events-calendar.compact').length) {
+                                                        jQuery('.tiva-events-calendar.compact').html('<div class="events-calendar-bar">'
+                                                                + '<span class="bar-btn calendar-view calendar-btn active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
+                                                                + '<span class="bar-btn list-view calendar-btn"><i class="fa fa-list"></i>' + list_view + '</span>'
+                                                                //          + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
+                                                                + '</div>'
+                                                                + '<div class="cleardiv"></div>'
+                                                                + '<div class="tiva-events-calendar-wrap">'
+                                                                + '<div class="tiva-calendar-compact tiva-calendar"></div>'
+                                                                + '<div class="tiva-event-list-compact tiva-event-list"></div>'
+                                                                + '<div class="tiva-event-detail-compact tiva-event-detail"></div>'
+                                                                + '</div>'
+                                                                );
+}
 
-    // Show - Hide view
-    //   jQuery('.tiva-events-calendar .back-calendar').hide();
-    jQuery('.tiva-event-list').hide();
-    jQuery('.tiva-event-detail').hide();
+// Show - Hide view
+//   jQuery('.tiva-events-calendar .back-calendar').hide();
+jQuery('.tiva-event-list').hide();
+jQuery('.tiva-event-detail').hide();
 
-    jQuery('.tiva-events-calendar').each(function (index) {
-        // Hide switch button
-        var switch_button = (typeof jQuery(this).attr('data-switch') != "undefined") ? jQuery(this).attr('data-switch') : 'show';
-        if (switch_button == 'hide') {
-            jQuery(this).find('.calendar-view').hide();
-            jQuery(this).find('.list-view').hide();
+jQuery('.tiva-events-calendar').each(function (index) {
+                                                        // Hide switch button
+                                                        var switch_button = (typeof jQuery(this).attr('data-switch') != "undefined") ? jQuery(this).attr('data-switch') : 'show';
+                                                        if (switch_button == 'hide') {
+                                                                        jQuery(this).find('.calendar-view').hide();
+                                                                        jQuery(this).find('.list-view').hide();
 
-            // Change css of button back
-            jQuery(this).find('.events-calendar-bar').css('position', 'relative');
-            //    jQuery(this).find('.back-calendar').css({"position": "absolute", "margin-top": "15px", "right": "15px"});
-            jQuery(this).find('.tiva-event-detail').css('padding-top', '60px');
-        }
-    });
+                                                                        // Change css of button back
+                                                                        jQuery(this).find('.events-calendar-bar').css('position', 'relative');
+                                                                        //    jQuery(this).find('.back-calendar').css({"position": "absolute", "margin-top": "15px", "right": "15px"});
+                                                                        jQuery(this).find('.tiva-event-detail').css('padding-top', '60px');
+}
+});
 
-    // Set wordDay 
-    date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') != "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
-    if (date_start == 'sunday') {
-        wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
-    } else { // Start with Monday
-        wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun);
-    }
+// Set wordDay 
+date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') != "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
+if (date_start == 'sunday') {
+                                                                        wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
+} else { // Start with Monday
+                                                                                wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun);
+}
 
-    jQuery.ajax({
-        // url: "./events/ejemplo_agenda.json",
-        url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2",
-        dataType: 'json',
-        type: "GET",
-        beforeSend: function () {
-            jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
-        },
-        success: function (entradas) {
+jQuery.ajax({
+                                                                        // url: "./events/ejemplo_agenda.json",
+                                                                        url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2",
+                                                                        dataType: 'json',
+                                                                        type: "GET",
+                                                                        beforeSend: function () {
+                                                                                jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
+},
+success: function (entradas) {
 
-            j = -1; //contador para asignar las IP a los eventos
-            entradas.forEach(entrada => {
-                j++;
-                var color = "1";
-                tipo = entrada.Tipo;
+                                                                                        j = -1; //contador para asignar las IP a los eventos
+                                                                                entradas.forEach(entrada => {
+                                                                                    j++;
+                                                                                    var color = "1";
+                                                                                    tipo = entrada.Tipo;
 
-                // Asigna un color  cada evento, dependiendo del tipo de evento 
-                switch (tipo) {
-                    case "Aereo":
-                        color = "1";
-                        break;
-                    case "Hotel":
-                        color = "2";
-                        break;
-                    case "Tren":
-                        color = "3";
-                        break;
-                    case "Barco":
-                        color = "4";
-                        break;
-                    case "Coche":
-                        color = "5";
-                        break;
-                    case "Otros":
-                        color = "6";
-                        break;
-                    case "Parking":
-                        color = "7";
-                        break;
-                    case "Seguro":
-                        color = "8";
-                        break;
-                    default:
-                        color = "9";
-                        break;
+                                                                                    // Asigna un color  cada evento, dependiendo del tipo de evento 
+                                                                                    switch (tipo) {
+                                                                                                                    case "Aereo":
+                                                                                                                        color = "1";
+                                                                                                                        break;
+                                                                                                                    case "Hotel":
+                                                                                                                        color = "2";
+                                                                                                                        break;
+                                                                                                                    case "Tren":
+                                                                                                                        color = "3";
+                                                                                                                        break;
+                                                                                                                    case "Barco":
+                                                                                                                        color = "4";
+                                                                                                                        break;
+                                                                                                                    case "Coche":
+                                                                                                                        color = "5";
+                                                                                                                        break;
+                                                                                                                    case "Otros":
+                                                                                                                        color = "6";
+                                                                                                                        break;
+                                                                                                                    case "Parking":
+                                                                                                                        color = "7";
+                                                                                                                        break;
+                                                                                                                    case "Seguro":
+                                                                                                                        color = "8";
+                                                                                                                        break;
+                                                                                                                    default:
+                                                                                                                        color = "9";
+                                                                                                                        break;
 
-                }
-
-
-
-                // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
-                evento = {
-
-                    "color": color,
-                    "day": entrada.FechaInicio.substring(8, 10),
-                    "description": "",
-                    "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
-                    "image": "",
-                    "location": entrada.Detalles.Direccion,
-                    "month": entrada.FechaInicio.substring(5, 7),
-                    "name": entrada.Asunto,
-                    "time": entrada.FechaInicio.substring(11, 16),
-                    "year": entrada.FechaInicio.substring(0, 4),
-                    "_tipo": entrada.Tipo,
-                    "_refPedido": entrada.idPedido, //numero de referencia - hay otro campo que es idServicio 
-                    "_ciudadOrigen": entrada.Detalles.SalidaCiudad,
-                    "_ciudadDestino": entrada.Detalles.LlegadaCiudad,
-                    "_diaFin": entrada.FechaFin.substring(8, 10),
-                    "_mesFin": entrada.FechaFin.substring(5, 7),
-                    "_anyoFin": entrada.FechaFin.substring(0, 4),
-                    "_horaFin": entrada.FechaFin.substring(11, 16),
-                    "_adjuntos": entrada.Detalles.Adjuntos, //array
-                    "_fechaInicio": entrada.FechaInicio,
-                    "_fechaFin": entrada.FechaFin,
-                    "_ubicacion": entrada.Ubicacion, //dirección postal
-                    "_latitud": entrada.Detalles.Latitud,
-                    "_longitud": entrada.Detalles.Longitud,
-
-                    //para Vuelo
-                    "_NVuelo": entrada.Detalles.NVuelo,
-                    "_Aerolinea": entrada.Detalles.Aerolinea,
-                    "_AeropuertoSalida": entrada.Detalles.SalidaNombreAeropuerto,
-                    "_AeropuertoLlegada": entrada.Detalles.LlegadaNombreAeropuerto,
-                    "_SalidaIATA": entrada.Detalles.SalidaIATA,
-                    "_LlegadaIATA": entrada.Detalles.LlegadaIATA,
-                    "_DuracionHoras": entrada.Detalles.DuracionHoras,
-
-                    //para hotel
-                    "_direccion": entrada.Detalles.Direccion,
-                    "_nombreHotel": entrada.Detalles.NombreHotel,
-                    "_latitud": entrada.Detalles.Latitud, //siempre del destino o de la ubicación cuando es única
-                    "_longitud": entrada.Detalles.Longitud,
-                    "_regimen": entrada.Detalles.Regimen,
-                    "_tipohabita": entrada.Detalles.TipoHabitacion,
-                    "_localizador": entrada.Detalles.Localizador,
-                    "_acompanyantes": entrada.Viajeros, //array
-
-                    //para Tren
-                    "_proveedor": entrada.Detalles.Proveedor, //común con Coche y barco
-                    "_TipoTren": entrada.Detalles.TipoTren,
-                    "_Clase": entrada.Detalles.Clase,
-                    "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
-                    "_EstacionDestino": entrada.Detalles.EstacionDestino,
-
-                    //para Coche
-
-                    "_categoria": entrada.Detalles.Categoria,
-                    "_transmision": entrada.Detalles.Transmision,
-                    "_combustible": entrada.Detalles.Combustible_AC,
-                    "_direccionRecogida": entrada.Detalles.DireccionRecogida,
-                    "_direccionEntrega": entrada.Detalles.DireccionEntrega,
-
-                    //para Barco
-                    "_vehiculos": entrada.Detalles.Vehiculos, //array
-                    "_origen": entrada.Detalles.Origen,
-                    "_destino": entrada.Detalles.Destino,
-                    "_acomodacion": entrada.Detalles.Acomodacion
-
-
-                };
-                // Adapta la duracion a cada evento, fijando el valor a 1 en caso de que sea un evento que implique un billete
-                // y contemplando el dia de salida/devolucion en los eventos de alquiler de habitaciones en hoteles o coches
-
-
-                if (evento._tipo === "Aereo" || evento._tipo === "Barco" || evento._tipo === "Tren") {
-                    evento.duration = 1;
-                } else {
-                    evento.duration = evento.duration + 1;
-
-                }
+}
 
 
 
-                var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
+// asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
+evento = {
+
+                                                                                                                    "color": color,
+                                                                                                                    "day": entrada.FechaInicio.substring(8, 10),
+                                                                                                                    "description": "",
+                                                                                                                    "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
+                                                                                                                    "image": "",
+                                                                                                                    "location": entrada.Detalles.Direccion,
+                                                                                                                    "month": entrada.FechaInicio.substring(5, 7),
+                                                                                                                    "name": entrada.Asunto,
+                                                                                                                    "time": entrada.FechaInicio.substring(11, 16),
+                                                                                                                    "year": entrada.FechaInicio.substring(0, 4),
+                                                                                                                    "_tipo": entrada.Tipo,
+                                                                                                                    "_refPedido": entrada.idPedido, //numero de referencia - hay otro campo que es idServicio 
+                                                                                                                    "_ciudadOrigen": entrada.Detalles.SalidaCiudad,
+                                                                                                                    "_ciudadDestino": entrada.Detalles.LlegadaCiudad,
+                                                                                                                    "_diaFin": entrada.FechaFin.substring(8, 10),
+                                                                                                                    "_mesFin": entrada.FechaFin.substring(5, 7),
+                                                                                                                    "_anyoFin": entrada.FechaFin.substring(0, 4),
+                                                                                                                    "_horaFin": entrada.FechaFin.substring(11, 16),
+                                                                                                                    "_adjuntos": entrada.Detalles.Adjuntos, //array
+                                                                                                                    "_fechaInicio": entrada.FechaInicio,
+                                                                                                                    "_fechaFin": entrada.FechaFin,
+                                                                                                                    "_ubicacion": entrada.Ubicacion, //dirección postal
+                                                                                                                    "_latitudDestino": entrada.Detalles.LatitudDestino,
+                                                                                                                    "_longitudDestino": entrada.Detalles.LongitudDestino,
+                                                                                                                    "_latitudOrigen": entrada.LatitudOrigen,
+                                                                                                                    "_longitudOrigen": entrada.LongitudOrigen,
+
+                                                                                                                    //para Vuelo
+                                                                                                                    "_NVuelo": entrada.Detalles.NVuelo,
+                                                                                                                    "_Aerolinea": entrada.Detalles.Aerolinea,
+                                                                                                                    "_AeropuertoSalida": entrada.Detalles.SalidaNombreAeropuerto,
+                                                                                                                    "_AeropuertoLlegada": entrada.Detalles.LlegadaNombreAeropuerto,
+                                                                                                                    "_SalidaIATA": entrada.Detalles.SalidaIATA,
+                                                                                                                    "_LlegadaIATA": entrada.Detalles.LlegadaIATA,
+                                                                                                                    "_DuracionHoras": entrada.Detalles.DuracionHoras,
+
+                                                                                                                    //para hotel
+                                                                                                                    "_direccion": entrada.Detalles.Direccion,
+                                                                                                                    "_nombreHotel": entrada.Detalles.NombreHotel,                                                                             
+                                                                                                                    "_regimen": entrada.Detalles.Regimen,
+                                                                                                                    "_tipohabita": entrada.Detalles.TipoHabitacion,
+                                                                                                                    "_localizador": entrada.Detalles.Localizador,
+                                                                                                                    "_acompanyantes": entrada.Viajeros, //array
+
+                                                                                                                    //para Tren
+                                                                                                                    "_proveedor": entrada.Detalles.Proveedor, //común con Coche y barco
+                                                                                                                    "_TipoTren": entrada.Detalles.TipoTren,
+                                                                                                                    "_Clase": entrada.Detalles.Clase,
+                                                                                                                    "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
+                                                                                                                    "_EstacionDestino": entrada.Detalles.EstacionDestino,
+
+                                                                                                                    //para Coche
+
+                                                                                                                    "_categoria": entrada.Detalles.Categoria,
+                                                                                                                    "_transmision": entrada.Detalles.Transmision,
+                                                                                                                    "_combustible": entrada.Detalles.Combustible_AC,
+                                                                                                                    "_direccionRecogida": entrada.Detalles.DireccionRecogida,
+                                                                                                                    "_direccionEntrega": entrada.Detalles.DireccionEntrega,
+
+                                                                                                                    //para Barco
+                                                                                                                    "_vehiculos": entrada.Detalles.Vehiculos, //array
+                                                                                                                    "_origen": entrada.Detalles.Origen,
+                                                                                                                    "_destino": entrada.Detalles.Destino,
+                                                                                                                    "_acomodacion": entrada.Detalles.Acomodacion
+
+
+};
+// Adapta la duracion a cada evento, fijando el valor a 1 en caso de que sea un evento que implique un billete
+// y contemplando el dia de salida/devolucion en los eventos de alquiler de habitaciones en hoteles o coches
+
+
+if (evento._tipo === "Aereo" || evento._tipo === "Barco" || evento._tipo === "Tren") {
+                                                                                                                    evento.duration = 1;
+} else {
+                                                                                                                            evento.duration = evento.duration + 1;
+
+}
 
 
 
-                evento.date = event_date.getTime();
-
-                tiva_events.push(evento);
+var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
 
 
 
-            });
+evento.date = event_date.getTime();
 
-            tiva_events.sort(sortEventsByDate);
-            for (var i = 0; i < tiva_events.length; i++) {
-                tiva_events[i].id = i;
-            }
+tiva_events.push(evento);
 
 
-            // Create calendar
-            changedate('current', 'full');
-            //  changedate('current', 'compact'); crea el calendario en forma compacta
-            if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
-                $(".list-view").click();
-                returnView = "lista";
 
-            } else {
-                $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
-                 el tipo de vista entre calendario o vista */
-            }
+});
+
+tiva_events.sort(sortEventsByDate);
+for (var i = 0; i < tiva_events.length; i++) {
+                                                                                                                    tiva_events[i].id = i;
+}
 
 
-            jQuery('.tiva-events-calendar').each(function (index) {
-                // Initial view
-                var initial_view = (typeof jQuery(this).attr('data-view') != "undefined") ? jQuery(this).attr('data-view') : 'calendar';
-                if (initial_view == 'list') {
-                    jQuery(this).find('.list-view').click();
-                }
-            });
-        }
-    });
+// Create calendar
+changedate('current', 'full');
+//  changedate('current', 'compact'); crea el calendario en forma compacta
+if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
+                                                                                                                    $(".list-view").click();
+                                                                                                                    returnView = "lista";
+
+} else {
+                                                                                                                            $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
+                                                                                                                             el tipo de vista entre calendario o vista */
+}
+
+
+jQuery('.tiva-events-calendar').each(function (index) {
+                                                                                                                    // Initial view
+                                                                                                                    var initial_view = (typeof jQuery(this).attr('data-view') != "undefined") ? jQuery(this).attr('data-view') : 'calendar';
+                                                                                                                    if (initial_view == 'list') {
+                                                                                                                                jQuery(this).find('.list-view').click();
+}
+});
+}
+});
 //    }
 
-    // Click - Calendar view btn
-    jQuery('.tiva-events-calendar .calendar-view').click(function () {
-        //   jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(500);
+// Click - Calendar view btn
+jQuery('.tiva-events-calendar .calendar-view').click(function () {
+                                                                                                                                //   jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').hide();
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(500);
 
-        jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
-        jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').addClass('active');
-        returnView = "calendario";
-    });
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').addClass('active');
+                                                                                                                                returnView = "calendario";
+});
 
-    // Click - List view btn
-    jQuery('.tiva-events-calendar .list-view').click(function () {
-        //  jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(500);
+// Click - List view btn
+jQuery('.tiva-events-calendar .list-view').click(function () {
+                                                                                                                                //  jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').hide();
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(500);
 
-        jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').removeClass('active');
-        jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
-        returnView = "lista";
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').removeClass('active');
+                                                                                                                                jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
+                                                                                                                                returnView = "lista";
 
-        var layout = jQuery(this).parents('.tiva-events-calendar').attr('class') ? jQuery(this).parents('.tiva-events-calendar').attr('class') : 'full';
-        var max_events = jQuery(this).parents('.tiva-events-calendar').attr('data-events') ? jQuery(this).parents('.tiva-events-calendar').attr('data-events') : 1000;
-        if (layout.indexOf('full') != -1) {
-            showEventList('full', max_events);
-        } else {
-            showEventList('compact', max_events);
-        }
-    });
+                                                                                                                                var layout = jQuery(this).parents('.tiva-events-calendar').attr('class') ? jQuery(this).parents('.tiva-events-calendar').attr('class') : 'full';
+                                                                                                                                var max_events = jQuery(this).parents('.tiva-events-calendar').attr('data-events') ? jQuery(this).parents('.tiva-events-calendar').attr('data-events') : 1000;
+                                                                                                                                if (layout.indexOf('full') != -1) {
+                                                                                                                                            showEventList('full', max_events);
+} else {
+                                                                                                                                                    showEventList('compact', max_events);
+}
+});
 
-    // Click - Back calendar btn
+// Click - Back calendar btn
 //    jQuery('.tiva-events-calendar .back-calendar').click(function () {
 //        jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
 //        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
@@ -1995,6 +2015,6 @@ function cargaCalendario() {
 
 }
 jQuery(document).ready(function () {
-    cargaCalendario();
-    
+                                                                                                                                            cargaCalendario();
+
 });
