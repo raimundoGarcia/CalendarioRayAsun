@@ -1512,11 +1512,12 @@ function showEventDetail(id, layout, day, month, year) {
                                     humedad += dias[k].main.humidity;
 
                                     var codClima = dias[k].weather[0].id;
-                                    var codClima = codClima.toString();
+                                    var codClima = codClima.toString(); console.log("Codigo string "+codClima);
                                     var cod = codClima.charAt(0);
                                     if (cod === '8') {
-                                        codClima.replace('8', '1');
+                                        codClima = codClima.replace('8', '1'); console.log("Código string sustituido "+codClima);
                                     }
+                                    
                                     var intId = parseInt(codClima);
                                     array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
                                 }
