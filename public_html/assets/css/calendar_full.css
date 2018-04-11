@@ -413,12 +413,7 @@
 
 
 @media (max-width: 768px ){  /*Para que en móviles se vea la ventana modal de detalles centrada*/
-
-    #fichaDetalle{
-        /*  padding-left: 0px;
-          position-left: 0px; */
-    }
-
+    
     .horario{
 
         flex-direction: column !important;  /*lo aplica hasta 691px*/ 
@@ -426,8 +421,8 @@
 }
 
 #fichaDetalle{
-    padding-left: 0px !important;
-    padding-right: 0px !important; 
+    padding-left: 0vw !important;
+    padding-right: 0vw !important; 
 }
 
 .topcontent{
@@ -491,6 +486,9 @@
 
 }
 
+#descripcion{
+    padding: 5px 0px 5px;
+}
 
 .localizacion{
     margin: 20px 0px 20px;
@@ -507,9 +505,13 @@
 
 }
 .ubicacion{
-    /*  border: 1px solid #e2e2e2; */
+    
     padding: 10px;
 }
+.p5{
+   padding: 5px 0px 5px; 
+}
+
 .ubicacion-maps{
 
 }
@@ -568,6 +570,21 @@
   pointer-events: none;
 }
 
+.destacado{
+    font-weight: bold;
+}
+
+.highlight-color{
+    background-color: lightyellow;
+}
+
+.modaltext-titulo{
+    font-size: 2.25vh;
+}
+.modaltext{
+   font-size: 1.75vh; 
+}
+
 /*TOASTS - AVISOS*/
 
 .toaster{
@@ -586,24 +603,7 @@
    font-size: 1.5vh;
    
 }
-/*
-#toast-container {
-    position: absolute;
-    bottom: 13.25vw;
-    right: 0vw;
-    z-index: 999999;
-    
-}
-#toast-container>div{
-    overflow: hidden;
-    margin: 0 0 6px;
-    padding: 1vw 1vw 1vw 5vw;
-    
-    background-position: 15px center;
-    background-repeat: no-repeat;
-      
-}
-*/
+
 .toast-success {
     background-color: #00c851;
 }
@@ -742,7 +742,7 @@ table td{
     height: 4vh;
     font-size: 3vh;
 }
-.event__fecha, .event__hora, .event__ubicacion, .numvuelo, .origen, .destino, .h4 {
+.event__fecha, .event__hora, .event__ubicacion, .numvuelo, .origen, .destino {
     font-size: 2vh;
 
 }
