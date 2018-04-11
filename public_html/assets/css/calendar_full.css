@@ -35,6 +35,7 @@
 }
 .tiva-calendar-full .calendar-btn {
     padding: 0 !important;
+
 }
 .tiva-calendar-full .calendar-btn span {
     cursor: pointer;
@@ -485,7 +486,7 @@
 #linea{
     height: 0.3vh;
     width: 30vh;
-  
+
     margin: 5px;
 
 }
@@ -561,6 +562,65 @@
     height: auto;
 }
 
+.isDisabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/*TOASTS - AVISOS*/
+
+.toaster{
+    position: relative;
+    top: 0vw;
+    right: 0vw;
+    width: 100%;
+    margin-bottom: 2vw;
+    padding: 1vw;
+    opacity: .90;
+
+}
+
+.toast-text{
+    color: #fff !important; 
+    font-size: 1.5vh;
+
+}
+/*
+#toast-container {
+    position: absolute;
+    bottom: 13.25vw;
+    right: 0vw;
+    z-index: 999999;
+    
+}
+#toast-container>div{
+    overflow: hidden;
+    margin: 0 0 6px;
+    padding: 1vw 1vw 1vw 5vw;
+    
+    background-position: 15px center;
+    background-repeat: no-repeat;
+      
+}
+*/
+.toast-success {
+    background-color: #00c851;
+}
+
+.toast-error {
+    background-color: #ff3547;
+
+}
+
+.toast-info {
+    background-color: #33b5e5;
+}
+
+.toast-warning {
+    background-color: #fb3;
+}
+
 /*MODIFICACIONES CLASES MDB*/
 
 .btn{
@@ -613,25 +673,64 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     align-items: center;
 
 }
-.list-view{
+@media (max-width:954px){
+    .events-calendar-bar{
+        flex-flow: column wrap;
+    }
+}
+.list-view,#limpiar-filtro{
     margin-right: auto !important;
     margin-left: 1vw !important;
 }
-.row {
+.barras-fechas {
     margin-right:auto !important;
-    /*    margin-left: auto !important;*/
+    margin-left: auto !important;
+    display:flex;
+    flex-flow: column wrap;
+    justify-content: space-around;
+}
+@media (max-width:954px){
+    .barras-fechas{
+        flex-flow: row wrap;
+    }
+    .btn-cambio-filtro{
+        margin-top: 15px !important;
+    }
+}
+@media (min-width:1737px){
+    .barras-fechas{
+        flex-flow: row wrap;
+    }
+
 }
 .calendar-bar__item{
     max-height: 5vh;
     font-size: 1em;
+    min-width: 150px !important;
 
+}
+@media (max-width:400px){
+   .calendar-bar__item{ 
+    max-height:none;
+   }
+   .form-control{
+       display:inline;
+   }
+  
 }
 .md-form{
     margin-top: 0 !important;
+
 }
 /* DATE PICKER */
 .datepicker{
-    width: 30vw;
+    width: 28vw;
+    text-align: center;
+}
+@media (max-width:400px){
+    .datepicker{
+    width:32vw;
+    }
 }
 
 table td{
@@ -691,10 +790,19 @@ table td{
 }
 .listado-eventos-terminados{
     display:none;
+}#cambiarEventos{
+    margin-left: auto !important;
+    margin-right: auto !important; 
+
+}
+.cambiarEventos{
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 /* ICONOS TIEMPO MODAL */
 .iconos{
-  /*  transition: height 1.5s;*/
+    /*  transition: height 1.5s;*/
     height: 0px ;
     display:none;
 }

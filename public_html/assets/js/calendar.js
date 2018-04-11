@@ -664,19 +664,22 @@ function showEventList(layout, max_events) {
 
     if (layout == 'full') {
         jQuery('.tiva-event-list-full').html('');
+        jQuery('.tiva-event-list-full').append('<div class="cambiarEventos" ><button id="cambiarEventos" class="btn btn-primary btn-lg ">Ver eventos pasados</button></div>');
         jQuery('.tiva-event-list-full').append('<div class="listado-eventos-pendientes">');
         jQuery('.tiva-event-list-full').append('<div class="listado-eventos-terminados">');
-        jQuery('.tiva-event-list-full').append('<button id="cambiarEventos" class="btn btn-primary">Eventos pasados/pendientes</button>');
+
         $("#cambiarEventos").on("click", function () {
 
             if ($(".listado-eventos-pendientes").css("display") === "none") {
 
                 $(".listado-eventos-pendientes").css("display", "block");
                 $(".listado-eventos-terminados").css("display", "none");
+                $(this).text("Ver eventos pasados");
             } else {
 
                 $(".listado-eventos-pendientes").css("display", "none");
                 $(".listado-eventos-terminados").css("display", "block");
+                  $(this).text("Ver eventos pendientes");
             }
         });
 
@@ -999,13 +1002,13 @@ function diferenciaDiasClima(hoy, inicioViaje) {
     var timeDifferenceInDays = timeDifferenceInHours / 24;
     console.log("Función dif en días: " + timeDifferenceInDays);
 
-    return Math.round(timeDifferenceInDays);
+    return timeDifferenceInDays;
 }
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
-    var pais= "";
-    var ciudad= "";
+    var pais = "";
+    var ciudad = "";
     /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); 
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
@@ -1205,24 +1208,24 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("verMapa").addEventListener("click", function () {
             window.open('http://maps.google.es/?q=' + coordenadas);
         });
-         var geocoder = new google.maps.Geocoder;
-            var localizacion = {lat: latDestino, lng: lonDestino};
-            // var localizacion = {lat: 45.808123, lng: 3.085775};
+        var geocoder = new google.maps.Geocoder;
+        var localizacion = {lat: latDestino, lng: lonDestino};
+        // var localizacion = {lat: 45.808123, lng: 3.085775};
 
-            geocoder.geocode({'location': localizacion}, function (results, status) {
-                if (status === 'OK') {
-                    pais = results[results.length - 1].formatted_address; // aqui se filtra el listado para obtener el pais
-                    var campoCiudad = results[results.length - 3].formatted_address;
-                    ciudad = campoCiudad.split(",")[0];
-                  
-                }
-        // Mostrar la información recomendada según el pais de destino 
+        geocoder.geocode({'location': localizacion}, function (results, status) {
+            if (status === 'OK') {
+                pais = results[results.length - 1].formatted_address; // aqui se filtra el listado para obtener el pais
+                var campoCiudad = results[results.length - 3].formatted_address;
+                ciudad = campoCiudad.split(",")[0];
 
-        document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
-           
-                    buscarPais = "recomdaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
-                    window.open('http://www.google.com/search?q=' + buscarPais);
-                
+            }
+            // Mostrar la información recomendada según el pais de destino 
+
+            document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
+
+                buscarPais = "recomendaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
+                window.open('http://www.google.com/search?q=' + buscarPais);
+
             });
 
         });
@@ -1443,132 +1446,161 @@ function showEventDetail(id, layout, day, month, year) {
 
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
 
-        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
+        if (latDestino != null && lonDestino != null) {
+            var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
 
-        var fechaInicioViaje = tiva_events[id]._fechaInicio;
-        var hoy = new Date();
-
-
-        diasDif = diferenciaDiasClima(hoy, fechaInicioViaje);
-        console.log("diferencia (llamada función): " + diasDif);
-        //Asignar evento al botón del clima
-        $("#info-clima").on('click', function () {
-            $('.iconos').html("");
-            //si la diferencia es menor de 5 días, llamar a API del clima
-            if ((diasDif >= 0) && (diasDif <= 5)) {
-                console.log("Es menor de 5 días");
-                if ($(".iconos").attr("id") === "iconos") {
-                    $(".iconos").attr("id", "noMostrar");
-                } else {
-                    $(".iconos").attr("id", "iconos");
-                }
-                var listadoMediciones = [];
-                var fechasUnicas = [];
-                var paneles = "";
-
-                $.ajax({
-
-                    url: urlclima,
-                    type: 'get',
-                    dataType: 'json',
-
-                    success: function (datosClima) {
-                        paneles += ' <h2 class="card-tittle">' + ciudad  + ',&nbsp;&nbsp;' + pais + '</h2>  ';
-                        console.log(pais);
-                        console.log(ciudad);
-                        datosClima.list.forEach(medicion => {
-                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
-                            fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
-                        });
-                        for (var i = 0; i < fechasUnicas.length; i++) {
-                            var dias = [];
-
-                            var array_id_meteo = [];
+            var fechaInicioViaje = tiva_events[id]._fechaInicio;
+            var hoy = new Date();
 
 
-
-
-                            for (var j = 0; j < datosClima.list.length; j++) {
-                                if (datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]) {
-
-                                    dias.push(datosClima.list[j]);
-
-                                }
-                            }
-                            var temp_minima = 100;
-                            var temp_maxima = -200;
-                            var humedad = 0;
-                            for (var k = 0; k < dias.length; k++) {
-                                if (temp_minima > dias[k].main.temp_min) {
-                                    temp_minima = dias[k].main.temp_min;
-                                }
-                                if (temp_maxima < dias[k].main.temp_max) {
-                                    temp_maxima = dias[k].main.temp_max;
-                                }
-                                humedad += dias[k].main.humidity;
-                                var intId = parseInt(dias[k].weather[0].id);
-                                array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
-                            }
-
-                            console.log("Listado ids: " + array_id_meteo);
-                            maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
-                            console.log("El máximo diario es: " + maximo);
-
-                            var descripcion = "";
-                            info_meteoro.forEach(medicion => {
-                                if (medicion.id == maximo) {
-                                    descripcion = medicion.descripcion;
-                                    icono_meteo = medicion.icono;
-                                }
-                            });
-                            var diaSemana = new Date(fechasUnicas[i]);
-                            var mediaHumedad = humedad / dias.length;
-                            paneles += '   <div id="' + fechasUnicas[i] + '" class="card card-cascade narrower">  ' +
-                                    '                <h4 style="color:' + 'green' + '";><b>' + diasSemana[diaSemana.getDay()] + ', ' + fechasUnicas[i].substring(8, 10) + '</b></h4>  ' +
-                                    '                <!--Card image-->  ' +
-                                    '                <div class="view overlay hm-white-slight">  ' +
-                                    '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + '.png' + '" class="img-fluid iconos__logo" alt="">  ' +
-                                    '                <a>  ' +
-                                    '                <div class="mask"></div>  ' +
-                                    '                </a>  ' +
-                                    '                </div>  ' +
-                                    '                <!--/.Card image-->  ' +
-                                    '                <!--Card content-->  ' +
-                                    '                <div class="card-body">  ' +
-                                    '                <!--Title-->  ' +
-                                    '                <!--Text-->  ' +
-                                    '                <p class="card-text"><b>Temperatura: </b><br>' + '<b>Min </b>' + temp_minima + '<b>ºC - Max </b>' + temp_maxima + 'ºC</p>  ' +
-                                    '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
-                                    '                <p class="card-text"><b>Humedad: </b>' + mediaHumedad.toFixed(2) + '%</p>  ' +
-                                    '                </div>  ' +
-                                    '               </div>  ';
-                            console.log("nuevo dia");
-                            console.log(dias);
-
-
-                        }
-                        console.log(fechasUnicas);
-
-
-
-
-                        $(".iconos").html("");
-                        $(".iconos").append(paneles);
-                    },
-                    error: function () {
-                        console.log("Se ha producido un error API u otra causa.");
+            diasDif = diferenciaDiasClima(hoy, fechaInicioViaje);
+            console.log("diferencia (llamada función): " + diasDif);
+            //Asignar evento al botón del clima
+            $("#info-clima").on('click', function () {
+                $('.iconos').html("");
+                //si la diferencia es menor de 5 días, llamar a API del clima
+                if ((diasDif > -1) && (diasDif <= 5)) {
+                    console.log("Es menor de 5 días");
+                    if ($(".iconos").attr("id") === "iconos") {
+                        $(".iconos").attr("id", "noMostrar");
+                    } else {
+                        $(".iconos").attr("id", "iconos");
                     }
-                });
+                    var listadoMediciones = [];
+                    var fechasUnicas = [];
+                    var paneles = "";
 
-                //si no, aviso al usuario 
-            } else {
-                console.log("La diferencia es mayor de 5 días (" + diasDif + "). Consulte la previsión máximo 5 días antes del inicio del viaje.");
-            }
+                    $.ajax({
 
-        });
+                        url: urlclima,
+                        type: 'get',
+                        dataType: 'json',
+
+                        success: function (datosClima) {
+                            paneles += ' <h2 class="card-tittle">' + ciudad + ',&nbsp;&nbsp;' + pais + '</h2>  ';
+                            console.log(pais);
+                            console.log(ciudad);
+                            datosClima.list.forEach(medicion => {
+                                listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
+                                fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
+                            });
+                            for (var i = 0; i < fechasUnicas.length; i++) {
+                                var dias = [];
+
+                                var array_id_meteo = [];
+
+                                for (var j = 0; j < datosClima.list.length; j++) {
+                                    if (datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]) {
+
+                                        dias.push(datosClima.list[j]);
+
+                                    }
+                                }
+                                var temp_minima = 100;
+                                var temp_maxima = -200;
+                                var humedad = 0;
+                                for (var k = 0; k < dias.length; k++) {
+                                    if (temp_minima > dias[k].main.temp_min) {
+                                        temp_minima = dias[k].main.temp_min;
+                                    }
+                                    if (temp_maxima < dias[k].main.temp_max) {
+                                        temp_maxima = dias[k].main.temp_max;
+                                    }
+                                    humedad += dias[k].main.humidity;
+
+                                    var codClima = dias[k].weather[0].id;
+                                    var codClima = codClima.toString();
+                                    var cod = codClima.charAt(0);
+                                    if (cod === '8') {
+                                        codClima.replace('8', '1');
+                                    }
+                                    var intId = parseInt(codClima);
+                                    array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
+                                }
+
+                                console.log("Listado ids: " + array_id_meteo);
+                                maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
+                                console.log("El máximo diario es: " + maximo);
+
+                                var descripcion = "";
+                                info_meteoro.forEach(medicion => {
+                                    if (medicion.id == maximo) {
+                                        descripcion = medicion.descripcion;
+                                        icono_meteo = medicion.icono;
+                                        if (icono_meteo == null || icono_meteo == "" || icono_meteo == 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
+                                            icono_meteo = 'Consultia';
+                                        }
+                                    }
+
+                                });
+                                var diaSemana = new Date(fechasUnicas[i]);
+                                var mediaHumedad = humedad / dias.length;
+                                paneles += '   <div id="' + fechasUnicas[i] + '" class="card card-cascade narrower">  ' +
+                                        '                <h4 style="color:' + 'green' + '";><b>' + diasSemana[diaSemana.getDay()] + ', ' + fechasUnicas[i].substring(8, 10) + '</b></h4>  ' +
+                                        '                <!--Card image-->  ' +
+                                        '                <div class="view overlay hm-white-slight">  ' +
+                                        '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + '.png' + '" class="img-fluid iconos__logo" alt="">  ' +
+                                        '                <a>  ' +
+                                        '                <div class="mask"></div>  ' +
+                                        '                </a>  ' +
+                                        '                </div>  ' +
+                                        '                <!--/.Card image-->  ' +
+                                        '                <!--Card content-->  ' +
+                                        '                <div class="card-body">  ' +
+                                        '                <!--Title-->  ' +
+                                        '                <!--Text-->  ' +
+                                        '                <p class="card-text"><b>Temperatura: </b><br>' + '<b>Min </b>' + temp_minima + '<b>ºC - Max </b>' + temp_maxima + 'ºC</p>  ' +
+                                        '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
+                                        '                <p class="card-text"><b>Humedad: </b>' + mediaHumedad.toFixed(2) + '%</p>  ' +
+                                        '                </div>  ' +
+                                        '               </div>  ';
+                                console.log("nuevo dia");
+                                console.log(dias);
 
 
-        // document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
+                            }
+                            console.log(fechasUnicas);
+
+
+
+
+                            $(".iconos").html("");
+                            $(".iconos").append(paneles);
+                        },
+                        error: function () {
+                            console.log("Se ha producido un error API u otra causa.");
+                        }
+                    });
+
+                    //si no, aviso al usuario 
+                } else if (diasDif < 0) {  //caso días anteriores a hoy
+
+                    variableTexto = '<div class="toast-text">Evento pasado, no hay previsiones disponibles.</div>';
+                    $('<div class="toaster toast-error">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
+                    $('#info-clima').addClass('isDisabled');
+                    setTimeout(function () {
+                        $('.toaster').fadeOut('slow', 'linear');
+                        $('#info-clima').removeClass('isDisabled');
+                    }, 3000);
+
+                } else { //resto de casos, cuando la diferencia de días es mayor a 5 (días máximos previsión)
+
+                    variableTexto = '<div class="toast-text">La diferencia es mayor de 5 días (' + diasDif + '). Consulte la previsión máximo 5 días antes del inicio del viaje.</div>';
+                    $('<div class="toaster toast-error">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
+                    $('#info-clima').addClass('isDisabled');
+                    setTimeout(function () {
+                        $('.toaster').fadeOut('slow', 'linear');
+                        $('#info-clima').removeClass('isDisabled');
+                    }, 3000);
+
+                }
+
+            }); //fin información clima
+
+        } else {
+            $('#info-clima').addClass('isDisabled');
+        }
+// document.getElementById("fichaDetalle").style.display='block';  //NO FUNCIONA...la alternativa, jQuery
 
         $("#fichaDetalle").modal("show");
 
@@ -1712,10 +1744,10 @@ function cargaCalendario() {
     $('.tiva-events-calendar.full').html("");
     if (jQuery('.tiva-events-calendar.full').length) {
         jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
-                + '<button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
-                + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button>'
+                + '<div class="btn-cambio-interfaz"><button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
+                + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button></div>'
                 + ' <!--Grid row-->'
-                + ' <div class="row">'
+                + ' <div class="barras-fechas">'
 
                 + ' <!--Grid column-->'
                 + ' <div class="col-md-6 mb-4 calendar-bar__item">'
@@ -1744,8 +1776,8 @@ function cargaCalendario() {
                 + ' </div>'
                 + ' <!--Grid row-->'
                 //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
-                + '<button id="filtro-fechas" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
-                + '<button id="limpiar-filtro" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button>'
+                + '<div class="btn-cambio-filtro"><button id="filtro-fechas" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
+                + '<button id="limpiar-filtro" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button></div>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
                 + '<div class="tiva-events-calendar-wrap">'
@@ -1756,7 +1788,7 @@ function cargaCalendario() {
                 );
     }
 
-    // Init calendar compact
+// Init calendar compact
     if (jQuery('.tiva-events-calendar.compact').length) {
         jQuery('.tiva-events-calendar.compact').html('<div class="events-calendar-bar">'
                 + '<span class="bar-btn calendar-view calendar-btn active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
@@ -1772,8 +1804,8 @@ function cargaCalendario() {
                 );
     }
 
-    // Show - Hide view
-    //   jQuery('.tiva-events-calendar .back-calendar').hide();
+// Show - Hide view
+//   jQuery('.tiva-events-calendar .back-calendar').hide();
     jQuery('.tiva-event-list').hide();
     jQuery('.tiva-event-detail').hide();
 
@@ -1856,7 +1888,7 @@ function cargaCalendario() {
 
 
 
-                // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
+// asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
                 evento = {
 
                     "color": color,
@@ -1926,8 +1958,8 @@ function cargaCalendario() {
 
 
                 };
-                // Adapta la duracion a cada evento, fijando el valor a 1 en caso de que sea un evento que implique un billete
-                // y contemplando el dia de salida/devolucion en los eventos de alquiler de habitaciones en hoteles o coches
+// Adapta la duracion a cada evento, fijando el valor a 1 en caso de que sea un evento que implique un billete
+// y contemplando el dia de salida/devolucion en los eventos de alquiler de habitaciones en hoteles o coches
 
 
                 if (evento._tipo === "Aereo" || evento._tipo === "Barco" || evento._tipo === "Tren") {
@@ -1957,21 +1989,21 @@ function cargaCalendario() {
             }
 
 
-            // Create calendar
+// Create calendar
             changedate('current', 'full');
-            //  changedate('current', 'compact'); crea el calendario en forma compacta
+//  changedate('current', 'compact'); crea el calendario en forma compacta
             if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
                 $(".list-view").click();
                 returnView = "lista";
 
             } else {
                 $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
-                                 el tipo de vista entre calendario o vista */
-               if ( returnView === "lista"){
-                   $(".list-view").click();
-               }else{
-                   $(".calendar-view").click();
-               }
+                 el tipo de vista entre calendario o vista */
+                if (returnView === "lista") {
+                    $(".list-view").click();
+                } else {
+                    $(".calendar-view").click();
+                }
             }
 
 
@@ -1986,7 +2018,7 @@ function cargaCalendario() {
     });
 //    }
 
-    // Click - Calendar view btn
+// Click - Calendar view btn
     jQuery('.tiva-events-calendar .calendar-view').click(function () {
         //   jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').hide();
@@ -1998,7 +2030,7 @@ function cargaCalendario() {
         returnView = "calendario";
     });
 
-    // Click - List view btn
+// Click - List view btn
     jQuery('.tiva-events-calendar .list-view').click(function () {
         //  jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').hide();
@@ -2018,7 +2050,7 @@ function cargaCalendario() {
         }
     });
 
-    // Click - Back calendar btn
+// Click - Back calendar btn
 //    jQuery('.tiva-events-calendar .back-calendar').click(function () {
 //        jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
 //        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
