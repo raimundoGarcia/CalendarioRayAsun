@@ -664,19 +664,22 @@ function showEventList(layout, max_events) {
 
     if (layout == 'full') {
         jQuery('.tiva-event-list-full').html('');
+        jQuery('.tiva-event-list-full').append('<div class="cambiarEventos" ><button id="cambiarEventos" class="btn btn-primary btn-lg ">Ver eventos pasados</button></div>');
         jQuery('.tiva-event-list-full').append('<div class="listado-eventos-pendientes">');
         jQuery('.tiva-event-list-full').append('<div class="listado-eventos-terminados">');
-        jQuery('.tiva-event-list-full').append('<button id="cambiarEventos" class="btn btn-primary">Eventos pasados/pendientes</button>');
+
         $("#cambiarEventos").on("click", function () {
 
             if ($(".listado-eventos-pendientes").css("display") === "none") {
 
                 $(".listado-eventos-pendientes").css("display", "block");
                 $(".listado-eventos-terminados").css("display", "none");
+                $(this).text("Ver eventos pasados");
             } else {
 
                 $(".listado-eventos-pendientes").css("display", "none");
                 $(".listado-eventos-terminados").css("display", "block");
+                  $(this).text("Ver eventos pendientes");
             }
         });
 
@@ -1004,6 +1007,8 @@ function diferenciaDiasClima(hoy, inicioViaje) {
 
 // Show event detail TODO: mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
+    var pais = "";
+    var ciudad = "";
     /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); 
      jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
@@ -1040,7 +1045,7 @@ function showEventDetail(id, layout, day, month, year) {
             '                                    <div id="fecha-o" class="fecha-o">dd/mm/aaaa</div>' +
             '                                    <div id="hora-o" class="hora-o">hh:mm</div> ' +
             '                                </div>' +
-            '                                <div class="linea">' +
+            '                                <div id="linea">' +
             '' +
             '                                </div>' +
             '                                <div class="destino"> ' +
@@ -1205,20 +1210,24 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("verMapa").addEventListener("click", function () {
             window.open('http://maps.google.es/?q=' + coordenadas);
         });
+        var geocoder = new google.maps.Geocoder;
+        var localizacion = {lat: latDestino, lng: lonDestino};
+        // var localizacion = {lat: 45.808123, lng: 3.085775};
 
-        // Mostrar la información recomendada según el pais de destino 
+        geocoder.geocode({'location': localizacion}, function (results, status) {
+            if (status === 'OK') {
+                pais = results[results.length - 1].formatted_address; // aqui se filtra el listado para obtener el pais
+                var campoCiudad = results[results.length - 3].formatted_address;
+                ciudad = campoCiudad.split(",")[0];
 
-        document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
-            var geocoder = new google.maps.Geocoder;
-            var localizacion = {lat: latDestino, lng: lonDestino};
-            // var localizacion = {lat: 45.808123, lng: 3.085775};
+            }
+            // Mostrar la información recomendada según el pais de destino 
 
-            geocoder.geocode({'location': localizacion}, function (results, status) {
-                if (status === 'OK') {
-                    pais = results[results.length - 1].formatted_address; // aqui se filtra el listado para obtener el pais
-                    buscarPais = "recomendaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
-                    window.open('http://www.google.com/search?q=' + buscarPais);
-                }
+            document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
+
+                buscarPais = "recomendaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
+                window.open('http://www.google.com/search?q=' + buscarPais);
+
             });
 
         });
@@ -1226,6 +1235,7 @@ function showEventDetail(id, layout, day, month, year) {
         var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
         document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
         document.getElementById("asunto").classList.add("color-" + colorfondo);
+        document.getElementById("linea").classList.add("color-" + colorfondo);
 
         //Fechas salida-llegada / origen-destino
         document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
@@ -1470,7 +1480,9 @@ function showEventDetail(id, layout, day, month, year) {
                         dataType: 'json',
 
                         success: function (datosClima) {
-                            paneles += ' <h2 class="card-tittle">' + datosClima.city.name + ',&nbsp;&nbsp;' + datosClima.city.country + '</h2>  ';
+                            paneles += ' <h2 class="card-tittle">' + ciudad + ',&nbsp;&nbsp;' + pais + '</h2>  ';
+                            console.log(pais);
+                            console.log(ciudad);
                             datosClima.list.forEach(medicion => {
                                 listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
                                 fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
@@ -1725,10 +1737,10 @@ function cargaCalendario() {
     $('.tiva-events-calendar.full').html("");
     if (jQuery('.tiva-events-calendar.full').length) {
         jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
-                + '<button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
-                + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button>'
+                + '<div class="btn-cambio-interfaz"><button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
+                + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button></div>'
                 + ' <!--Grid row-->'
-                + ' <div class="row">'
+                + ' <div class="barras-fechas">'
 
                 + ' <!--Grid column-->'
                 + ' <div class="col-md-6 mb-4 calendar-bar__item">'
@@ -1757,8 +1769,8 @@ function cargaCalendario() {
                 + ' </div>'
                 + ' <!--Grid row-->'
                 //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
-                + '<button id="filtro-fechas" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
-                + '<button id="limpiar-filtro" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button>'
+                + '<div class="btn-cambio-filtro"><button id="filtro-fechas" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
+                + '<button id="limpiar-filtro" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button></div>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
                 + '<div class="tiva-events-calendar-wrap">'
@@ -1980,6 +1992,11 @@ function cargaCalendario() {
             } else {
                 $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
                  el tipo de vista entre calendario o vista */
+                if (returnView === "lista") {
+                    $(".list-view").click();
+                } else {
+                    $(".calendar-view").click();
+                }
             }
 
 
@@ -2068,7 +2085,7 @@ function cargaCalendario() {
         console.log(returnView);
         cargaCalendario();
 //        if (returnView === "lista") {
-//            $(".list-view").click();
+
 //        }
     });
 }
