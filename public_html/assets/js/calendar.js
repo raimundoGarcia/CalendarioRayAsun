@@ -1244,7 +1244,7 @@ function showEventDetail(id, layout, day, month, year) {
         //Variables para las horas
         var horaOrigen = tiva_events[id].time; //siempre hora inicio
         var horaDestino = tiva_events[id]._horaFin;
-        var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local de cada País.";
+        var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local de cada país.";
 
         //Localizador de la reserva
         document.getElementById("localizador").innerHTML = "<h5 class='destacado modaltext'>LOCALIZADOR RESERVA: " + tiva_events[id]._localizador + "</h5>";
@@ -1261,12 +1261,11 @@ function showEventDetail(id, layout, day, month, year) {
             //TODO:buscar logo companyia aerea
             codigoV = codigoV.replace("/", ""); //para buscador google el código debe salir sin slash
 
-            //document.getElementById("numvuelo").innerHTML = codigoV;
             //nombre aerolinea para el logo
             var aerolinea = tiva_events[id]._Aerolinea;
 
             //funcionalidad botón seguimiento vuelo online google
-            var q = codigoV + " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day);
+            var q = codigoV;  /*+ " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day)*/
 
             document.getElementById("googlesearchvuelo").onclick = function () {
                 window.open('http://www.google.com/search?q=' + q);
@@ -1351,6 +1350,8 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("compartecon").innerHTML = html;
 
         } else if (tipoReserva === "Tren") {
+            //logo
+            $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>");
 
             document.getElementById("googlesearchvuelo").style.display = "none";
             document.getElementById("ciudad-o").innerHTML = tiva_events[id]._EstacionOrigen;
@@ -1512,10 +1513,10 @@ function showEventDetail(id, layout, day, month, year) {
                                     humedad += dias[k].main.humidity;
 
                                     var codClima = dias[k].weather[0].id;
-                                    var codClima = codClima.toString(); console.log("Codigo string "+codClima);
+                                    var codClima = codClima.toString();
                                     var cod = codClima.charAt(0);
                                     if (cod === '8') {
-                                        codClima = codClima.replace('8', '1'); console.log("Código string sustituido "+codClima);
+                                        codClima = codClima.replace('8', '1'); 
                                     }
                                     
                                     var intId = parseInt(codClima);

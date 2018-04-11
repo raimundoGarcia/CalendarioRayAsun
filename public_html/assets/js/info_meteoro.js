@@ -257,27 +257,27 @@ info_meteoro = [
     
     
     {
-    "id": "800",
+    "id": "100",
     "descripcion": "Cielo despejado",
     "icono": "01d"
     },
     {
-    "id": "801",
+    "id": "101",
     "descripcion": "Poco nublado",
     "icono": "02d"
     },
     {
-    "id": "802",
+    "id": "102",
     "descripcion": "Nubes dispersas",
     "icono": "03d"
     },
     {
-    "id": "803",
+    "id": "103",
     "descripcion": "Nubes fragmentadas",
     "icono": "04d"
     },
     {
-    "id": "804",
+    "id": "104",
     "descripcion": "Cielo cubierto",
     "icono": "04d"
     },
