@@ -1256,6 +1256,13 @@ function showEventDetail(id, layout, day, month, year) {
         if (tipoReserva == "Aereo") {
 
             document.getElementById("googlesearchvuelo").style.display = "block";
+            //funcionalidad botón seguimiento vuelo online google
+            var q = codigoV;  /*+ " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day)*/
+
+            document.getElementById("googlesearchvuelo").onclick = function () {
+                window.open('http://www.google.com/search?q=' + q);
+            };
+            
             var codigoV = tiva_events[id]._NVuelo;
             var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo
             //TODO:buscar logo companyia aerea
@@ -1263,13 +1270,7 @@ function showEventDetail(id, layout, day, month, year) {
 
             //nombre aerolinea para el logo
             var aerolinea = tiva_events[id]._Aerolinea;
-
-            //funcionalidad botón seguimiento vuelo online google
-            var q = codigoV;  /*+ " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day)*/
-
-            document.getElementById("googlesearchvuelo").onclick = function () {
-                window.open('http://www.google.com/search?q=' + q);
-            };
+            
             //Bloque horarios
             var salidaIata = tiva_events[id]._SalidaIATA;
             var llegadaIata = tiva_events[id]._LlegadaIATA;
@@ -1350,7 +1351,7 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("compartecon").innerHTML = html;
 
         } else if (tipoReserva === "Tren") {
-            //logo
+            //logo renfe
             $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>");
 
             document.getElementById("googlesearchvuelo").style.display = "none";
