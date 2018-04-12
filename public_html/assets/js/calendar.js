@@ -29,9 +29,10 @@ var date_start;
 var returnView = "calendario"; // asigna la vista a la que volver despues de mostrar los detalles de un evento
 // comprobacion de si es calendario con filtro de fechas o sin filtro
 var filtrar = false;
+var filtrado = 0;
 
-var fechaIniDefault = sumarDias(-15);
-var fechaFinDefault = sumarDias(30);
+var fechaIniDefault = sumarDias(-900);
+var fechaFinDefault = sumarDias(900);
 
 var rangoFechaIni = "";
 var rangoFechaFin = "";
@@ -191,7 +192,7 @@ function getEventsByTime(type) {
     var events = [];
     var today_date = new Date(todaysYear, todaysMonth - 1, todaysDate);
     for (var i = 0; i < tiva_events.length; i++) {
-        if (type == 'upcoming') {
+        if (type === 'upcoming') {
             if (tiva_events[i].date >= today_date.getTime()) {
                 events.push(tiva_events[i]);
             }
@@ -206,41 +207,41 @@ function getEventsByTime(type) {
 
 // Change month or year on calendar  TODO: Cambiar mes o anyo en el calendario
 function changedate(btn, layout) {
-    if (btn == "prevyr") {
+    if (btn === "prevyr") {
         eval("yearNum_" + layout + "--;");
-    } else if (btn == "nextyr") {
+    } else if (btn === "nextyr") {
         eval("yearNum_" + layout + "++;");
-    } else if (btn == "prevmo") {
+    } else if (btn === "prevmo") {
         eval("monthNum_" + layout + "--;");
-    } else if (btn == "nextmo") {
+    } else if (btn === "nextmo") {
         eval("monthNum_" + layout + "++;");
-    } else if (btn == "current") {
+    } else if (btn === "current") {
         eval("monthNum_" + layout + " = todaysMonth;");
         eval("yearNum_" + layout + " = todaysYear;");
     }
 
-    if (monthNum_full == 0) { //si al retroceder un mes (getDay++)-1, resulta 0, el mes a mostrar es DICIEMBRE (12) Y EL AÑO ANTERIOR(--)
+    if (monthNum_full === 0) { //si al retroceder un mes (getDay++)-1, resulta 0, el mes a mostrar es DICIEMBRE (12) Y EL AÑO ANTERIOR(--)
         monthNum_full = 12;
         yearNum_full--;
-    } else if (monthNum_full == 13) { //si al avanzar un mes (getDay++)+1, resulta 13, el mes a mostrar es ENERO (1) Y EL AÑO EL SIGUIENTE (++)
+    } else if (monthNum_full === 13) { //si al avanzar un mes (getDay++)+1, resulta 13, el mes a mostrar es ENERO (1) Y EL AÑO EL SIGUIENTE (++)
         monthNum_full = 1;
-        yearNum_full++
+        yearNum_full++;
     }
 
-    if (monthNum_compact == 0) {
+    if (monthNum_compact === 0) {
         monthNum_compact = 12;
         yearNum_compact--;
-    } else if (monthNum_compact == 13) {
+    } else if (monthNum_compact === 13) {
         monthNum_compact = 1;
-        yearNum_compact++
+        yearNum_compact++;
     }
 
     // Get first day and number days of month
     eval("firstDate = new Date(yearNum_" + layout + ", monthNum_" + layout + " - 1, 1);"); //asigna a vble. la fecha del día 1 del mes actual
-    if (date_start == 'sunday') {
+    if (date_start === 'sunday') {
         firstDay = firstDate.getDay() + 1;  //first_day será el día de la semana del día 1
     } else {
-        firstDay = (firstDate.getDay() == 0) ? 7 : firstDate.getDay(); //si la semana empieza a contar en lunes, y el día 1 primer día de semana, la vble. firstDay es 7
+        firstDay = (firstDate.getDay() === 0) ? 7 : firstDate.getDay(); //si la semana empieza a contar en lunes, y el día 1 primer día de semana, la vble. firstDay es 7
     }
     eval("lastDate = new Date(yearNum_" + layout + ", monthNum_" + layout + ", 0);"); //asigna a la vble la fecha del último día del mes actual 
     numbDays = lastDate.getDate(); //números de días del mes
@@ -259,7 +260,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
     calendarString += '<table class=\"calendar-table table table-bordered\">';
     calendarString += '<tbody>';
     calendarString += '<tr>';
-    if (layout == 'full') {
+    if (layout === 'full') {
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevyr\', \'full\')\">« <span class="btn-change-date">' + prev_year + '<\/span><\/span><\/td>';
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevmo\', \'full\')\">« <span class="btn-change-date">' + prev_month + '<\/span><\/span><\/td>';
         calendarString += '<td class=\"calendar-title\" colspan=\"3\"><span><i class=\"far fa-calendar-alt\"><\/i>' + wordMonth[monthNum - 1] + '&nbsp;&nbsp;' + yearNum + '<\/span><\/td>';
@@ -287,7 +288,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
     }
     calendarString += '<\/tr>';
 
-    thisDate == 1;
+    thisDate === 1;
 
     for (var i = 1; i <= 6; i++) {
         var k = (i - 1) * 7 + 1;
@@ -300,27 +301,27 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                     calendarString += '<td class=\"calendar-day-blank\">&nbsp;<\/td>';
                 } else {
                     // Saturday or Sunday
-                    if (date_start == 'sunday') {
-                        if ((x == 1) || (x == 7)) {
+                    if (date_start === 'sunday') {
+                        if ((x === 1) || (x === 7)) {
                             daycounter_s = '<span class=\"calendar-day-weekend\">' + daycounter + '</span>';
                         } else {
                             daycounter_s = daycounter;
                         }
                     } else {
-                        if ((x == 6) || (x == 7)) {
+                        if ((x === 6) || (x === 7)) {
                             daycounter_s = '<span class=\"calendar-day-weekend\">' + daycounter + '</span>';
                         } else {
                             daycounter_s = daycounter;
                         }
                     }
 
-                    if ((todaysDate == daycounter) && (todaysMonth == monthNum)) {
+                    if ((todaysDate === daycounter) && (todaysMonth === monthNum)) {
                         calendarString += '<td class=\"calendar-day-normal calendar-day-today\">';
                     } else {
                         calendarString += '<td class=\"calendar-day-normal\">';
                     }
                     if (checkEvents(daycounter, monthNum, yearNum)) {
-                        if (layout == 'full') {
+                        if (layout === 'full') {
                             calendarString += '<div class=\"calendar-day-event\">';
                         } else {
                             calendarString += '<div class=\"calendar-day-event\" onmouseover=\"showTooltip(0, \'compact\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ', this)\" onmouseout=\"clearTooltip(\'compact\', this)\" onclick=\"showEventDetail(0, \'compact\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ')\">';
@@ -328,14 +329,14 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                         calendarString += daycounter_s;
 
                         // Get events of day
-                        if (layout == 'full') {
+                        if (layout === 'full') {
                             var events = getEvents(daycounter, monthNum, yearNum);
 
 
                             //   events.sort(sortEventsByDate); //TODO: PRUEBA ORDENAR EVENTOS - FALTA HACER FECHAS date() CON LA HORA
                             for (var t = 0; t < events.length; t++) {
 
-                                if (typeof events[t] != "undefined") { //si existe evento en esa posición del array de eventos DE UN DÍA CONCRETO (no undefined)
+                                if (typeof events[t] !== "undefined") { //si existe evento en esa posición del array de eventos DE UN DÍA CONCRETO (no undefined)
                                     //TODO: PRUEBAS ICONOS EVENTOS
 
 
@@ -454,8 +455,8 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
                                 } else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
                                     var event_fake; //crea una variable
-                                    if (typeof events[t + 1] != "undefined") {  //establece otra condición: si el siguiente elemento del array no es indefinido -> Si el día sgte hay evento
-                                        if (typeof tiva_events[events[t + 1].id - 1] != "undefined") { //entonces si el evento de la lista global ordenada inmediatamente anterior al actual
+                                    if (typeof events[t + 1] !== "undefined") {  //establece otra condición: si el siguiente elemento del array no es indefinido -> Si el día sgte hay evento
+                                        if (typeof tiva_events[events[t + 1].id - 1] !== "undefined") { //entonces si el evento de la lista global ordenada inmediatamente anterior al actual
                                             //está definido, la vble. toma el nombre de ese evento inmediatamente anterior acortado
 
 //                                            event_fake = getShortText(tiva_events[events[t + 1].id - 1].name, 2);
@@ -488,7 +489,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
     calendarString += '</tbody>';
     calendarString += '</table>';
 
-    if (layout == 'full') {
+    if (layout === 'full') {
         jQuery('.tiva-calendar-full').html(calendarString);
     } else {
         /*
@@ -510,7 +511,7 @@ function checkEvents(day, month, year) {
         }
     }
 
-    if (numevents == 0) {
+    if (numevents === 0) {
         return false;
     } else {
         return true;
@@ -524,7 +525,7 @@ function getOrderNumber(id, day, month, year) {  //TODO OBTIENE EL NÚMERO
         var start_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, tiva_events[i].day); //FECHA INICIO EVENTO
         var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1); //FECHA FIN EVENTO = fecha inicio + duración - 1
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) { //si la FECHA ACTUAL está entre la INICIO y la FIN del evento
-            var first_day = (start_date.getTime() == date_check.getTime()) ? true : false; //si la fecha inicio coincide con la fecha actual, first_day es TRUE
+            var first_day = (start_date.getTime() === date_check.getTime()) ? true : false; //si la fecha inicio coincide con la fecha actual, first_day es TRUE
             var event = {id: tiva_events[i].id, name: tiva_events[i].name, day: tiva_events[i].day, month: tiva_events[i].month,
                 year: tiva_events[i].year, first_day: first_day}; //se crea el evento  y se insertará en la lista
             events.push(event);
@@ -532,14 +533,14 @@ function getOrderNumber(id, day, month, year) {  //TODO OBTIENE EL NÚMERO
     }
 
     if (events.length) {
-        if (events[0].id == id) {
+        if (events[0].id === id) {
             var num = order_num;  //inicializada a 0 en la declaración
             order_num = 0;
             return num;
         } else {
             order_num++;
             for (var j = 0; j < events.length; j++) {
-                if (events[j].id == id) {
+                if (events[j].id === id) {
                     return getOrderNumber(events[j - 1].id, events[j - 1].day, events[j - 1].month, events[j - 1].year);
                 }
             }
@@ -560,8 +561,8 @@ function getEvents(day, month, year) {
         var start_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, tiva_events[i].day);
         var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1);
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) {
-            var first_day = (start_date.getTime() == date_check.getTime()) ? true : false;
-            var last_day = (end_date.getTime() == date_check.getTime()) ? true : false;
+            var first_day = (start_date.getTime() === date_check.getTime()) ? true : false;
+            var last_day = (end_date.getTime() === date_check.getTime()) ? true : false;
             var event = {id: tiva_events[i].id, name: tiva_events[i].name, first_day: first_day, last_day: last_day, color: tiva_events[i].color, tipo: tiva_events[i]._tipo, duracion: tiva_events[i].duration}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
 
             if (!first_day) {
@@ -578,7 +579,7 @@ function getEvents(day, month, year) {
 
 // Show tooltip when mouse over  TODO: mostrar TOOLTIP onmouseover
 function showTooltip(id, layout, day, month, year, el) {
-    if (layout == 'full') {
+    if (layout === 'full') {
         if (tiva_events[id].image) {
             var event_image = '<img src="' + tiva_events[id].image + '" alt="' + tiva_events[id].name + '" />';
         } else {
@@ -610,7 +611,7 @@ function showTooltip(id, layout, day, month, year, el) {
         jQuery(el).find('.tiva-event-tooltip').html('');
         var events = getEvents(day, month, year);
         for (var i = 0; i < events.length; i++) {
-            if (typeof events[i] != "undefined") {
+            if (typeof events[i] !== "undefined") {
                 if (tiva_events[events[i].id].image) {
                     var event_image = '<img src="' + tiva_events[events[i].id].image + '" alt="' + tiva_events[events[i].id].name + '" />';
                 } else {
@@ -639,7 +640,7 @@ function showTooltip(id, layout, day, month, year, el) {
 
 // Clear tooltip when mouse out TODO: ocultar TOOLTIP onmouseover
 function clearTooltip(layout, el) {
-    if (layout == 'full') {
+    if (layout === 'full') {
         jQuery(el).parent().find('.tiva-event-tooltip').css('opacity', '0');
         jQuery(el).parent().find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
         jQuery(el).parent().find('.tiva-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
@@ -662,11 +663,11 @@ function showEventList(layout, max_events) {
     var tiva_list_events = upcoming_events.concat(past_events);
     tiva_list_events = tiva_list_events.slice(0, max_events);
 
-    if (layout == 'full') {
+    if (layout === 'full') {
         jQuery('.tiva-event-list-full').html('');
         jQuery('.tiva-event-list-full').append('<div class="cambiarEventos" ><button id="cambiarEventos" class="btn btn-primary btn-lg ">Ver eventos pasados</button></div>');
-        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-pendientes">');
-        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-terminados">');
+        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-pendientes"><span class="titulo-lista">Eventos Pendientes</span></div>');
+        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-terminados"><span class="titulo-lista">Eventos Finalizados</span></div>');
 
         $("#cambiarEventos").on("click", function () {
 
@@ -679,15 +680,16 @@ function showEventList(layout, max_events) {
 
                 $(".listado-eventos-pendientes").css("display", "none");
                 $(".listado-eventos-terminados").css("display", "block");
-                  $(this).text("Ver eventos pendientes");
+                $(this).text("Ver eventos pendientes");
             }
         });
 
 
         for (var i = 0; i < tiva_list_events.length; i++) {
             // Start date
+
             var day = new Date(tiva_list_events[i].year, Number(tiva_list_events[i].month) - 1, tiva_list_events[i].day);
-            if (date_start == 'sunday') {
+            if (date_start === 'sunday') {
                 var event_day = wordDay[day.getDay()];
             } else {
                 if (day.getDay() > 0) {
@@ -703,7 +705,7 @@ function showEventList(layout, max_events) {
             if (tiva_list_events[i].duration > 1) {
                 var end_date = new Date(tiva_list_events[i].year, Number(tiva_list_events[i].month) - 1, Number(tiva_list_events[i].day) + Number(tiva_list_events[i].duration) - 1);
 
-                if (date_start == 'sunday') {
+                if (date_start === 'sunday') {
                     var event_end_day = wordDay[end_date.getDay()];
                 } else {
                     if (end_date.getDay() > 0) {
@@ -751,6 +753,7 @@ function showEventList(layout, max_events) {
             } else {
                 $(".listado-eventos-terminados").append(eventoListado);
             }
+            ;
 
 
             ////'<div class="event-item">' +
@@ -797,6 +800,8 @@ function showEventList(layout, max_events) {
 //                    '      </div>' +
 //                    '   </div>');
         }
+        console.log(filtrado);
+        mostrarSegunFiltrado(filtrado, tiva_list_events.length);
     } else {
         /*
          jQuery('.tiva-event-list-compact').html('');
@@ -1108,10 +1113,10 @@ function showEventDetail(id, layout, day, month, year) {
             '        </div>';
     $("#espacioModal").html("");
     $("#espacioModal").append(myvar);
-    if (layout == 'full') {
+    if (layout === 'full') {
         // Start date
         var day = new Date(tiva_events[id].year, Number(tiva_events[id].month) - 1, tiva_events[id].day);
-        if (date_start == 'sunday') {
+        if (date_start === 'sunday') {
             var event_day = wordDay[day.getDay()];
         } else {
             if (day.getDay() > 0) {
@@ -1127,7 +1132,7 @@ function showEventDetail(id, layout, day, month, year) {
         if (tiva_events[id].duration > 1) {
             var end_date = new Date(tiva_events[id].year, Number(tiva_events[id].month) - 1, Number(tiva_events[id].day) + Number(tiva_events[id].duration) - 1);
 
-            if (date_start == 'sunday') {
+            if (date_start === 'sunday') {
                 var event_end_day = wordDay[end_date.getDay()];
             } else {
                 if (end_date.getDay() > 0) {
@@ -1196,14 +1201,14 @@ function showEventDetail(id, layout, day, month, year) {
         //Coordenadas origen
         var lat = tiva_events[id]._latitudOrigen;
         var lon = tiva_events[id]._longitudOrigen;
-        
+
         // Coordenadas destino (clima)
         var latDestino = tiva_events[id]._latitudDestino;
         var lonDestino = tiva_events[id]._longitudDestino;
 
         console.log("Latitud: " + lat + " y Longitud: " + lon);
         var coordenadas = lat + "%20" + lon;
-        
+
         //Ubicación en sección Mapa
         var ubicacion = tiva_events[id]._ubicacion;
         document.getElementById("ubicacion").innerHTML = "<h5 class='p5 modaltext'>" + ubicacion + "</h5>";
@@ -1253,7 +1258,7 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal", null);
 
 //BLOQUES PARTICULARIDADES POR TIPO DE RESERVA          
-        if (tipoReserva == "Aereo") {
+        if (tipoReserva === "Aereo") {
 
             document.getElementById("googlesearchvuelo").style.display = "block";
             var codigoV = tiva_events[id]._NVuelo;
@@ -1291,7 +1296,7 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>NÚMERO VUELO: " + codigoV + "</h5><h5 class='destacado modaltext'>AEROLÍNEA: " + aerolinea + "</h5>"
                     + "<h5 class='modaltext'>Aeropuerto Salida: " + salidaIata + " - " + aeropuertoSalida + "</h5>" +
                     "<h5 class='modaltext'>Aeropuerto Llegada: " + llegadaIata + " - " + aeropuertoLlegada + "</h5>" +
-                    "<h5 class='modaltext'>Duración vuelo: " + horas + " horas y " + minutos + " minutos. </h5><h6 class='modaltext'><span class='highlight-color'>"+avisoHorario+"</span></h6>";
+                    "<h5 class='modaltext'>Duración vuelo: " + horas + " horas y " + minutos + " minutos. </h5><h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
 
         } else if (tipoReserva === "Hotel") { //POSIBLE IF o SWITCH CON TODAS LAS OPCIONES QUE DIFIERAN
 
@@ -1315,7 +1320,7 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("descripcion").innerHTML = "<h5 class='modaltext'>Hotel: " + nombreHotel +
                     "</h5><h5 class='modaltext'>Dirección: " + direccionHotel +
                     "</h5><h5 class='modaltext'>Régimen: " + regimen + "</h5><h5 class='modaltext'>Tipo Habitación: " +
-                    tipoHabitacion + "</h5><h6 class='modaltext'> <span class='highlight-color'>"+avisoHorario+"</span></h6>";
+                    tipoHabitacion + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
             document.getElementById("compartecon").innerHTML = html;
 
         } else if (tipoReserva === "Coche") {
@@ -1347,7 +1352,7 @@ function showEventDetail(id, layout, day, month, year) {
                     "</h5><h5 class='modaltext'>Transmisión: " + transmision + "</h5><h5 class='modaltext'>Combustible: " +
                     combustible + "</h5><h5 class='modaltext'>Dirección Recogida: " +
                     direccionRecogida + "</h5><h5 class='modaltext'>Dirección Entrega: " +
-                    direccionEntrega + "</h5><h6 class='modaltext'> <span class='highlight-color'>"+avisoHorario+"</span></h6>";
+                    direccionEntrega + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
             document.getElementById("compartecon").innerHTML = html;
 
         } else if (tipoReserva === "Tren") {
@@ -1365,7 +1370,7 @@ function showEventDetail(id, layout, day, month, year) {
 
             document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
                     "</h5><h5 class='destacado modaltext'>Tipo de Tren: " + tipotren +
-                    "</h5><h5 class='modaltext'>Clase: " + clase + "<h6 class='modaltext'> <span class='highlight-color'>"+avisoHorario+"</span></h6>";
+                    "</h5><h5 class='modaltext'>Clase: " + clase + "<h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
 
         } else if (tipoReserva === "Barco") {
             document.getElementById("googlesearchvuelo").style.display = "none";
@@ -1388,7 +1393,7 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
                     "</h5><h5 class='modaltext'>Origen: " + origen +
                     "</h5><h5 class='modaltext'>Destino: " + destino + "<h5>Acomodación: " + acomodacion +
-                    "</h5><span class='modaltext'>Vehículos (" + vehiculos.length + "): </span>" + matriculas + "<h6 class='modaltext'><span class='highlight-color'>"+avisoHorario+"</span></h6>";
+                    "</h5><span class='modaltext'>Vehículos (" + vehiculos.length + "): </span>" + matriculas + "<h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
 
 
         } else if (tipoReserva === "Otros") {
@@ -1442,14 +1447,14 @@ function showEventDetail(id, layout, day, month, year) {
 
 
 
-        } else if (tiva_events[id]._adjuntos == null || tiva_events[id]._adjuntos == 'undefined') {
+        } else if (tiva_events[id]._adjuntos === null || tiva_events[id]._adjuntos === 'undefined') {
 
             document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";
         }
 
         //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
 
-        if (latDestino != null && lonDestino != null) {
+        if (latDestino !== null && lonDestino !== null) {
             var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
 
             var fechaInicioViaje = tiva_events[id]._fechaInicio;
@@ -1462,7 +1467,7 @@ function showEventDetail(id, layout, day, month, year) {
             $("#info-clima").on('click', function () {
                 $('.iconos').html("");
                 //caso1: si la diferencia es menor de 5 días anteriores a hoy, pero el evento dura como mínimo hasta hoy //caso2: eventos con fecha inicio desde hoy hasta 5 días después  //caso3: eventos con fechas inicio anteriores 5 días desde hoy cuya duración llega hasta hoy (hoy es primer día previsión meteo)
-                if ( ((diasDif >= -5) && (tiva_events[id].duration >= Math.abs(diasDif)) ) || ( (diasDif <= 5) && (diasDif >= 0) ) || ((diasDif < -5) && (tiva_events[id].duration >= Math.abs(diasDif))) ){
+                if (((diasDif >= -5) && (tiva_events[id].duration >= Math.abs(diasDif))) || ((diasDif <= 5) && (diasDif >= 0)) || ((diasDif < -5) && (tiva_events[id].duration >= Math.abs(diasDif)))) {
                     console.log("Es menor de 5 días");
                     if ($(".iconos").attr("id") === "iconos") {
                         $(".iconos").attr("id", "noMostrar");
@@ -1512,12 +1517,14 @@ function showEventDetail(id, layout, day, month, year) {
                                     humedad += dias[k].main.humidity;
 
                                     var codClima = dias[k].weather[0].id;
-                                    var codClima = codClima.toString(); console.log("Codigo string "+codClima);
+                                    var codClima = codClima.toString();
+                                    console.log("Codigo string " + codClima);
                                     var cod = codClima.charAt(0);
                                     if (cod === '8') {
-                                        codClima = codClima.replace('8', '1'); console.log("Código string sustituido "+codClima);
+                                        codClima = codClima.replace('8', '1');
+                                        console.log("Código string sustituido " + codClima);
                                     }
-                                    
+
                                     var intId = parseInt(codClima);
                                     array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
                                 }
@@ -1528,10 +1535,10 @@ function showEventDetail(id, layout, day, month, year) {
 
                                 var descripcion = "";
                                 info_meteoro.forEach(medicion => {
-                                    if (medicion.id == maximo) {
+                                    if (medicion.id === maximo) {
                                         descripcion = medicion.descripcion;
                                         icono_meteo = medicion.icono;
-                                        if (icono_meteo == null || icono_meteo == "" || icono_meteo == 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
+                                        if (icono_meteo === null || icono_meteo === "" || icono_meteo === 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
                                             icono_meteo = 'Consultia';
                                         }
                                     }
@@ -1577,18 +1584,18 @@ function showEventDetail(id, layout, day, month, year) {
                     });
 
                     //si no, aviso al usuario 
-                
+
                 } else { //resto de casos, cuando la diferencia de días con la fecha de inicio es mayor a 5 en el pasado (y no dura hasta hoy mínimo) o más de 5 días en el futuro(días máximos previsión desde hoy)
 
                     variableTexto = '<div class="toast-text">Evento pasado o demasiado lejano, no hay previsiones disponibles.</div>';
                     $('<div class="toaster toast-warning">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
-                    $('#info-clima').addClass('isDisabled'); 
+                    $('#info-clima').addClass('isDisabled');
                     setTimeout(function () {
                         $('.toaster').fadeOut('slow', 'linear');
                         $('#info-clima').removeClass('isDisabled');
                     }, 3000);
 
-                } 
+                }
 
             }); //fin información clima
 
@@ -1708,6 +1715,7 @@ function dayDifference(entrada, salida) {
 
 // Now we convert the array to a Date object, which has several helpful methods
     date1 = new Date(date1[0], date1[1] - 1, date1[2]);
+
     date2 = new Date(date2[0], date2[1] - 1, date2[2]);
 
     var timeDifference = date2 - date1;
@@ -1731,7 +1739,34 @@ function sumarDias(dias) {
     var result = year + "-" + month + "-" + day;
     return result;
 }
+function mostrarSegunFiltrado(numeroFiltro, cantidadEventos) {
+    switch (numeroFiltro) {
+        case 1 :
 
+            $(".listado-eventos-pendientes").css("display", "block");
+            $(".listado-eventos-terminados").css("display", "none");
+            $("#cambiarEventos").addClass("displayNone");
+
+            break;
+        case 2 :
+            $(".listado-eventos-pendientes").css("display", "none");
+            $(".listado-eventos-terminados").css("display", "block");
+            $("#cambiarEventos").addClass("displayNone");
+            break;
+        case 3:
+            if (cantidadEventos > 15) {
+                $(".listado-eventos-pendientes").css("display", "block");
+                $(".listado-eventos-terminados").css("display", "none");
+                $("#cambiarEventos").removeClass("displayNone");
+                break;
+            } else {
+                $(".listado-eventos-pendientes").css("display", "block");
+                $(".listado-eventos-terminados").css("display", "block");
+                $("#cambiarEventos").addClass("displayNone");
+                break;
+            }
+    }
+}
 //TODO: código en $(document).ready()
 // Init calendar full
 function cargaCalendario() {
@@ -1805,8 +1840,8 @@ function cargaCalendario() {
 
     jQuery('.tiva-events-calendar').each(function (index) {
         // Hide switch button
-        var switch_button = (typeof jQuery(this).attr('data-switch') != "undefined") ? jQuery(this).attr('data-switch') : 'show';
-        if (switch_button == 'hide') {
+        var switch_button = (typeof jQuery(this).attr('data-switch') !== "undefined") ? jQuery(this).attr('data-switch') : 'show';
+        if (switch_button === 'hide') {
             jQuery(this).find('.calendar-view').hide();
             jQuery(this).find('.list-view').hide();
 
@@ -1818,8 +1853,8 @@ function cargaCalendario() {
     });
 
     // Set wordDay 
-    date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') != "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
-    if (date_start == 'sunday') {
+    date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') !== "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
+    if (date_start === 'sunday') {
         wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
     } else { // Start with Monday
         wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun);
@@ -2003,8 +2038,8 @@ function cargaCalendario() {
 
             jQuery('.tiva-events-calendar').each(function (index) {
                 // Initial view
-                var initial_view = (typeof jQuery(this).attr('data-view') != "undefined") ? jQuery(this).attr('data-view') : 'calendar';
-                if (initial_view == 'list') {
+                var initial_view = (typeof jQuery(this).attr('data-view') !== "undefined") ? jQuery(this).attr('data-view') : 'calendar';
+                if (initial_view === 'list') {
                     jQuery(this).find('.list-view').click();
                 }
             });
@@ -2037,7 +2072,7 @@ function cargaCalendario() {
 
         var layout = jQuery(this).parents('.tiva-events-calendar').attr('class') ? jQuery(this).parents('.tiva-events-calendar').attr('class') : 'full';
         var max_events = jQuery(this).parents('.tiva-events-calendar').attr('data-events') ? jQuery(this).parents('.tiva-events-calendar').attr('data-events') : 1000;
-        if (layout.indexOf('full') != -1) {
+        if (layout.indexOf('full') !== -1) {
             showEventList('full', max_events);
         } else {
             showEventList('compact', max_events);
@@ -2064,30 +2099,47 @@ function cargaCalendario() {
 //        }
 //    });
     controlesDataPicker();
+
+
+
     $("#filtro-fechas").on("click", function () {
 
         FechaIni = $("#startingDate").val();
         FechaFin = $("#endingDate").val();
         if ((FechaIni !== "") && FechaFin !== "") {
+
+
             rangoFechaIni = FechaIni.split("-").reverse().join("-");
             rangoFechaFin = FechaFin.split("-").reverse().join("-");
-            filtrar = true;
+            var cantidadDiasFiltrado = dayDifference(rangoFechaIni, rangoFechaFin);
+            if (cantidadDiasFiltrado > 365) {
+                alert("No puede haber más de un año de diferencia entre la fecha inicial y la final");
+            } else {
 
-
-            cargaCalendario();
+                if (diferenciaDiasClima(new Date, rangoFechaIni) > 0) {
+                    filtrar = true;
+                    filtrado = 1;
+                    cargaCalendario();
+                } else if (diferenciaDiasClima(new Date, rangoFechaFin) < 0) {
+                    filtrar = true;
+                    filtrado = 2;
+                    cargaCalendario();
+                } else {
+                    filtrar = true ;
+                    filtrado = 3;
+                    cargaCalendario();
+                }
+            }
         } else {
             alert("Selecciona fecha de inicio y fin para realizar una busqueda");
-            cargaCalendario();
+
         }
 
     });
     $("#limpiar-filtro").on("click", function () {
         filtrar = false;
-        console.log(returnView);
+        filtrado = 0 ;
         cargaCalendario();
-//        if (returnView === "lista") {
-
-//        }
     });
 }
 
@@ -2095,3 +2147,4 @@ jQuery(document).ready(function () {
     cargaCalendario();
 
 });
+
