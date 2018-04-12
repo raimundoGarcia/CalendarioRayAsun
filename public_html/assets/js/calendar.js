@@ -1192,6 +1192,11 @@ function showEventDetail(id, layout, day, month, year) {
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = tiva_events[id]._tipo;
         var colorfondo = tiva_events[id].color;
+        
+        //fechas para calcular rangos de días
+        fechaInicioViaje = tiva_events[id]._fechaInicio;
+        hoy = new Date();
+        diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); //diferencia entre hoy y la fecha inicio viaje (para clima y para seguimiento vuelo)
 
         //Coordenadas origen
         var lat = tiva_events[id]._latitudOrigen;
@@ -1254,21 +1259,52 @@ function showEventDetail(id, layout, day, month, year) {
 
 //BLOQUES PARTICULARIDADES POR TIPO DE RESERVA          
         if (tipoReserva == "Aereo") {
-
-            document.getElementById("googlesearchvuelo").style.display = "block";
-            //funcionalidad botón seguimiento vuelo online google
-            var q = codigoV;  /*+ " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day)*/
-
-            document.getElementById("googlesearchvuelo").onclick = function () {
-                window.open('http://www.google.com/search?q=' + q);
-            };
-            
+          
             var codigoV = tiva_events[id]._NVuelo;
-            var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo
+            var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
             //TODO:buscar logo companyia aerea
             codigoV = codigoV.replace("/", ""); //para buscador google el código debe salir sin slash
+            
+            //Búsqueda vuelo google
+            document.getElementById("googlesearchvuelo").style.display = "block";
+            
+            //funcionalidad botón seguimiento vuelo online google
+            var fechaInicioVuelo = new Date(fechaInicioViaje); //obtener la fecha en formato válido para utilizar .toLocaleDateString()
+            var options = { month: 'short', day: 'numeric' }; //mes corto y día númerico
+            var fechaConsultaVuelo = fechaInicioVuelo.toLocaleDateString('es', options); //en español
+            fechaConsultaVuelo = fechaConsultaVuelo.replace(".", " "); //ejemplo formato de salida:  12 abr 
+            console.log(fechaConsultaVuelo);
+            
+            var q = codigoV + " " + fechaConsultaVuelo;         /*+ " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day)*/
 
-            //nombre aerolinea para el logo
+            document.getElementById("googlesearchvuelo").onclick = function () {
+                
+               if ( (diasDif >=0) && (diasDif<= 2) ){
+                   window.open('http://www.google.com/search?q=' + q);
+                   
+               }else if(diasDif < -1){         
+                    variableAviso = '<div class="toast-text">La fecha del vuelo es anterior a la de ayer. Información no disponible.</div>';
+                    $('<div class="toaster toast-warning">' + variableAviso + '</div>').insertAfter($('#googlesearchvuelo'));
+                    $('#googlesearchvuelo').addClass('isDisabled'); 
+                    setTimeout(function () {
+                        $('.toaster').fadeOut('slow', 'linear');
+                        $('#googlesearchvuelo').removeClass('isDisabled');
+                    }, 3000);
+                    
+               }else{
+                    variableAviso = '<div class="toast-text">La fecha del vuelo es demasiado lejana. Información no disponible.</div>';
+                    $('<div class="toaster toast-warning">' + variableAviso + '</div>').insertAfter($('#googlesearchvuelo'));
+                    $('#googlesearchvuelo').addClass('isDisabled'); 
+                    setTimeout(function () {
+                        $('.toaster').fadeOut('slow', 'linear');
+                        $('#googlesearchvuelo').removeClass('isDisabled');
+                    }, 3000);
+               }
+                
+                
+            };
+
+            //nombre aerolinea PENDIENTE API CÓDIGO PROVEEDOR
             var aerolinea = tiva_events[id]._Aerolinea;
             
             //Bloque horarios
@@ -1352,7 +1388,7 @@ function showEventDetail(id, layout, day, month, year) {
 
         } else if (tipoReserva === "Tren") {
             //logo renfe
-            $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>");
+            $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>"); //de momento sólo Renfe
 
             document.getElementById("googlesearchvuelo").style.display = "none";
             document.getElementById("ciudad-o").innerHTML = tiva_events[id]._EstacionOrigen;
@@ -1453,12 +1489,7 @@ function showEventDetail(id, layout, day, month, year) {
 
         if (latDestino != null && lonDestino != null) {
             var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
-
-            var fechaInicioViaje = tiva_events[id]._fechaInicio;
-            var hoy = new Date();
-
-
-            diasDif = diferenciaDiasClima(hoy, fechaInicioViaje);
+                      
             console.log("diferencia (llamada función): " + diasDif);
             //Asignar evento al botón del clima
             $("#info-clima").on('click', function () {
@@ -1583,7 +1614,7 @@ function showEventDetail(id, layout, day, month, year) {
                 } else { //resto de casos, cuando la diferencia de días con la fecha de inicio es mayor a 5 en el pasado (y no dura hasta hoy mínimo) o más de 5 días en el futuro(días máximos previsión desde hoy)
 
                     variableTexto = '<div class="toast-text">Evento pasado o demasiado lejano, no hay previsiones disponibles.</div>';
-                    $('<div class="toaster toast-warning">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
+                    $('<div class="toaster toast-warning">' + variableTexto + '</div>').insertAfter($('#info-clima'));
                     $('#info-clima').addClass('isDisabled'); 
                     setTimeout(function () {
                         $('.toaster').fadeOut('slow', 'linear');
