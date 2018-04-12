@@ -1186,6 +1186,8 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("descripcion").innerHTML = "";
         document.getElementById("compartecon").innerHTML = "";
         document.getElementsByClassName("iconos")[0].innerHTML = "";
+        $("div.logo img").remove(); //elimina cualquier imagen anyadida como child para el logo
+       
         //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
 
 
@@ -1355,7 +1357,21 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("compartecon").innerHTML = html;
 
         } else if (tipoReserva === "Coche") {
-
+            //logo coches
+             //esto vendrá después en la respuesta de la API, y será tiva_events[id]._algo
+            var codigoRent = 17;
+            info_cars.forEach(agencia => {
+                                    
+                                    if (agencia.id === codigoRent) {
+                                        rentacar = agencia.img;
+                                        textoAlternativo = agencia.proveedor;
+                                        $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + textoAlternativo + "'>");
+                                    }
+                                       // $('.logo').append("<img src='assets/images/img_proveedores/alquiler_de_coches.svg' alt='alquiler_de_coches'>");
+                                        
+                                    
+                                });
+            
             document.getElementById("googlesearchvuelo").style.display = "none";
             //horas
             document.getElementById("hora-o").innerHTML = horaOrigen; //recogida
