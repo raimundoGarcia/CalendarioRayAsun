@@ -666,6 +666,13 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     height: 100%;
     /*  padding-left: 15px;*/
 }
+.titulo-lista{
+  font-size: 3vh;
+ text-decoration: underline;
+ font-weight: bold;
+ color: #327EE7;
+
+}
 /* BARRA DE NAVEGACION */
 .events-calendar-bar{
     /* padding-left: 15px;*/
@@ -789,13 +796,23 @@ table td{
 }
 .listado-eventos-pendientes{
     display:block;
+    text-align: center;
+     margin-top: 1vh;
 }
 .listado-eventos-terminados{
     display:none;
+    text-align: center;
+      margin-top: 1vh;
 }#cambiarEventos{
     margin-left: auto !important;
     margin-right: auto !important; 
 
+}
+.displayNone{
+    display:none;
+}
+.displayBlock{
+    display:block;
 }
 .cambiarEventos{
     display:flex;
