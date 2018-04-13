@@ -1250,8 +1250,10 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("linea").classList.add("color-" + colorfondo);
 
         //Fechas salida-llegada / origen-destino
-        document.getElementById("fecha-o").innerHTML = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year;
-        document.getElementById("fecha-d").innerHTML = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
+        var fechaInicioEvento = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year; //formato dd/mm/aaaa
+        var fechaFinEvento = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
+        document.getElementById("fecha-o").innerHTML = fechaInicioEvento;
+        document.getElementById("fecha-d").innerHTML = fechaFinEvento;
 
         //Variables para las horas
         var horaOrigen = tiva_events[id].time; //siempre hora inicio
