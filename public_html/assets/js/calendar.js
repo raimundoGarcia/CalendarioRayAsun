@@ -1365,7 +1365,7 @@ function showEventDetail(id, layout, day, month, year) {
                     "<h5 class='modaltext'>Duración vuelo: " + horas + " horas y " + minutos + " minutos. </h5><h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
             //Bloque descripción ICS
             icsDescription = 
-                        'DESCRIPTION: Tiene una reserva de vuelo para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n' +
+                        'DESCRIPTION: Tiene una reserva de VUELO para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
                         ' Localizador: ' + localizadorReserva + '\\n' +
                         ' Aerolínea: ' + aerolinea + '\\n' +
                         ' Número Vuelo: ' + codigoV +'\\n' +
@@ -1377,7 +1377,7 @@ function showEventDetail(id, layout, day, month, year) {
                         ' Fecha y Hora de Llegada: ' + fechaFinEvento +" "+ horaDestino +'\\n' +
                         ' Aeropuerto: ' + llegadaIata +" - "+ aeropuertoLlegada + '\\n\\n' +  
                          avisoHorario +'\n' +
-                        'SUMMARY:Vuelo: ' + fechaInicioEvento +" "+ horaOrigen +" "+ aeropuertoSalida + " --> " + fechaFinEvento +" "+ horaDestino +" "+aeropuertoLlegada +'\n' +
+                        'SUMMARY: VUELO: ' + fechaInicioEvento +" "+ horaOrigen +" "+ aeropuertoSalida + " --> " + fechaFinEvento +" "+ horaDestino +" "+aeropuertoLlegada +'\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
                         'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
@@ -1407,18 +1407,18 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("compartecon").innerHTML = html;
             //Bloque descripción ICS
             icsDescription = 
-                        'DESCRIPTION: Tiene una reserva de hotel para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n' +
+                        'DESCRIPTION: Tiene una reserva de HOTEL para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
                         ' Localizador: ' + localizadorReserva + '\\n' +
                         ' Hotel: ' + nombreHotel + '\\n' +
                         ' Dirección: ' + direccionHotel +'\\n' +
                         ' Régimen: ' + regimen +'\\n' +
-                        ' Tipo habitación: ' + tipoHabitacion +'\\n' +
+                        ' Tipo habitación: ' + tipoHabitacion +'\\n\\n' +
                         ' ENTRADA_________________________________________\\n\\n' +
-                        ' Fecha: ' + fechaInicioEvento +'\\n' +
+                        ' Fecha: ' + fechaInicioEvento +'\\n\\n' +
                         ' SALIDA________________________________________\\n\\n' +
                         ' Fecha: ' + fechaFinEvento +'\\n\\n' +
                         avisoHorario + '\n' +
-                        'SUMMARY:Hotel: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'SUMMARY: HOTEL: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
                         'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
@@ -1467,15 +1467,36 @@ function showEventDetail(id, layout, day, month, year) {
                     direccionRecogida + "</h5><h5 class='modaltext'>Dirección Entrega: " +
                     direccionEntrega + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
             document.getElementById("compartecon").innerHTML = html;
+            
+            icsDescription = 
+                        'DESCRIPTION: Tiene una reserva de COCHE para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                        ' Localizador: ' + localizadorReserva + '\\n' +
+                        ' Proveedor: ' + proveedor + '\\n' +
+                        ' Categoría: ' + categoria +'\\n' +
+                        ' Transmisión: ' + transmision +'\\n' +
+                        ' Combustible: ' + combustible +'\\n\\n' +
+                        ' RECOGIDA_________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaInicioEvento +'\\n' +
+                        ' Hora recogida: ' + horaOrigen +'\\n' +
+                        ' Dirección: ' + direccionRecogida +'\\n\\n' +
+                        ' ENTREGA________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaFinEvento +'\\n' +
+                        ' Hora entregas: ' + horaDestino +'\\n' +
+                        ' Dirección: ' + direccionEntrega +'\\n\\n' +
+                        avisoHorario + '\n' +
+                        'SUMMARY: COCHE: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                        'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
         } else if (tipoReserva === "Tren") {
             //logo renfe
             $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>"); //de momento sólo Renfe
-
+            var estacionOrigen = tiva_events[id]._EstacionOrigen;
+            var estacionDestino = tiva_events[id]._EstacionDestino;
             document.getElementById("googlesearchvuelo").style.display = "none";
-            document.getElementById("ciudad-o").innerHTML = tiva_events[id]._EstacionOrigen;
+            document.getElementById("ciudad-o").innerHTML = estacionOrigen;
             document.getElementById("hora-o").innerHTML = horaOrigen;
-            document.getElementById("ciudad-d").innerHTML = tiva_events[id]._EstacionDestino;
+            document.getElementById("ciudad-d").innerHTML = estacionDestino;
             document.getElementById("hora-d").innerHTML = horaDestino;
 
             //bloque descripción
@@ -1486,6 +1507,26 @@ function showEventDetail(id, layout, day, month, year) {
             document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
                     "</h5><h5 class='destacado modaltext'>Tipo de Tren: " + tipotren +
                     "</h5><h5 class='modaltext'>Clase: " + clase + "<h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
+            
+            //Bloque descripción ICS
+            icsDescription = 
+                        'DESCRIPTION: Tiene una reserva de TREN para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                        ' Localizador: ' + localizadorReserva + '\\n' +
+                        ' Compañía: ' + proveedor + '\\n' +
+                        ' Tipo Tren: ' + tipotren +'\\n' +
+                        ' Clase: ' + clase +'\\n\\n' +
+                        ' SALIDA_________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaInicioEvento +'\\n' +
+                        ' Hora Salida: ' + horaOrigen +'\\n' +
+                        ' Estación Origen: ' + estacionOrigen +'\\n\\n' +
+                        ' LLEGADA________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaFinEvento +'\\n' +
+                        ' Hora Llegada: ' + horaDestino +'\\n' +
+                        ' Estación Destino: ' + estacionDestino +'\\n\\n' +
+                        avisoHorario + '\n' +
+                        'SUMMARY: TREN: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                        'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
         } else if (tipoReserva === "Barco") {
             document.getElementById("googlesearchvuelo").style.display = "none";
@@ -1509,7 +1550,24 @@ function showEventDetail(id, layout, day, month, year) {
                     "</h5><h5 class='modaltext'>Origen: " + origen +
                     "</h5><h5 class='modaltext'>Destino: " + destino + "<h5>Acomodación: " + acomodacion +
                     "</h5><span class='modaltext'>Vehículos (" + vehiculos.length + "): </span>" + matriculas + "<h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
-
+            
+            //Bloque descripción ICS
+            icsDescription = 
+                        'DESCRIPTION: Tiene una reserva de BARCO para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                        ' Localizador: ' + localizadorReserva + '\\n' +
+                        ' Compañía: ' + proveedor + '\\n' +
+                        ' Acomodación: ' + acomodacion +'\\n' +
+                        ' Vehículos a bordo: ' + vehiculos.length +'\\n\\n' +
+                        ' SALIDA_________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaInicioEvento +'\\n' +
+                        ' Origen: ' + origen +'\\n\\n' +
+                        ' LLEGADA________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaFinEvento +'\\n' +
+                        ' Destino: ' + destino +'\\n\\n' +
+                        avisoHorario + '\n' +
+                        'SUMMARY: BARCO: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                        'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
         } else if (tipoReserva === "Otros") {
             document.getElementById("googlesearchvuelo").style.display = "none";
@@ -1988,7 +2046,7 @@ function cargaCalendario() {
         success: function (entradas) {
 
             j = -1; //contador para asignar las IP a los eventos
-            entradas.forEach(entrada => {
+            entradas.Pedidos.forEach(entrada => {
                 j++;
                 var color = "1";
                 tipo = entrada.Tipo;
