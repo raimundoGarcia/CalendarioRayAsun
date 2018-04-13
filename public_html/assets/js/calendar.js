@@ -1099,7 +1099,7 @@ function showEventDetail(id, layout, day, month, year) {
             '                            </div>' +
             '                            <div class="ics">' +
             '                                <h4 class="modaltext-titulo destacado">Descarga ICS:</h4>' +
-            '                                <button class="btn btn-info btn-lg descargaics textoboton">descargar ICS</button></div>' +
+            '                                <a href="#" download class="btn btn-info btn-lg descargaics textoboton">descargar ICS</a></div>' +
             '                        </div>' +
             '                    </div>' +
             '                    <!--Footer-->' +
@@ -1192,14 +1192,14 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("compartecon").innerHTML = "";
         document.getElementsByClassName("iconos")[0].innerHTML = "";
         $("div.logo img").remove(); //elimina cualquier imagen anyadida como child para el logo
-       
+
         //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
 
 
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = tiva_events[id]._tipo;
         var colorfondo = tiva_events[id].color;
-        
+
         //fechas para calcular rangos de días
         fechaInicioViaje = tiva_events[id]._fechaInicio;
         hoy = new Date();
@@ -1233,6 +1233,42 @@ function showEventDetail(id, layout, day, month, year) {
                 ciudad = campoCiudad.split(",")[0];
 
             }
+            //Descarga de archivo en formato ICS
+            $(".descargaics").on("click", function () {
+                var icsFormat =
+                        'BEGIN:VCALENDAR\n' +
+                        'PRODID:-//Schedule a Meeting\n' +
+                        'VERSION:2.0\n' +
+                        'METHOD:REQUEST\n' +
+                        'BEGIN:VEVENT\n' +
+                        'DTSTART:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
+                        'DTSTAMP:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
+                        'DTEND:' + tiva_events[id]._fechaFin.replace("-", "") + '\n' +
+                        'LOCATION:' + tiva_events[id]._ubicacion + '\n' +
+                        'UID:40ddbba4-abb2-4969-b9b6-9c75c3b9f5c2\n' +
+                        'DESCRIPTION: Jose Ramon, Soler Gil Mascarell  tiene una reserva de tren para el 16/04/2018 con los siguientes detalles: \\n' +
+                        ' Compañia: Renfe\\n' +
+                        ' Localizador: JV3BX6\\n' +
+                        ' Tipo de tren: AVE/05069\\n' +
+                        ' Clase: Preferente\\n\\n' +
+                        ' SALIDA_________________________________________\\n\\n' +
+                        ' Fecha y Hora de Salida: 16/04/2018 07:10\\n' +
+                        ' Estación: VALENCIA JOAQUÍN SOROLLA\\n\\n' +
+                        ' LLEGADA________________________________________\\n\\n' +
+                        ' Fecha y Hora de Llegada: 16/04/2018 08:51\\n' +
+                        ' Estación: MADRID PUERTA DE ATOCHA\n' +    
+                        'SUMMARY:Tren: Jose Ramon, Soler Gil Mascarell  16/04/2018 07:10 VALENCIA JOAQUÍN SOROLLA --> 16/04/2018 08:51 MADRID PUERTA DE ATOCHA\n' +
+                        'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                        'ATTENDEE;CN="Jose Ramon, Soler Gil Mascarell ";RSVP=TRUE:mailto:miguel.jimenez@consultiatravel.es\n' +
+                        'BEGIN:VALARM\n' +
+                        'TRIGGER:-PT24H\n' +
+                        'ACTION:DISPLAY\n' +
+                        'DESCRIPTION:Reminder\n' +
+                        'END:VALARM\n' +
+                        'END:VEVENT\n' +
+                        'END:VCALENDAR';
+                this.href = 'data:text/calendar;charset=utf-8,' + icsFormat;
+            });
             // Mostrar la información recomendada según el pais de destino 
 
             document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
@@ -1272,49 +1308,49 @@ function showEventDetail(id, layout, day, month, year) {
             var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
             //TODO:buscar logo companyia aerea
             codigoV = codigoV.replace("/", ""); //para buscador google el código debe salir sin slash
-            
+
             //Búsqueda vuelo google
             document.getElementById("googlesearchvuelo").style.display = "block";
-            
+
             //funcionalidad botón seguimiento vuelo online google
             var fechaInicioVuelo = new Date(fechaInicioViaje); //obtener la fecha en formato válido para utilizar .toLocaleDateString()
-            var options = { month: 'short', day: 'numeric' }; //mes corto y día númerico
+            var options = {month: 'short', day: 'numeric'}; //mes corto y día númerico
             var fechaConsultaVuelo = fechaInicioVuelo.toLocaleDateString('es', options); //en español
             fechaConsultaVuelo = fechaConsultaVuelo.replace(".", " "); //ejemplo formato de salida:  12 abr 
             console.log(fechaConsultaVuelo);
-            
+
             var q = codigoV + " " + fechaConsultaVuelo;         /*+ " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day)*/
 
             document.getElementById("googlesearchvuelo").onclick = function () {
-                
-               if ( (diasDif >=0) && (diasDif<= 2) ){
-                   window.open('http://www.google.com/search?q=' + q);
-                   
-               }else if(diasDif < -1){         
+
+                if ((diasDif >= 0) && (diasDif <= 2)) {
+                    window.open('http://www.google.com/search?q=' + q);
+
+                } else if (diasDif < -1) {
                     variableAviso = '<div class="toast-text">La fecha del vuelo es anterior a la de ayer. Información no disponible.</div>';
                     $('<div class="toaster toast-warning">' + variableAviso + '</div>').insertAfter($('#googlesearchvuelo'));
-                    $('#googlesearchvuelo').addClass('isDisabled'); 
+                    $('#googlesearchvuelo').addClass('isDisabled');
                     setTimeout(function () {
                         $('.toaster').fadeOut('slow', 'linear');
                         $('#googlesearchvuelo').removeClass('isDisabled');
                     }, 3000);
-                    
-               }else{
+
+                } else {
                     variableAviso = '<div class="toast-text">La fecha del vuelo es demasiado lejana. Información no disponible.</div>';
                     $('<div class="toaster toast-warning">' + variableAviso + '</div>').insertAfter($('#googlesearchvuelo'));
-                    $('#googlesearchvuelo').addClass('isDisabled'); 
+                    $('#googlesearchvuelo').addClass('isDisabled');
                     setTimeout(function () {
                         $('.toaster').fadeOut('slow', 'linear');
                         $('#googlesearchvuelo').removeClass('isDisabled');
                     }, 3000);
-               }
-                
-                
+                }
+
+
             };
 
             //nombre aerolinea PENDIENTE API CÓDIGO PROVEEDOR
             var aerolinea = tiva_events[id]._Aerolinea;
-            
+
             //Bloque horarios
             var salidaIata = tiva_events[id]._SalidaIATA;
             var llegadaIata = tiva_events[id]._LlegadaIATA;
@@ -1364,20 +1400,20 @@ function showEventDetail(id, layout, day, month, year) {
 
         } else if (tipoReserva === "Coche") {
             //logo coches
-             //esto vendrá después en la respuesta de la API, y será tiva_events[id]._algo
+            //esto vendrá después en la respuesta de la API, y será tiva_events[id]._algo
             var codigoRent = 17;
             info_cars.forEach(agencia => {
-                                    
-                                    if (agencia.id === codigoRent) {
-                                        rentacar = agencia.img;
-                                        textoAlternativo = agencia.proveedor;
-                                        $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + textoAlternativo + "'>");
-                                    }
-                                       // $('.logo').append("<img src='assets/images/img_proveedores/alquiler_de_coches.svg' alt='alquiler_de_coches'>");
-                                        
-                                    
-                                });
-            
+
+                if (agencia.id === codigoRent) {
+                    rentacar = agencia.img;
+                    textoAlternativo = agencia.proveedor;
+                    $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + textoAlternativo + "'>");
+                }
+                // $('.logo').append("<img src='assets/images/img_proveedores/alquiler_de_coches.svg' alt='alquiler_de_coches'>");
+
+
+            });
+
             document.getElementById("googlesearchvuelo").style.display = "none";
             //horas
             document.getElementById("hora-o").innerHTML = horaOrigen; //recogida
@@ -1511,7 +1547,7 @@ function showEventDetail(id, layout, day, month, year) {
 
         if (latDestino !== null && lonDestino !== null) {
             var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
-                      
+
             console.log("diferencia (llamada función): " + diasDif);
             //Asignar evento al botón del clima
             $("#info-clima").on('click', function () {
@@ -2175,7 +2211,7 @@ function cargaCalendario() {
                     filtrado = 2;
                     cargaCalendario();
                 } else {
-                    filtrar = true ;
+                    filtrar = true;
                     filtrado = 3;
                     cargaCalendario();
                 }
@@ -2188,7 +2224,7 @@ function cargaCalendario() {
     });
     $("#limpiar-filtro").on("click", function () {
         filtrar = false;
-        filtrado = 0 ;
+        filtrado = 0;
         cargaCalendario();
     });
 }
