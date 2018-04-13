@@ -1246,20 +1246,7 @@ function showEventDetail(id, layout, day, month, year) {
                         'DTEND:' + tiva_events[id]._fechaFin.replace("-", "") + '\n' +
                         'LOCATION:' + tiva_events[id]._ubicacion + '\n' +
                         'UID:40ddbba4-abb2-4969-b9b6-9c75c3b9f5c2\n' +
-                        'DESCRIPTION: Jose Ramon, Soler Gil Mascarell  tiene una reserva de tren para el 16/04/2018 con los siguientes detalles: \\n' +
-                        ' Compañia: Renfe\\n' +
-                        ' Localizador: JV3BX6\\n' +
-                        ' Tipo de tren: AVE/05069\\n' +
-                        ' Clase: Preferente\\n\\n' +
-                        ' SALIDA_________________________________________\\n\\n' +
-                        ' Fecha y Hora de Salida: 16/04/2018 07:10\\n' +
-                        ' Estación: VALENCIA JOAQUÍN SOROLLA\\n\\n' +
-                        ' LLEGADA________________________________________\\n\\n' +
-                        ' Fecha y Hora de Llegada: 16/04/2018 08:51\\n' +
-                        ' Estación: MADRID PUERTA DE ATOCHA\n' +    
-                        'SUMMARY:Tren: Jose Ramon, Soler Gil Mascarell  16/04/2018 07:10 VALENCIA JOAQUÍN SOROLLA --> 16/04/2018 08:51 MADRID PUERTA DE ATOCHA\n' +
-                        'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
-                        'ATTENDEE;CN="Jose Ramon, Soler Gil Mascarell ";RSVP=TRUE:mailto:miguel.jimenez@consultiatravel.es\n' +
+                        icsDescription +
                         'BEGIN:VALARM\n' +
                         'TRIGGER:-PT24H\n' +
                         'ACTION:DISPLAY\n' +
@@ -1286,8 +1273,8 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("linea").classList.add("color-" + colorfondo);
 
         //Fechas salida-llegada / origen-destino
-        var fechaInicioEvento = tiva_events[id].day + " / " + tiva_events[id].month + " / " + tiva_events[id].year; //formato dd/mm/aaaa
-        var fechaFinEvento = tiva_events[id]._diaFin + " / " + tiva_events[id]._mesFin + " / " + tiva_events[id]._anyoFin;
+        var fechaInicioEvento = tiva_events[id].day + "/" + tiva_events[id].month + "/" + tiva_events[id].year; //formato dd/mm/aaaa
+        var fechaFinEvento = tiva_events[id]._diaFin + "/" + tiva_events[id]._mesFin + "/" + tiva_events[id]._anyoFin;
         document.getElementById("fecha-o").innerHTML = fechaInicioEvento;
         document.getElementById("fecha-d").innerHTML = fechaFinEvento;
 
@@ -1297,7 +1284,8 @@ function showEventDetail(id, layout, day, month, year) {
         var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local de cada país.";
 
         //Localizador de la reserva
-        document.getElementById("localizador").innerHTML = "<h5 class='destacado modaltext'>LOCALIZADOR RESERVA: " + tiva_events[id]._localizador + "</h5>";
+        var localizadorReserva = tiva_events[id]._localizador;
+        document.getElementById("localizador").innerHTML = "<h5 class='destacado modaltext'>LOCALIZADOR RESERVA: " + localizadorReserva + "</h5>";
 
         //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva 
         document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal", null);
@@ -1374,6 +1362,22 @@ function showEventDetail(id, layout, day, month, year) {
                     + "<h5 class='modaltext'>Aeropuerto Salida: " + salidaIata + " - " + aeropuertoSalida + "</h5>" +
                     "<h5 class='modaltext'>Aeropuerto Llegada: " + llegadaIata + " - " + aeropuertoLlegada + "</h5>" +
                     "<h5 class='modaltext'>Duración vuelo: " + horas + " horas y " + minutos + " minutos. </h5><h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
+            //Bloque descripción ICS
+            icsDescription = 
+                        'DESCRIPTION: Tiene una reserva de vuelo para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n' +
+                        ' Aerolínea: ' + aerolinea + '\\n' +
+                        ' Localizador: ' + localizadorReserva + '\\n' +
+                        ' Número Vuelo: ' + codigoV +'\\n' +
+                        ' Duración: '+ horas + ' horas y ' + minutos + 'minutos.\\n\\n' +
+                        ' SALIDA_________________________________________\\n\\n' +
+                        ' Fecha y Hora de Salida: ' + fechaInicioEvento +" "+ horaOrigen +'\\n' +
+                        ' Aeropuerto: ' + salidaIata +" - "+ aeropuertoSalida + '\\n\\n' +
+                        ' LLEGADA________________________________________\\n\\n' +
+                        ' Fecha y Hora de Llegada: ' + fechaFinEvento +" "+ horaDestino +'\\n' +
+                        ' Aeropuerto: ' + llegadaIata +" - "+ aeropuertoLlegada + '\n' +    
+                        'SUMMARY:Vuelo: ' + fechaInicioEvento +" "+ horaOrigen +" "+ aeropuertoSalida + " --> " + fechaFinEvento +" "+ horaDestino +" "+aeropuertoLlegada +'\n' +
+                        'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                        'ATTENDEE;CN="Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
         } else if (tipoReserva === "Hotel") { //POSIBLE IF o SWITCH CON TODAS LAS OPCIONES QUE DIFIERAN
 
