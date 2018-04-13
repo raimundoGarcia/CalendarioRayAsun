@@ -1293,12 +1293,24 @@ function showEventDetail(id, layout, day, month, year) {
 
 //BLOQUES PARTICULARIDADES POR TIPO DE RESERVA          
         if (tipoReserva === "Aereo") {
-
-            document.getElementById("googlesearchvuelo").style.display = "block";
+                                  
             var codigoV = tiva_events[id]._NVuelo;
-            var companyiaAerea = codigoV.split("/"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
-            //TODO:buscar logo companyia aerea
-            codigoV = codigoV.replace("/", ""); //para buscador google el código debe salir sin slash
+            var companyiaAerea = codigoV.split("-"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
+          console.log(companyiaAerea[0]);
+            codigoV = codigoV.replace("-", ""); //para buscador google el código debe salir sin slash
+
+           if (diccionarioLogos.length >0){
+               for (var i = 0; i < diccionarioLogos.length; i++) {
+                    if(companyiaAerea[0] == diccionarioLogos[i].IATA){
+                        logoAerolinea = diccionarioLogos[i].Logo;
+                        $('.logo').append("<img src='" + logoAerolinea + "' alt='Logo-Aerolinea'>");
+                    }
+                }
+           }else{
+               $('.logo').append("<img src='assets/images/Consultia.png' alt='Logo-Aerolinea'>");
+           }
+            
+            
 
             //Búsqueda vuelo google
             document.getElementById("googlesearchvuelo").style.display = "block";
@@ -2044,7 +2056,9 @@ function cargaCalendario() {
             jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
         },
         success: function (entradas) {
-
+            
+            diccionarioLogos = entradas.DiccionarioLogos; //array 
+         
             j = -1; //contador para asignar las IP a los eventos
             entradas.Pedidos.forEach(entrada => {
                 j++;
@@ -2123,7 +2137,7 @@ function cargaCalendario() {
                     "_SalidaIATA": entrada.Detalles.SalidaIATA,
                     "_LlegadaIATA": entrada.Detalles.LlegadaIATA,
                     "_DuracionHoras": entrada.Detalles.DuracionHoras,
-
+                    
                     //para hotel
                     "_direccion": entrada.Detalles.Direccion,
                     "_nombreHotel": entrada.Detalles.NombreHotel,
