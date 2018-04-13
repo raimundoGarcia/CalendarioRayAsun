@@ -1248,7 +1248,7 @@ function showEventDetail(id, layout, day, month, year) {
                         'UID:40ddbba4-abb2-4969-b9b6-9c75c3b9f5c2\n' +
                         icsDescription +
                         'BEGIN:VALARM\n' +
-                        'TRIGGER:-PT24H\n' +
+                        'TRIGGER:-PT48H\n' +
                         'ACTION:DISPLAY\n' +
                         'DESCRIPTION:Reminder\n' +
                         'END:VALARM\n' +
@@ -1368,7 +1368,7 @@ function showEventDetail(id, layout, day, month, year) {
                         ' Aerolínea: ' + aerolinea + '\\n' +
                         ' Localizador: ' + localizadorReserva + '\\n' +
                         ' Número Vuelo: ' + codigoV +'\\n' +
-                        ' Duración: '+ horas + ' horas y ' + minutos + 'minutos.\\n\\n' +
+                        ' Duración: '+ horas + ' horas y ' + minutos + ' minutos.\\n\\n' +
                         ' SALIDA_________________________________________\\n\\n' +
                         ' Fecha y Hora de Salida: ' + fechaInicioEvento +" "+ horaOrigen +'\\n' +
                         ' Aeropuerto: ' + salidaIata +" - "+ aeropuertoSalida + '\\n\\n' +
