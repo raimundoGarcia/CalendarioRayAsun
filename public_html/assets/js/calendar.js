@@ -1192,6 +1192,7 @@ function showEventDetail(id, layout, day, month, year) {
         document.getElementById("compartecon").innerHTML = "";
         document.getElementsByClassName("iconos")[0].innerHTML = "";
         $("div.logo img").remove(); //elimina cualquier imagen anyadida como child para el logo
+        icsDescription = ""; //limpiar variable global ICS
 
         //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
 
@@ -1365,8 +1366,8 @@ function showEventDetail(id, layout, day, month, year) {
             //Bloque descripción ICS
             icsDescription = 
                         'DESCRIPTION: Tiene una reserva de vuelo para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n' +
-                        ' Aerolínea: ' + aerolinea + '\\n' +
                         ' Localizador: ' + localizadorReserva + '\\n' +
+                        ' Aerolínea: ' + aerolinea + '\\n' +
                         ' Número Vuelo: ' + codigoV +'\\n' +
                         ' Duración: '+ horas + ' horas y ' + minutos + ' minutos.\\n\\n' +
                         ' SALIDA_________________________________________\\n\\n' +
@@ -1374,7 +1375,8 @@ function showEventDetail(id, layout, day, month, year) {
                         ' Aeropuerto: ' + salidaIata +" - "+ aeropuertoSalida + '\\n\\n' +
                         ' LLEGADA________________________________________\\n\\n' +
                         ' Fecha y Hora de Llegada: ' + fechaFinEvento +" "+ horaDestino +'\\n' +
-                        ' Aeropuerto: ' + llegadaIata +" - "+ aeropuertoLlegada + '\n' +    
+                        ' Aeropuerto: ' + llegadaIata +" - "+ aeropuertoLlegada + '\\n\\n' +  
+                         avisoHorario +'\n' +
                         'SUMMARY:Vuelo: ' + fechaInicioEvento +" "+ horaOrigen +" "+ aeropuertoSalida + " --> " + fechaFinEvento +" "+ horaDestino +" "+aeropuertoLlegada +'\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
                         'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
@@ -1403,6 +1405,22 @@ function showEventDetail(id, layout, day, month, year) {
                     "</h5><h5 class='modaltext'>Régimen: " + regimen + "</h5><h5 class='modaltext'>Tipo Habitación: " +
                     tipoHabitacion + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
             document.getElementById("compartecon").innerHTML = html;
+            //Bloque descripción ICS
+            icsDescription = 
+                        'DESCRIPTION: Tiene una reserva de hotel para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n' +
+                        ' Localizador: ' + localizadorReserva + '\\n' +
+                        ' Hotel: ' + nombreHotel + '\\n' +
+                        ' Dirección: ' + direccionHotel +'\\n' +
+                        ' Régimen: ' + regimen +'\\n' +
+                        ' Tipo habitación: ' + tipoHabitacion +'\\n' +
+                        ' ENTRADA_________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaInicioEvento +'\\n' +
+                        ' SALIDA________________________________________\\n\\n' +
+                        ' Fecha: ' + fechaFinEvento +'\\n\\n' +
+                        avisoHorario + '\n' +
+                        'SUMMARY:Hotel: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                        'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
         } else if (tipoReserva === "Coche") {
             //logo coches
