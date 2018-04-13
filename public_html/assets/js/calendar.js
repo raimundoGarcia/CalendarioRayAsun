@@ -1377,7 +1377,7 @@ function showEventDetail(id, layout, day, month, year) {
                         ' Aeropuerto: ' + llegadaIata +" - "+ aeropuertoLlegada + '\n' +    
                         'SUMMARY:Vuelo: ' + fechaInicioEvento +" "+ horaOrigen +" "+ aeropuertoSalida + " --> " + fechaFinEvento +" "+ horaDestino +" "+aeropuertoLlegada +'\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
-                        'ATTENDEE;CN="Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+                        'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
         } else if (tipoReserva === "Hotel") { //POSIBLE IF o SWITCH CON TODAS LAS OPCIONES QUE DIFIERAN
 
