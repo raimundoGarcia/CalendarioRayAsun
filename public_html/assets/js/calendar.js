@@ -1056,7 +1056,7 @@ function showEventDetail(id, layout) {
         //Variables para las horas
         var horaOrigen = tiva_events[id].time; //siempre hora inicio
         var horaDestino = tiva_events[id]._horaFin;
-        var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local de cada país.";
+        var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local en cada país.";
 
         //Localizador de la reserva
         var localizadorReserva = tiva_events[id]._localizador;
@@ -1210,12 +1210,13 @@ function showEventDetail(id, layout) {
 
         } else if (tipoReserva === "Coche") {
             //logo coches
-            //esto vendrá después en la respuesta de la API, y será tiva_events[id]._algo
-            var codigoRent = 17;
+            var codigoRent = tiva_events[id]._ProveedorCoches; console.log(codigoRent);
+            var proveedor = "";
             info_cars.forEach(agencia => {
-
-                if (agencia.id === codigoRent) {
+            
+                if (agencia.id == codigoRent) {
                     rentacar = agencia.img;
+                    proveedor = agencia.proveedor;
                     textoAlternativo = agencia.proveedor;
                     $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + textoAlternativo + "'>");
                 }
@@ -1237,7 +1238,6 @@ function showEventDetail(id, layout) {
                 html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + acompanyantes[i].Nombre + "</h5>";
             }
             //Bloque Descripción
-            var proveedor = tiva_events[id]._proveedor;
             var categoria = tiva_events[id]._categoria;
             var transmision = tiva_events[id]._transmision;
             var combustible = tiva_events[id]._combustible;
@@ -1274,7 +1274,7 @@ function showEventDetail(id, layout) {
 
         } else if (tipoReserva === "Tren") {
             //logo renfe
-            $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>"); //de momento sólo Renfe
+            
             var estacionOrigen = tiva_events[id]._EstacionOrigen;
             var estacionDestino = tiva_events[id]._EstacionDestino;
             document.getElementById("googlesearchvuelo").style.display = "none";
@@ -1284,13 +1284,26 @@ function showEventDetail(id, layout) {
             document.getElementById("hora-d").innerHTML = horaDestino;
 
             //bloque descripción
-            var proveedor = tiva_events[id]._proveedor;
+            var proveedor = tiva_events[id]._proveedor; //ahora viene un entero para el código proveedor
+            if(proveedor == 3){
+                proveedor = "Renfe";
+                $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>"); //de momento sólo hay Logo de Renfe
+            }else{
+                $('.logo').append("<img src='assets/images/img_proveedores/logo_tren_generico.png' alt='Logo-renfe'>"); 
+            }
             var tipotren = tiva_events[id]._TipoTren;
             var clase = tiva_events[id]._Clase;
+            var DireccionOrigen = tiva_events[id]._DireccionOrigen;
+            var DireccionDestino = tiva_events[id]._DireccionDestino;
 
             document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
                     "</h5><h5 class='destacado modaltext'>Tipo de Tren: " + tipotren +
-                    "</h5><h5 class='modaltext'>Clase: " + clase + "<h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
+                    "</h5><h5 class='modaltext'>Clase: " + clase + "</h5>"+
+                    "<h5 class='destacado modaltext'>Estación de SALIDA: " + estacionOrigen + "</h5>"+
+                    "<h5 class='modaltext'>Dirección: " + DireccionOrigen + "</h5>"+
+                    "<h5 class='destacado modaltext'>Estación de LLEGADA: " + estacionDestino +"</h5>"+
+                    "<h5 class='modaltext'>Dirección: " + DireccionDestino + "</h5>"+
+                    "<h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
             
             //Bloque descripción ICS
             icsDescription = 
@@ -1302,11 +1315,13 @@ function showEventDetail(id, layout) {
                         ' SALIDA_________________________________________\\n\\n' +
                         ' Fecha: ' + fechaInicioEvento +'\\n' +
                         ' Hora Salida: ' + horaOrigen +'\\n' +
-                        ' Estación Origen: ' + estacionOrigen +'\\n\\n' +
+                        ' Estación origen: ' + estacionOrigen +'\\n' +
+                        ' Dirección: ' + DireccionOrigen +'\\n\\n' +
                         ' LLEGADA________________________________________\\n\\n' +
                         ' Fecha: ' + fechaFinEvento +'\\n' +
                         ' Hora Llegada: ' + horaDestino +'\\n' +
-                        ' Estación Destino: ' + estacionDestino +'\\n\\n' +
+                        ' Estación destino: ' + estacionDestino +'\\n' +
+                        ' Dirección: ' + DireccionDestino +'\\n\\n' +
                         avisoHorario + '\n' +
                         'SUMMARY: TREN: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
@@ -1317,7 +1332,7 @@ function showEventDetail(id, layout) {
             //horas
             document.getElementById("hora-o").innerHTML = horaOrigen;
             document.getElementById("hora-d").innerHTML = horaDestino;
-            //Bloque descripción          
+            //Bloque descripción       //TODO: DICCIONARIO PROVEEDORES   
             var proveedor = tiva_events[id]._proveedor;
             var origen = tiva_events[id]._origen;
             var destino = tiva_events[id]._destino;
@@ -1843,6 +1858,8 @@ function cargaCalendario() {
                     "_Clase": entrada.Detalles.Clase,
                     "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
                     "_EstacionDestino": entrada.Detalles.EstacionDestino,
+                    "_DireccionOrigen": entrada.DireccionOrigen,
+                    "_DireccionDestino": entrada.Detalles.DireccionDestino,
 
                     //para Coche
 
@@ -1856,7 +1873,8 @@ function cargaCalendario() {
                     "_vehiculos": entrada.Detalles.Vehiculos, //array
                     "_origen": entrada.Detalles.Origen,
                     "_destino": entrada.Detalles.Destino,
-                    "_acomodacion": entrada.Detalles.Acomodacion
+                    "_acomodacion": entrada.Detalles.Acomodacion,
+                    "_ProveedorCoches": entrada.Detalles.Proveedor
 
 
                 };
