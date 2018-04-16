@@ -1714,14 +1714,16 @@ function showEventDetail(id, layout, day, month, year) {
                                 console.log("El máximo diario es: " + maximo);
 
                                 var descripcion = "";
+                                icono_meteo = "";
                                 info_meteoro.forEach(medicion => {
-                                    if (medicion.id === maximo) {
+                                    if (medicion.id == maximo) {
                                         descripcion = medicion.descripcion;
-                                        icono_meteo = medicion.icono;
-                                        if (icono_meteo === null || icono_meteo === "" || icono_meteo === 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
+                                        icono_meteo = medicion.icono; console.log(icono_meteo);
+                                        
+                                    }
+                                    if (icono_meteo === null || icono_meteo === "" || icono_meteo === 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
                                             icono_meteo = 'Consultia';
                                         }
-                                    }
 
                                 });
                                 var diaSemana = new Date(fechasUnicas[i]);
