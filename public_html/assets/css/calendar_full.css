@@ -110,7 +110,6 @@
 .tiva-calendar-full .calendar-event-name.no-name {
     opacity: 0;
     visibility: hidden;
-    background-color: red;
 }
 /*.tiva-calendar-full .calendar-event-name.color-1 {
     background: #567BD2;
