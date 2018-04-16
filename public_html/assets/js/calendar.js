@@ -157,7 +157,7 @@ function getShortText(text, num) {
     return "";
 }
 
-function sortEventsByDate(a, b) {   //TODO: FUNCIÓN QUE ORDENA EVENTOS POR FECHA
+function sortEventsByDate(a, b) {   //FUNCIÓN QUE ORDENA EVENTOS POR FECHA
     if (a.date < b.date) {
         return -1;
     } else if (a.date > b.date) {
@@ -166,16 +166,6 @@ function sortEventsByDate(a, b) {   //TODO: FUNCIÓN QUE ORDENA EVENTOS POR FECH
         return 0;
     }
 }
-
-/*
- * 
- * Date.UTC(año,mes[, dia[, hora[, minutos[, segundos, milisegundos]]]])  CON DATE() FUNCIONA =
- * 
- * IPOfecha.setTime(Date.parse("Aug 9, 1995")) ;
- * 
- * 
- * 
- */
 
 function sortEventsByUpcoming(a, b) {
     var today_date = new Date(todaysYear, todaysMonth - 1, todaysDate);
@@ -205,7 +195,7 @@ function getEventsByTime(type) {
     return events;
 }
 
-// Change month or year on calendar  TODO: Cambiar mes o anyo en el calendario
+// Change month or year on calendar - Cambiar mes o anyo en el calendario
 function changedate(btn, layout) {
     if (btn === "prevyr") {
         eval("yearNum_" + layout + "--;");
@@ -267,20 +257,14 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextmo\', \'full\')\"><span class="btn-change-date">' + next_month + '<\/span> »<\/span><\/td>';
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextyr\', \'full\')\"><span class="btn-change-date">' + next_year + '<\/span> »<\/span><\/td>';
     } else {
-        /*
-         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevyr\', \'compact\')\">«<\/span><\/td>';
-         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevmo\', \'compact\')\">«<\/span><\/td>';
-         calendarString += '<td class=\"calendar-title\" colspan=\"3\"><span>' + wordMonth[monthNum - 1] + '&nbsp;&nbsp;' + yearNum + '<\/span><\/td>';
-         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextmo\', \'compact\')\">»<\/span><\/td>';
-         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextyr\', \'compact\')\">»<\/span><\/td>';
-         */
+        //antiguo calendario compact
     }
     calendarString += '<\/tr>'; //fin de cabecera botones
 
     calendarString += '<tr class="active">';
     for (var m = 0; m < wordDay.length; m++) {
         if ($(window).width() < 600) {
-            calendarString += '<th>' + wordDay[m].substring(0, 3) + '<\/th>';  //TODO: ACORTADOR STRING DÍAS DE LA SEMANA para cabecera días semana
+            calendarString += '<th>' + wordDay[m].substring(0, 3) + '<\/th>';  //ACORTADOR STRING DÍAS DE LA SEMANA para cabecera días semana
         } else {
             calendarString += '<th>' + wordDay[m] + '<\/th>';
         }
@@ -331,15 +315,11 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                         // Get events of day
                         if (layout === 'full') {
                             var events = getEvents(daycounter, monthNum, yearNum);
-
-
-                            //   events.sort(sortEventsByDate); //TODO: PRUEBA ORDENAR EVENTOS - FALTA HACER FECHAS date() CON LA HORA
+                            
                             for (var t = 0; t < events.length; t++) {
 
                                 if (typeof events[t] !== "undefined") { //si existe evento en esa posición del array de eventos DE UN DÍA CONCRETO (no undefined)
-                                    //TODO: PRUEBAS ICONOS EVENTOS
-
-
+                                    
                                     color = events[t].color ? events[t].color : 1;
                                     var event_class = "one-day";
 
@@ -430,7 +410,6 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
                                     }
 
-
                                     // selecciona el numero menor de palabras teniendo en cuenta el tamaño del div, y el dia de la semana
                                     var palabrasEvento = Math.min(palabrasSegunDuracion, divMaxSegunDiaSemana);
 
@@ -518,7 +497,7 @@ function checkEvents(day, month, year) {
     }
 }
 
-function getOrderNumber(id, day, month, year) {  //TODO OBTIENE EL NÚMERO 
+function getOrderNumber(id, day, month, year) {  
     var date_check = new Date(year, Number(month) - 1, day); //fecha actual
     var events = [];  //array para trabajar con los eventos recibidos en el json y ordenarlos después en cliente
     for (var i = 0; i < tiva_events.length; i++) {
@@ -551,7 +530,7 @@ function getOrderNumber(id, day, month, year) {  //TODO OBTIENE EL NÚMERO
     return 0;
 }
 
-// Get events of day  TODO: OBTENER EVENTOS DEL DÍA INDICADO EN PARÁMETROS
+// Get events of day  -- OBTENER EVENTOS DEL DÍA INDICADO EN PARÁMETROS
 function getEvents(day, month, year) {
     var n = 0;
     var date_check = new Date(year, Number(month) - 1, day);
@@ -577,7 +556,7 @@ function getEvents(day, month, year) {
     return events;
 }
 
-// Show tooltip when mouse over  TODO: mostrar TOOLTIP onmouseover
+// Show tooltip when mouse over  -- mostrar TOOLTIP onmouseover
 function showTooltip(id, layout, day, month, year, el) {
     if (layout === 'full') {
         if (tiva_events[id].image) {
@@ -599,7 +578,7 @@ function showTooltip(id, layout, day, month, year, el) {
 
         jQuery(el).parent().find('.tiva-event-tooltip').html('<div class="event-tooltip-item">'
                 + event_time
-                + '<div class="event-name">' + tiva_events[id].name + '</div>'  //TODO: DIV NOMBRE EVENTO
+                + '<div class="event-name">' + tiva_events[id].name + '</div>'  //DIV NOMBRE EVENTO
                 + '<div class="event-image">' + event_image + '</div>'
                 + '<div class="event-intro">' + getShortText(tiva_events[id].description, 10) + '</div>'
                 + '</div>'
@@ -645,15 +624,11 @@ function clearTooltip(layout, el) {
         jQuery(el).parent().find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
         jQuery(el).parent().find('.tiva-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
     } else {
-        /*
-         jQuery(el).find('.tiva-event-tooltip').css('opacity', '0');
-         jQuery(el).find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
-         jQuery(el).find('.tiva-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
-         */
+        //antiguo calendario compact
     }
 }
 
-// Show event detail  TODO: mostrar lista de eventos por venir (upcoming) ordenados
+// Show event detail -- mostrar lista de eventos por venir (upcoming) ordenados
 function showEventList(layout, max_events) {
     // Sort event via upcoming
     var upcoming_events = getEventsByTime('upcoming');
@@ -732,8 +707,6 @@ function showEventList(layout, max_events) {
                 var event_image = '';
             }
 
-
-
             var eventoListado = '<div class="list__event" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
                     '<div class="event__cabecera color-' + tiva_list_events[i].color + ' " >' +
                     formatCabecera(tiva_list_events[i].name, tiva_list_events[i]._tipo, "lista", null) +
@@ -755,114 +728,11 @@ function showEventList(layout, max_events) {
             }
             ;
 
-
-            ////'<div class="event-item">' +
-//                    '  <div class="card" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' +
-//                    ' <div class="card-header  color-' + tiva_list_events[i].color + ' lighten-1 white-text">' + tiva_list_events[i]._icono +
-//                    tiva_list_events[i].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5) + '</div>' +
-//                    ' <div class="card-body"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time +
-//                    '    <h4 class="card-title">' + event_time + '</h4>' +
-//                    '  <p class="card-text"> Ubicación: cambiar por ubicacion real (tiva_list_events[i].ubicacion</p>' +
-//                    ' </div>' +
-//                    '</div>');
-//                    + '<div class="event-item-right pull-left">'
-//                    + '<div class="event-name link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\', 0, 0, 0)">' + tiva_list_events[i].name + '</div>'
-//                    + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
-//                    + '<div class="event-time">' + event_time + '</div>'
-//                    + '<div class="event-intro">' + getShortText(tiva_list_events[i].description, 25) + '</div>'
-//                    + '</div>'
-//                    + '</div>'
-//                    + '<div class="cleardiv"></div>'
-//                    );
-//                    ' <div class="lista__item"> ' +
-//                    '         <div class=" modal-fluid" role="document">' +
-//                    '            <!--Content-->' +
-//                    '           <div class="modal-content">' +
-//                    '             <!--Header-->' +
-//                    '             <div class="modal-header  color-' + tiva_list_events[i].color + '">' +
-//                    '                <h4 class="modal-title w-100">' + tiva_list_events[i]._icono +
-//                    tiva_list_events[i].name.replace("-", '<i class="fas fa-arrow-right"></i>').substring(5) + ' </h4>' +
-//                    '           </div>' +
-//                    '  <!--Body-->' +
-//                    '         <div class="modal-body modal-cuerpo">' +
-//                    '             <div class="modal-content">' +
-//                    '                <div class="horario">  ' +
-//                    '               </div>' +
-//                    '              <div class="descripcion">' +
-//                    '                 <h4>Descripción:</h4>' +
-//                    '   <!-- <div class="listaviajeros">COMPARTE CON: </div> -->' +
-//                    '            </div>' +
-//                    '       </div>' +
-//                    '  </div>' +
-//                    '   <!--Footer-->' +
-//                    ' </div>' +
-//                    '  <!--/.Content-->' +
-//                    '      </div>' +
-//                    '   </div>');
         }
         console.log(filtrado);
         mostrarSegunFiltrado(filtrado, tiva_list_events.length);
     } else {
-        /*
-         jQuery('.tiva-event-list-compact').html('');
-         for (var i = 0; i < tiva_list_events.length; i++) {
-         // Start date
-         var day = new Date(tiva_list_events[i].year, Number(tiva_list_events[i].month) - 1, tiva_list_events[i].day);
-         if (date_start == 'sunday') {
-         var event_day = wordDay[day.getDay()];
-         } else {
-         if (day.getDay() > 0) {
-         var event_day = wordDay[day.getDay() - 1];
-         } else {
-         var event_day = wordDay[6];
-         }
-         }
-         var event_date = wordMonth[Number(tiva_list_events[i].month) - 1] + ' ' + tiva_list_events[i].day + ', ' + tiva_list_events[i].year;
-         
-         // End date
-         var event_end_time = '';
-         if (tiva_list_events[i].duration > 1) {
-         var end_date = new Date(tiva_list_events[i].year, Number(tiva_list_events[i].month) - 1, Number(tiva_list_events[i].day) + Number(tiva_list_events[i].duration) - 1);
-         
-         if (date_start == 'sunday') {
-         var event_end_day = wordDay[end_date.getDay()];
-         } else {
-         if (end_date.getDay() > 0) {
-         var event_end_day = wordDay[end_date.getDay() - 1];
-         } else {
-         var event_end_day = wordDay[6];
-         }
-         }
-         var event_end_date = wordMonth[Number(end_date.getMonth())] + ' ' + end_date.getDate() + ', ' + end_date.getFullYear();
-         event_end_time = ' - ' + event_end_day + ', ' + event_end_date;
-         }
-         
-         // Event time
-         if (tiva_list_events[i].time) {
-         var event_time = '<i class="fa fa-clock-o"></i>' + tiva_list_events[i].time;
-         } else {
-         var event_time = '';
-         }
-         
-         // Event image
-         if (tiva_list_events[i].image) {
-         var event_image = '<img src="' + tiva_list_events[i].image + '" alt="' + tiva_list_events[i].name + '" />';
-         } else {
-         var event_image = '';
-         }
-         
-         jQuery('.tiva-event-list-compact').append(	'<div class="event-item">'
-         + '<div class="event-image link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'compact\', 0, 0, 0)">' + event_image + '</div>'
-         + '<div class="event-name link" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'compact\', 0, 0, 0)">' + tiva_list_events[i].name + '</div>'
-         + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
-         + '<div class="event-time">' + event_time + '</div>'
-         + '<div class="event-intro">' + getShortText(tiva_list_events[i].description, 15) + '</div>'	
-         + '</div>'
-         + '<div class="cleardiv"></div>'
-         );
-         
-         }
-         */
+        //antiguo calendario compact
     }
 }
 function formatCabecera(asunto, tipo, formato, maxCaracter) {
@@ -1010,18 +880,11 @@ function diferenciaDiasClima(hoy, inicioViaje) {
     return timeDifferenceInDays;
 }
 
-// Show event detail TODO: mostrar detalles de los eventos
+// Show event detail -- mostrar detalles de los eventos
 function showEventDetail(id, layout, day, month, year) {
     var pais = "";
     var ciudad = "";
-    /*  jQuery('.tiva-events-calendar.' + layout + ' .back-calendar').show();
-     jQuery('.tiva-events-calendar.' + layout + ' .tiva-calendar').hide(); 
-     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();
-     jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-list').hide();*/
-//    jQuery('.tiva-events-calendar.' + layout + ' .tiva-event-detail').fadeIn(500);
-//
-//    jQuery('.tiva-events-calendar.' + layout + ' .list-view').removeClass('active');
-//    jQuery('.tiva-events-calendar.' + layout + ' .calendar-view').removeClass('active');
+    
     var myvar = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '            <div class="modal-dialog modal-lg" role="document">' +
             '                <!--Content-->' +
@@ -1184,7 +1047,7 @@ function showEventDetail(id, layout, day, month, year) {
          );
          */
 
-//RELLENAR Y MOSTRAR VENTANA MODAL //TODO: MODAL
+//RELLENAR Y MOSTRAR VENTANA MODAL 
 
         //Limpiar html antes de coger los datos:
 
@@ -1322,7 +1185,7 @@ function showEventDetail(id, layout, day, month, year) {
             fechaConsultaVuelo = fechaConsultaVuelo.replace(".", " "); //ejemplo formato de salida:  12 abr 
             console.log(fechaConsultaVuelo);
 
-            var q = codigoV + " " + fechaConsultaVuelo;         /*+ " " + (tiva_events[id].year + "/" + tiva_events[id].month + "/" + tiva_events[id].day)*/
+            var q = codigoV + " " + fechaConsultaVuelo; 
 
             document.getElementById("googlesearchvuelo").onclick = function () {
 
@@ -1445,9 +1308,7 @@ function showEventDetail(id, layout, day, month, year) {
                     textoAlternativo = agencia.proveedor;
                     $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + textoAlternativo + "'>");
                 }
-                // $('.logo').append("<img src='assets/images/img_proveedores/alquiler_de_coches.svg' alt='alquiler_de_coches'>");
-
-
+                
             });
 
             document.getElementById("googlesearchvuelo").style.display = "none";
@@ -1588,7 +1449,7 @@ function showEventDetail(id, layout, day, month, year) {
 
 
         //GESTIÓN DE LOS ADJUNTOS
-        if (tiva_events[id]._adjuntos !== null) { //TODO: el campo Adjuntos o es null o es un array con una posición mínimo
+        if (tiva_events[id]._adjuntos !== null) { //el campo Adjuntos o es null o es un array con una posición mínimo
 
             var adjuntos = "";
             var numdocs = tiva_events[id]._adjuntos.length;
@@ -1597,18 +1458,15 @@ function showEventDetail(id, layout, day, month, year) {
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
                 var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
                 adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" download><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
-                //adjuntos += '<img id="' + idadjunto + '" class="mimeType" src="assets/images/'+tipodoc+'.png" alt="" >'; 
                 console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
             document.getElementById("docs").innerHTML = adjuntos;
-
-            // var arrayAdjuntos = $('img.mimeType');
+            
             var arrayAdjuntos = $('a.linkadjunto');
 
             $.each(arrayAdjuntos, function (idx, val) {  //para cada elemento de la clase linkadjunto
 
                 var numadjunto = $(this).attr("id");
-
 
                 $(this).ready(function () {
 
@@ -1787,86 +1645,8 @@ function showEventDetail(id, layout, day, month, year) {
 
         $("#fichaDetalle").modal("show");
 
-    } else { //compacto
-        /*       jQuery('.tiva-event-detail-compact').html('');
-         if (day && month && year) {
-         var events = getEvents(day, month, year);
-         } else {
-         var events = [{id: id}];
-         }
-         for (var i = 0; i < events.length; i++) {
-         if (typeof events[i] != "undefined") {
-         // Start date
-         var day = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, tiva_events[events[i].id].day);
-         if (date_start == 'sunday') {
-         var event_day = wordDay[day.getDay()];
-         } else {
-         if (day.getDay() > 0) {
-         var event_day = wordDay[day.getDay() - 1];
-         } else {
-         var event_day = wordDay[6];
-         }
-         }
-         var event_date = wordMonth[Number(tiva_events[events[i].id].month) - 1] + ' ' + tiva_events[events[i].id].day + ', ' + tiva_events[events[i].id].year;
-         
-         // End date
-         var event_end_time = '';
-         if (tiva_events[events[i].id].duration > 1) {
-         var end_date = new Date(tiva_events[events[i].id].year, Number(tiva_events[events[i].id].month) - 1, Number(tiva_events[events[i].id].day) + Number(tiva_events[events[i].id].duration) - 1);
-         
-         if (date_start == 'sunday') {
-         var event_end_day = wordDay[end_date.getDay()];
-         } else {
-         if (end_date.getDay() > 0) {
-         var event_end_day = wordDay[end_date.getDay() - 1];
-         } else {
-         var event_end_day = wordDay[6];
-         }
-         }
-         var event_end_date = wordMonth[Number(end_date.getMonth())] + ' ' + end_date.getDate() + ', ' + end_date.getFullYear();
-         event_end_time = ' - ' + event_end_day + ', ' + event_end_date;
-         }
-         
-         // Event time
-         if (tiva_events[events[i].id].time) {
-         var event_time = '<i class="fa fa-clock-o"></i>' + tiva_events[events[i].id].time;
-         } else {
-         var event_time = '';
-         }
-         
-         // Event image
-         if (tiva_events[events[i].id].image) {
-         var event_image = '<img src="' + tiva_events[events[i].id].image + '" alt="' + tiva_events[events[i].id].name + '" />';
-         } else {
-         var event_image = '';
-         }
-         
-         // Event location
-         if (tiva_events[events[i].id].location) {
-         var event_location = '<i class="fa fa-map-marker"></i>' + tiva_events[events[i].id].location;
-         } else {
-         var event_location = '';
-         }
-         
-         // Event description
-         if (tiva_events[events[i].id].description) {
-         var event_desc = '<div class="event-desc">' + tiva_events[events[i].id].description + '</div>';
-         } else {
-         var event_desc = '';
-         }
-         
-         jQuery('.tiva-event-detail-compact').append('<div class="event-item">'
-         + '<div class="event-image">' + event_image + '</div>'
-         + '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
-         + '<div class="event-date"><i class="far fa-calendar-alt"></i>' + event_day + ', ' + event_date + event_end_time + '</div>'
-         + '<div class="event-time">' + event_time + '</div>'
-         + '<div class="event-location">' + event_location + '</div>'
-         + event_desc
-         + '</div>'
-         );
-         
-         }
-         }  */
+    } else { 
+        //antiguo calendario compact
     }
 }
 
@@ -1949,7 +1729,7 @@ function mostrarSegunFiltrado(numeroFiltro, cantidadEventos) {
             }
     }
 }
-//TODO: código en $(document).ready()
+
 // Init calendar full
 function cargaCalendario() {
     $('.tiva-events-calendar.full').html("");
@@ -2016,7 +1796,7 @@ function cargaCalendario() {
     }
 
 // Show - Hide view
-//   jQuery('.tiva-events-calendar .back-calendar').hide();
+
     jQuery('.tiva-event-list').hide();
     jQuery('.tiva-event-detail').hide();
 
@@ -2183,15 +1963,11 @@ function cargaCalendario() {
                 }
 
 
-
                 var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
-
-
 
                 evento.date = event_date.getTime();
 
                 tiva_events.push(evento);
-
 
 
             });
@@ -2263,27 +2039,8 @@ function cargaCalendario() {
         }
     });
 
-// Click - Back calendar btn
-//    jQuery('.tiva-events-calendar .back-calendar').click(function () {
-//        jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
-//        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
-//
-//        //var initial_view = (typeof jQuery(this).parents('.tiva-events-calendar').attr('data-view') != "undefined") ? jQuery(this).parents('.tiva-events-calendar').attr('data-view') : 'calendar';
-////        if (initial_view == 'calendar') {
-//        if (returnView === "calendario") {
-//            jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(500);
-//
-//            jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
-//            jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').addClass('active');
-//        } else {
-//            jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(500);
-//
-//            jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').removeClass('active');
-//            jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
-//        }
-//    });
+// Carga controles del DataPicker (al final de la carga completa del calendario)
     controlesDataPicker();
-
 
 
     $("#filtro-fechas").on("click", function () {
