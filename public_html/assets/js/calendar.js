@@ -433,19 +433,8 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
 
                                 } else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
-                                    var event_fake; //crea una variable
-                                    if (typeof events[t + 1] !== "undefined") {  //establece otra condición: si el siguiente elemento del array no es indefinido -> Si el día sgte hay evento
-                                        if (typeof tiva_events[events[t + 1].id - 1] !== "undefined") { //entonces si el evento de la lista global ordenada inmediatamente anterior al actual
-                                            //está definido, la vble. toma el nombre de ese evento inmediatamente anterior acortado
-
-//                                            event_fake = getShortText(tiva_events[events[t + 1].id - 1].name, 2);
-                                            event_fake = "no-name";
-                                        } else {
-                                            event_fake = "no-name";  //si es undefined, la vble. será no-name
-                                        }
-                                    } else {
-                                        event_fake = "no-name"; //si no hay siguiente evento del día, la vble. también será no-name
-                                    }
+                                    var event_fake = "no-name"; //crea una variable
+                                    
                                     calendarString += '<div class=\"calendar-event-name no-name\">' + event_fake + '</div>';  //TODO: PINTA UN DIV (invisible) con el valor de vble.
                                 }
                             }
