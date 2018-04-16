@@ -1057,9 +1057,6 @@ function showEventDetail(id, layout, day, month, year) {
         $("div.logo img").remove(); //elimina cualquier imagen anyadida como child para el logo
         icsDescription = ""; //limpiar variable global ICS
 
-        //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
-
-
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = tiva_events[id]._tipo;
         var colorfondo = tiva_events[id].color;
