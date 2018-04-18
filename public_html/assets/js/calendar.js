@@ -1085,7 +1085,6 @@ function showEventDetail(id, layout) {
            }
             
             
-
             //Búsqueda vuelo google
             document.getElementById("googlesearchvuelo").style.display = "block";
 
@@ -1125,7 +1124,7 @@ function showEventDetail(id, layout) {
 
             };
 
-            //nombre aerolinea PENDIENTE API CÓDIGO PROVEEDOR
+            //nombre aerolinea ESTE CAMPO ES INDEPENDIENTE DEL IDPROVEEDOR (NO SE DISPONE DICCIONARIO DE AEROLINEAS)
             var aerolinea = tiva_events[id]._Aerolinea;
 
             //Bloque horarios
@@ -1210,15 +1209,15 @@ function showEventDetail(id, layout) {
 
         } else if (tipoReserva === "Coche") {
             //logo coches
-            var codigoRent = tiva_events[id]._ProveedorCoches; console.log(codigoRent);
+            var codigoRent = tiva_events[id]._idProveedor; //string con el código
             var proveedor = "";
             info_cars.forEach(agencia => {
             
-                if (agencia.id == codigoRent) {
+                if (agencia.id == codigoRent) { //compara un int con un string
                     rentacar = agencia.img;
                     proveedor = agencia.proveedor;
-                    textoAlternativo = agencia.proveedor;
-                    $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + textoAlternativo + "'>");
+                    
+                    $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + proveedor + "'>");
                 }
                 
             });
@@ -1284,7 +1283,7 @@ function showEventDetail(id, layout) {
             document.getElementById("hora-d").innerHTML = horaDestino;
 
             //bloque descripción
-            var proveedor = tiva_events[id]._proveedor; //ahora viene un entero para el código proveedor
+            var proveedor = tiva_events[id]._idProveedor; //ahora viene un entero para el código proveedor
             if(proveedor == 3){
                 proveedor = "Renfe";
                 $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>"); //de momento sólo hay Logo de Renfe
@@ -1328,6 +1327,10 @@ function showEventDetail(id, layout) {
                         'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
         } else if (tipoReserva === "Barco") {
+            
+            //logo FIJO
+            $('.logo').append("<img src='assets/images/img_proveedores/logo_crucero_generico.png' alt='Logo-barco'>");
+            
             document.getElementById("googlesearchvuelo").style.display = "none";
             //horas
             document.getElementById("hora-o").innerHTML = horaOrigen;
@@ -1853,13 +1856,14 @@ function cargaCalendario() {
                     "_acompanyantes": entrada.Viajeros, //array
 
                     //para Tren
-                    "_proveedor": entrada.Detalles.Proveedor, //común con Coche y barco
+                    "_proveedor": entrada.Detalles.Proveedor, //común con barco (Nombre proveedor)
                     "_TipoTren": entrada.Detalles.TipoTren,
                     "_Clase": entrada.Detalles.Clase,
                     "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
                     "_EstacionDestino": entrada.Detalles.EstacionDestino,
                     "_DireccionOrigen": entrada.DireccionOrigen,
                     "_DireccionDestino": entrada.Detalles.DireccionDestino,
+                    "_idProveedor": entrada.idProveedor, //común para Tren y Coche
 
                     //para Coche
 
