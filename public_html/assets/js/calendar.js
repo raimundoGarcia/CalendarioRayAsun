@@ -1103,7 +1103,7 @@ function showEventDetail(id, layout) {
                     window.open('http://www.google.com/search?q=' + q);
 
                 } else if (diasDif < -1) {
-                    variableAviso = '<div class="toast-text">La fecha del vuelo es anterior a la de ayer. Información no disponible.</div>';
+                    variableAviso = '<div class="toast-text">La fecha del vuelo es anterior. Información no disponible.</div>';
                     $('<div class="toaster toast-warning">' + variableAviso + '</div>').insertAfter($('#googlesearchvuelo'));
                     $('#googlesearchvuelo').addClass('isDisabled');
                     setTimeout(function () {
