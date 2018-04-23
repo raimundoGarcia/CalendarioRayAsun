@@ -253,7 +253,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
     if (layout === 'full') {
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevyr\', \'full\')\">« <span class="btn-change-date">' + prev_year + '<\/span><\/span><\/td>';
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'prevmo\', \'full\')\">« <span class="btn-change-date">' + prev_month + '<\/span><\/span><\/td>';
-        calendarString += '<td class=\"calendar-title\" colspan=\"3\"><span><i class=\"far fa-calendar-alt\"><\/i>' + wordMonth[monthNum - 1] + '&nbsp;&nbsp;' + yearNum + '<\/span><\/td>';
+        calendarString += '<td class=\"calendar-title\" colspan=\"3\"><span><i class=\"far fa-calendar-alt\"><\/i>&nbsp;&nbsp;' + wordMonth[monthNum - 1] + '&nbsp;&nbsp;' + yearNum + '<\/span><\/td>';
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextmo\', \'full\')\"><span class="btn-change-date">' + next_month + '<\/span> »<\/span><\/td>';
         calendarString += '<td class=\"calendar-btn\"><span onClick=\"changedate(\'nextyr\', \'full\')\"><span class="btn-change-date">' + next_year + '<\/span> »<\/span><\/td>';
     } else {
@@ -995,7 +995,15 @@ function showEventDetail(id, layout) {
         var ubicacion = tiva_events[id]._ubicacion;
         document.getElementById("ubicacion").innerHTML = "<h5 class='p5 modaltext'>" + ubicacion + "</h5>";
         document.getElementById("verMapa").addEventListener("click", function () {
-            window.open('http://maps.google.es/?q=' + coordenadas);
+            console.log(tipoReserva);
+            if (tipoReserva === "Aereo")   {
+                window.open( ' https://www.google.com/maps/dir/?api=1&origin='+lat+','+lon+'&destination='+latDestino+','+lonDestino+'&travelmode=fly');
+            }else if(tipoReserva === "Tren"){
+                  window.open( ' https://www.google.com/maps/dir/?api=1&origin='+lat+','+lon+'&destination='+latDestino+','+lonDestino+'&travelmode=transit&mode[]=train');
+            }else if(tipoReserva === "Barco"){
+            }else{
+                 window.open('http://maps.google.es/?q=' + coordenadas);
+            };
         });
         var geocoder = new google.maps.Geocoder;
         var localizacion = {lat: latDestino, lng: lonDestino};
