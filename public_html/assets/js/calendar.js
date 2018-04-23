@@ -861,6 +861,107 @@ function diferenciaDiasClima(hoy, inicioViaje) {
 
     return timeDifferenceInDays;
 }
+//Detecta el navegador IExplorer devolviendo la versión del IE o False en caso de ser distinto navegador
+function detectIE() {
+
+    var ua = window.navigator.userAgent;
+ 
+    // Test values; Uncomment to check result …
+     // IE 10
+    // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+
+     // IE 11
+    // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+ 
+     // Edge 12 (Spartan)
+    // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+
+     // Edge 13
+    // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+ 
+    var msie = ua.indexOf('MSIE ');
+
+    if (msie > 0) {
+
+      // IE 10 or older => return version number
+
+      return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+
+    }
+
+    var trident = ua.indexOf('Trident/');
+
+    if (trident > 0) {
+
+      // IE 11 => return version number
+
+      var rv = ua.indexOf('rv:');
+
+      return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+
+    }
+ 
+    var edge = ua.indexOf('Edge/');
+
+    if (edge > 0) {
+
+      // Edge (IE 12+) => return version number
+
+      return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+
+    }
+ 
+    // other browser
+
+    return false;
+
+  }
+
+//Convierte base64 a blob, pasando como parámetros el String en base64 y el content-type. Retorna el blob.
+
+function b64toBlob(b64Data, contentType) {
+
+//procesamiento de byteCharacters en trozos más pequeños de 512 bytes
+    contentType = contentType || '';
+
+    var sliceSize = 512;
+
+    b64Data = b64Data.replace(/^[^,]+,/, '');
+
+    b64Data = b64Data.replace(/\s/g, '');
+
+    var byteCharacters = window.atob(b64Data);
+
+    var byteArrays = [];
+ 
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+
+        var slice = byteCharacters.slice(offset, offset + sliceSize); //hace porciones de 512 en 512 bytes.
+ 
+
+        var byteNumbers = new Array(slice.length); //crea un array del tamanyo del slice
+
+        for (var i = 0; i < slice.length; i++) {
+
+            byteNumbers[i] = slice.charCodeAt(i); //lo llena con los caracteres
+
+        }
+
+ 
+        var byteArray = new Uint8Array(byteNumbers); //genera array de entero sin signo de 8 bits, param: typedarray
+ 
+
+        byteArrays.push(byteArray);
+
+    }
+ 
+
+    var blob = new Blob(byteArrays, {type: contentType}); //genera el objeto blob a partir de
+
+    return blob;
+
+  }
 
 // Show event detail -- mostrar detalles de los eventos
 function showEventDetail(id, layout) {
@@ -1016,29 +1117,58 @@ function showEventDetail(id, layout) {
                 ciudad = campoCiudad.split(",")[0];
 
             }
-            //Descarga de archivo en formato ICS
-            $(".descargaics").on("click", function () {
-                var icsFormat =
-                        'BEGIN:VCALENDAR\n' +
-                        'PRODID:-//Schedule a Meeting\n' +
-                        'VERSION:2.0\n' +
-                        'METHOD:REQUEST\n' +
-                        'BEGIN:VEVENT\n' +
-                        'DTSTART:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
-                        'DTSTAMP:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
-                        'DTEND:' + tiva_events[id]._fechaFin.replace("-", "") + '\n' +
-                        'LOCATION:' + tiva_events[id]._ubicacion + '\n' +
-                        'UID:40ddbba4-abb2-4969-b9b6-9c75c3b9f5c2\n' +
-                        icsDescription +
-                        'BEGIN:VALARM\n' +
-                        'TRIGGER:-PT48H\n' +
-                        'ACTION:DISPLAY\n' +
-                        'DESCRIPTION:Reminder\n' +
-                        'END:VALARM\n' +
-                        'END:VEVENT\n' +
-                        'END:VCALENDAR';
-                this.href = 'data:text/calendar;charset=utf-8,' + icsFormat;
-            });
+            //creación de la cadena de texto para el contenido del archivo ICS
+            var icsFormat =
+                                'BEGIN:VCALENDAR\n' +
+                                'PRODID:-//Schedule a Meeting\n' +
+                                'VERSION:2.0\n' +
+                                'METHOD:REQUEST\n' +
+                                'BEGIN:VEVENT\n' +
+                                'DTSTART:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
+                                'DTSTAMP:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
+                                'DTEND:' + tiva_events[id]._fechaFin.replace("-", "") + '\n' +
+                                'LOCATION:' + tiva_events[id]._ubicacion + '\n' +
+                                'UID:40ddbba4-abb2-4969-b9b6-9c75c3b9f5c2\n' +
+                                icsDescription +
+                                'BEGIN:VALARM\n' +
+                                'TRIGGER:-PT48H\n' +
+                                'ACTION:DISPLAY\n' +
+                                'DESCRIPTION:Reminder\n' +
+                                'END:VALARM\n' +
+                                'END:VEVENT\n' +
+                                'END:VCALENDAR';
+            
+            //Si es IE, 
+            if(detectIE()){
+                //eliminamos el atributo 'download' al vínculo (el atributo aparece en cada evento click de una reserva de viaje)
+                document.getElementsByClassName('descargaics')[0].removeAttribute('download');
+                
+                if (window.navigator.msSaveBlob) {
+                    //generamos el objeto blob (equivalente a un archivo)
+                        var blob = new Blob([icsFormat]);
+                        //asignamos evento al vínculo para descarga
+                        document.getElementsByClassName('descargaics')[0].onclick = function(){
+
+                            window.navigator.msSaveBlob(blob, 'documento.ics');
+
+                        }; 
+                                      
+                   }
+             //Si no es IE,
+            } else {
+                
+                //Descarga de archivo en formato ICS
+                    $(".descargaics").on("click", function () {
+                        
+                       //anyadiendo url descarga al vínculo
+                        this.href = 'data:text/calendar;charset=utf-8,' + icsFormat;
+
+
+                    });
+                
+            }
+            
+            
             // Mostrar la información recomendada según el pais de destino 
 
             document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
@@ -1188,6 +1318,9 @@ function showEventDetail(id, layout) {
             var regimen = tiva_events[id]._regimen;
             var tipoHabitacion = tiva_events[id]._tipohabita;
             var acompanyantes = tiva_events[id]._acompanyantes;
+            //TODO: Obtención de la ciudad a partir de la dirección postal que viene de base datos PROVISIONAL
+            var laCiudad = direccionHotel.split(',');
+            laCiudad = laCiudad[laCiudad.length-2];
             console.log(acompanyantes);
             var html = "";
             for (i = 0; i < acompanyantes.length; i++) {
@@ -1203,6 +1336,7 @@ function showEventDetail(id, layout) {
                         'DESCRIPTION: Tiene una reserva de HOTEL para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
                         ' Localizador: ' + localizadorReserva + '\\n' +
                         ' Hotel: ' + nombreHotel + '\\n' +
+                        ' Ubicación: ' + laCiudad + '\\n' +
                         ' Dirección: ' + direccionHotel +'\\n' +
                         ' Régimen: ' + regimen +'\\n' +
                         ' Tipo habitación: ' + tipoHabitacion +'\\n\\n' +
@@ -1211,7 +1345,7 @@ function showEventDetail(id, layout) {
                         ' SALIDA________________________________________\\n\\n' +
                         ' Fecha: ' + fechaFinEvento +'\\n\\n' +
                         avisoHorario + '\n' +
-                        'SUMMARY: HOTEL: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'SUMMARY: HOTEL EN: '+ laCiudad + " "+ fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
                         'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
@@ -1332,7 +1466,7 @@ function showEventDetail(id, layout) {
                         ' Estación destino: ' + estacionDestino +'\\n' +
                         ' Dirección: ' + DireccionDestino +'\\n\\n' +
                         avisoHorario + '\n' +
-                        'SUMMARY: TREN: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'SUMMARY: TREN: ' + fechaInicioEvento +" "+ horaOrigen + " " + estacionOrigen +" --> " + fechaFinEvento +" "+ horaDestino + " " + estacionDestino + '\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
                         'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
@@ -1377,7 +1511,7 @@ function showEventDetail(id, layout) {
                         ' Fecha: ' + fechaFinEvento +'\\n' +
                         ' Destino: ' + destino +'\\n\\n' +
                         avisoHorario + '\n' +
-                        'SUMMARY: BARCO: ' + fechaInicioEvento +" "+ horaOrigen + " --> " + fechaFinEvento +" "+ horaDestino +'\n' +
+                        'SUMMARY: BARCO: ' + fechaInicioEvento +" "+ horaOrigen + " " + origen +" --> " + fechaFinEvento +" "+ horaDestino + " " + destino + '\n' +
                         'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
                         'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
@@ -1396,8 +1530,19 @@ function showEventDetail(id, layout) {
             for (n = 0; n < numdocs; n++) {
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
                 var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
-                adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" download><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
-                console.log(tiva_events[id]._adjuntos[n].idAdjunto);
+                
+               if (detectIE()){
+                   //el vínculo se generará sin el atributo 'download'
+                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="Adjunto_'+idadjunto+'"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+                
+               } else {
+                    
+                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="Adjunto_'+idadjunto+'" download><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+                }
+               
+                
+               
+               console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
             document.getElementById("docs").innerHTML = adjuntos;
             
@@ -1414,8 +1559,29 @@ function showEventDetail(id, layout) {
                         type: 'GET',
                         dataType: 'json',
                         success: function (churro) {
+                            
+                            //Detectado IE 
+                            if (detectIE()) {
 
-                            $('#' + numadjunto).attr("href", churro);
+                                    if (window.navigator.msSaveBlob) {
+                                       
+                                      //generamos el objeto blob a partir del String en base64 (churro) con la función b64toBlob
+                                      var blob = b64toBlob(churro, 'application/pdf');
+                                      //asignamos evento al vínculo para que se descargue al click
+                                      $('#'+numadjunto).on('click', function(){
+                                          
+                                          window.navigator.msSaveBlob(blob, 'Adjunto_' + numadjunto +'.'+ tipodoc);
+                                          
+                                      });
+                                      
+                                    }
+
+                                  } else {
+                                       //Navegadores distintos de IE se anyade el atributo href con el valor del String base64
+                                        $('#' + numadjunto).attr("href", churro);
+                                    
+                                  }
+                                                                                  
                         },
                         error: function () {
                             console.log("Se ha producido un error API adjuntos u otra causa.");
