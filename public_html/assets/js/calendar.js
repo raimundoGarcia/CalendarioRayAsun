@@ -1211,15 +1211,17 @@ function showEventDetail(id, layout) {
             //logo coches
             var codigoRent = tiva_events[id]._idProveedor; //string con el código
             var proveedor = "";
-            info_cars.forEach(agencia => {
-            
+                       
+           info_cars.forEach( function (agencia) {
+               
+
                 if (agencia.id == codigoRent) { //compara un int con un string
                     rentacar = agencia.img;
                     proveedor = agencia.proveedor;
-                    
+
                     $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + proveedor + "'>");
                 }
-                
+
             });
 
             document.getElementById("googlesearchvuelo").style.display = "none";
@@ -1455,10 +1457,13 @@ function showEventDetail(id, layout) {
                             paneles += ' <h2 class="card-tittle">' + ciudad + ',&nbsp;&nbsp;' + pais + '</h2>  ';
                             console.log(pais);
                             console.log(ciudad);
-                            datosClima.list.forEach(medicion => {
-                                listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
-                                fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
-                            });
+                                                     
+                            datosClima.list.forEach( function (medicion) {
+                                    listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
+                                    fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
+                            }); 
+                            
+                            
                             for (var i = 0; i < fechasUnicas.length; i++) {
                                 var dias = [];
 
@@ -1502,7 +1507,8 @@ function showEventDetail(id, layout) {
 
                                 var descripcion = "";
                                 icono_meteo = "";
-                                info_meteoro.forEach(medicion => {
+                                                         
+                                info_meteoro.forEach( function(medicion) {
                                     if (medicion.id == maximo) {
                                         descripcion = medicion.descripcion;
                                         icono_meteo = medicion.icono; console.log(icono_meteo);
@@ -1513,6 +1519,9 @@ function showEventDetail(id, layout) {
                                         }
 
                                 });
+                                
+                                
+                                
                                 var diaSemana = new Date(fechasUnicas[i]);
                                 var mediaHumedad = humedad / dias.length;
                                 paneles += '   <div id="' + fechasUnicas[i] + '" class="card card-cascade narrower">  ' +
@@ -1769,7 +1778,7 @@ function cargaCalendario() {
             diccionarioLogos = entradas.DiccionarioLogos; //array 
          
             j = -1; //contador para asignar las IP a los eventos
-            entradas.Pedidos.forEach(entrada => {
+            entradas.Pedidos.forEach(function(entrada) {
                 j++;
                 var color = "1";
                 tipo = entrada.Tipo;
@@ -1901,7 +1910,7 @@ function cargaCalendario() {
                 tiva_events.push(evento);
 
 
-            });
+            }); //forEach entrada
 
             tiva_events.sort(sortEventsByDate);
             for (var i = 0; i < tiva_events.length; i++) {

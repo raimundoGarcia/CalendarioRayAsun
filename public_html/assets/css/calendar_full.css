@@ -886,9 +886,10 @@ table td{
     }
     .card-title{
         font-size: 4.5vw !important;
-        .modal-body{
-            padding: 3px !important;
-        }
+        
+    }
+    .modal-body{
+        padding: 3px !important;
     }
     .card-text{
         font-size: 3.5vw !important;
