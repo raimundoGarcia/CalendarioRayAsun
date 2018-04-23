@@ -15062,8 +15062,9 @@ $(window).scroll(function () {
             body.addEventListener('touchcancel', TouchHandler.registerEvent, false);
             body.addEventListener('touchend', TouchHandler.registerEvent, false);
         }
-
+        if(body){  //TODO: SOLUCIONADO condicional para evitar error en IE, addEventListener de undefined o null
         body.addEventListener('mousedown', showEffect, false);
+        }
     };
 
 
