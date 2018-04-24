@@ -929,7 +929,7 @@ function b64toBlob(b64Data, contentType) {
     b64Data = b64Data.replace(/^[^,]+,/, '');
 
     b64Data = b64Data.replace(/\s/g, '');
-
+// atob() decodifica base64-encoded string en un nuevo string con un caracter por cada byte de la info en binario.
     var byteCharacters = window.atob(b64Data);
 
     var byteArrays = [];
@@ -1530,18 +1530,18 @@ function showEventDetail(id, layout) {
             for (n = 0; n < numdocs; n++) {
                 var tipodoc = tiva_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
                 var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
+                var nombreAdjunto = tiva_events[id]._adjuntos[n].Nombre;
                 
                if (detectIE()){
                    //el vínculo se generará sin el atributo 'download'
-                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="Adjunto_'+idadjunto+'"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="'+nombreAdjunto+'"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
                 
                } else {
                     
-                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="Adjunto_'+idadjunto+'" download><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="'+nombreAdjunto+'" download="'+nombreAdjunto+'.'+tipodoc+'"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
                 }
                
-                
-               
+                               
                console.log(tiva_events[id]._adjuntos[n].idAdjunto);
             }
             document.getElementById("docs").innerHTML = adjuntos;
@@ -1559,14 +1559,27 @@ function showEventDetail(id, layout) {
                         type: 'GET',
                         dataType: 'json',
                         success: function (churro) {
+                            console.log(churro);
+                            //Sacar el content-type y asignarlo a variable para parámetro de la función b64toBlob
+
+                                    var arrayString = churro.split(":"); //genera un array de 2 elementos, 'data' y el resto del churro 
+                                    var contentType = arrayString[1].split(";");  //genera un array de 2 elementos, el primero es el content-type y el segundo es  'base64,stringchurro'
+                                    var content_type = contentType[0]; console.log("El content-type es: " + content_type); //string con el mime type
+
+                                    //Sacar el string en base64 para pasarlo por parámetro a la función b64b64toBlob()
+                                    var arrayBase64 = contentType[1].split(','); 
+                                    var stringBase64 = arrayBase64[1];  // console.log(stringBase64);//string en base64 
+                            
                             
                             //Detectado IE 
                             if (detectIE()) {
+                                                                              
 
                                     if (window.navigator.msSaveBlob) {
                                        
-                                      //generamos el objeto blob a partir del String en base64 (churro) con la función b64toBlob
-                                      var blob = b64toBlob(churro, 'application/pdf');
+                                        //generamos el objeto blob a partir del String en base64 (churro) con la función b64toBlob
+                                        // var blob = b64toBlob(churro, 'application/pdf'); //TODO: AVERIGUAR POR QUÉ HA FUNCIONADO CON EL EXCEL SI LOS PARÁMETROS NO SON LOS QUE ESPERA LA FUNCIÓN
+                                        var blob = b64toBlob(stringBase64,content_type); console.log(blob);
                                       //asignamos evento al vínculo para que se descargue al click
                                       $('#'+numadjunto).on('click', function(){
                                           
@@ -1576,11 +1589,14 @@ function showEventDetail(id, layout) {
                                       
                                     }
 
-                                  } else {
-                                       //Navegadores distintos de IE se anyade el atributo href con el valor del String base64
-                                        $('#' + numadjunto).attr("href", churro);
-                                    
-                                  }
+                            } else {
+                                 //Navegadores distintos de IE se anyade el atributo href con el valor del String base64
+                                 //console.log("churro");
+                                 var blob = b64toBlob(stringBase64,content_type);console.log(blob);
+                                 var descargarAdjunto = URL.createObjectURL(blob); console.log(descargarAdjunto);
+                                 $('#' + numadjunto).attr("href", descargarAdjunto);
+                                
+                            }
                                                                                   
                         },
                         error: function () {
