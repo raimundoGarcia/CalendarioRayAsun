@@ -426,9 +426,9 @@
    
 }
 .logo img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain !important;
+  /*  width: 100%;
+    height: auto; */
+    
 }
 .horario{
     margin-top: 10px;
@@ -907,7 +907,3 @@ table td{
 
 }
 
-
-@-ms-viewport {
-  width: device-width;
-}
