@@ -1839,6 +1839,30 @@ function mostrarSegunFiltrado(numeroFiltro, cantidadEventos) {
             }
     }
 }
+function promesaAjax(url) {
+
+    // Return the $.ajax promise
+
+    return $.ajax({
+
+        url: url,
+
+        dataType: 'json',
+       
+        type: "GET",
+
+        beforeSend: function () {
+            jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
+        },
+        error: function (status, message)
+        {
+            console.log(status);
+            console.log(message);
+        }
+
+    });
+
+}
 
 // Init calendar full
 function cargaCalendario() {
@@ -1939,15 +1963,24 @@ function cargaCalendario() {
         var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + fechaIniDefault + "&FechaFin=" + fechaFinDefault;
     }
     filtrar = false;
-    jQuery.ajax({
-        // url: "./events/ejemplo_agenda.json",
-        url: url,
-        dataType: 'json',
-        type: "GET",
-        beforeSend: function () {
-            jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
-        },
-        success: function (entradas) {
+
+
+ filtrar = false;
+    promesaDatos = promesaAjax(url);
+    $.when(promesaDatos).done(function(entradas){
+//            jQuery.ajax({
+//
+//                url: url,
+//                dataType: 'JSON',
+//                type: "GET",
+//                beforeSend: function () {
+//                    jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
+//                },
+//                error: function (status, message)
+//                {
+//                    alert('A jQuery error has occurred. Status: ' + status + ' - Message: ' + message);
+//                },
+//                success: function (entradas) {
             
             diccionarioLogos = entradas.DiccionarioLogos; //array 
          
@@ -2117,7 +2150,7 @@ function cargaCalendario() {
                     jQuery(this).find('.list-view').click();
                 }
             });
-        }
+        
     });
 //    }
 
