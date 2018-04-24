@@ -1981,7 +1981,7 @@ function cargaCalendario() {
     filtrar = false;
 
 
- filtrar = false;
+
     promesaDatos = promesaAjax(url);
     $.when(promesaDatos).done(function(entradas){
 //            jQuery.ajax({
