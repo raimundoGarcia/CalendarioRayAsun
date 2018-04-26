@@ -61,8 +61,8 @@ function DatePicker( picker, settings ) {
         select: 'parse create validate',
         highlight: 'parse navigate create validate',
         view: 'parse create validate viewset',
-        disable: 'deactivate',
-        enable: 'activate'
+        disable: 'deacconsultiate',
+        enable: 'acconsultiate'
     }
 
     // The component's item object.
@@ -818,7 +818,7 @@ DatePicker.prototype.flipEnable = function(val) {
 /**
  * Mark a collection of dates as “disabled”.
  */
-DatePicker.prototype.deactivate = function( type, datesToDisable ) {
+DatePicker.prototype.deacconsultiate = function( type, datesToDisable ) {
 
     var calendar = this,
         disabledItems = calendar.item.disable.slice(0)
@@ -871,13 +871,13 @@ DatePicker.prototype.deactivate = function( type, datesToDisable ) {
 
     // Return the updated collection.
     return disabledItems
-} //DatePicker.prototype.deactivate
+} //DatePicker.prototype.deacconsultiate
 
 
 /**
  * Mark a collection of dates as “enabled”.
  */
-DatePicker.prototype.activate = function( type, datesToEnable ) {
+DatePicker.prototype.acconsultiate = function( type, datesToEnable ) {
 
     var calendar = this,
         disabledItems = calendar.item.disable,
@@ -963,7 +963,7 @@ DatePicker.prototype.activate = function( type, datesToEnable ) {
 
     // Return the updated collection.
     return disabledItems.filter(function( val ) { return val != null })
-} //DatePicker.prototype.activate
+} //DatePicker.prototype.acconsultiate
 
 
 /**

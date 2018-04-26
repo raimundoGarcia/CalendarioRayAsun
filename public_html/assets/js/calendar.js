@@ -31,8 +31,8 @@ var returnView = "calendario"; // asigna la vista a la que volver despues de mos
 var filtrar = false;
 var filtrado = 0;
 
-var fechaIniDefault = sumarDias(-900);
-var fechaFinDefault = sumarDias(900);
+var fechaIniDefault = sumarDias(-15);
+var fechaFinDefault = sumarDias(30);
 
 var rangoFechaIni = "";
 var rangoFechaFin = "";
@@ -315,11 +315,11 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                         // Get events of day
                         if (layout === 'full') {
                             var events = getEvents(daycounter, monthNum, yearNum);
-                            
+
                             for (var t = 0; t < events.length; t++) {
 
                                 if (typeof events[t] !== "undefined") { //si existe evento en esa posición del array de eventos DE UN DÍA CONCRETO (no undefined)
-                                    
+
                                     color = events[t].color ? events[t].color : 1;
                                     var event_class = "one-day";
 
@@ -362,9 +362,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                                             var duracion = events[t].duracion;
 
                                             palabrasSegunDuracion = duracion;
-                                            console.log(duracion);
-                                            console.log(consultia_events[t].name);
-                                            console.log(consultia_events[t]._fechaInicio);
+                                          
                                             divSize = " length-" + duracion;
                                             if (duracion > 7) {
                                                 divSize = " length-7 ";
@@ -432,7 +430,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
                                 } else { //si no (si en la posición del array EVENTOS DEL DÍA encuentra "undefined") CREA UN EVENTO NO-NAME NO VISIBLE 
                                     var event_fake = "no-name"; //crea una variable
-          
+
                                     calendarString += '<div class=\"calendar-event-name no-name\">' + event_fake + '</div>';  //TODO: PINTA UN DIV (invisible) con el valor de vble.
                                 }
                             }
@@ -454,7 +452,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
     if (layout === 'full') {
         jQuery('.consultia-calendar-full').html(calendarString);
-    } 
+    }
     thisDate = 1;
 }//fin create calendar
 
@@ -477,7 +475,7 @@ function checkEvents(day, month, year) {
     }
 }
 
-function getOrderNumber(id, day, month, year) {  
+function getOrderNumber(id, day, month, year) {
     var date_check = new Date(year, Number(month) - 1, day); //fecha actual
     var events = [];  //array para trabajar con los eventos recibidos en el json y ordenarlos después en cliente
     for (var i = 0; i < consultia_events.length; i++) {
@@ -609,8 +607,6 @@ function showEventList(layout, max_events) {
                 var event_time = '';
             }
 
-            
-
             var eventoListado = '<div class="list__event" onclick="showEventDetail(' + consultia_list_events[i].id + ', \'full\')">' +
                     '<div class="event__cabecera color-' + consultia_list_events[i].color + ' " >' +
                     formatCabecera(consultia_list_events[i].name, consultia_list_events[i]._tipo, "lista", null) +
@@ -634,6 +630,14 @@ function showEventList(layout, max_events) {
 
         }
         mostrarSegunFiltrado(filtrado, consultia_list_events.length);
+        // añade un div con texto en caso de que una de las listas a mostrar no tenga contenido.
+        if ($(".listado-eventos-pendientes").children().length === 1) {
+            $(".listado-eventos-pendientes").append('<div>No hay eventos disponibles</div>')
+        }
+        if ($(".listado-eventos-terminados").children().length === 1) {
+            $(".listado-eventos-terminados").append('<div>No hay eventos disponibles</div>')
+        }
+
     } else {
         //antiguo calendario compact
     }
@@ -693,7 +697,7 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
                     texto = '<i class="fas fa-car"></i>&nbsp;' + asunto.substring(5);
                     break;
                 case "Otros":
-               
+
                     break;
                 case "Parking":
 
@@ -786,27 +790,27 @@ function diferenciaDiasClima(hoy, inicioViaje) {
 function detectIE() {
 
     var ua = window.navigator.userAgent;
- 
+
     // Test values; Uncomment to check result …
-     // IE 10
+    // IE 10
     // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
 
-     // IE 11
+    // IE 11
     // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
- 
-     // Edge 12 (Spartan)
+
+    // Edge 12 (Spartan)
     // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
 
-     // Edge 13
+    // Edge 13
     // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
- 
+
     var msie = ua.indexOf('MSIE ');
 
     if (msie > 0) {
 
-      // IE 10 or older => return version number
+        // IE 10 or older => return version number
 
-      return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+        return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
 
     }
 
@@ -814,29 +818,29 @@ function detectIE() {
 
     if (trident > 0) {
 
-      // IE 11 => return version number
+        // IE 11 => return version number
 
-      var rv = ua.indexOf('rv:');
+        var rv = ua.indexOf('rv:');
 
-      return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+        return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
 
     }
- 
+
     var edge = ua.indexOf('Edge/');
 
     if (edge > 0) {
 
-      // Edge (IE 12+) => return version number
+        // Edge (IE 12+) => return version number
 
-      return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+        return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
 
     }
- 
+
     // other browser
 
     return false;
 
-  }
+}
 
 //Convierte base64 a blob, pasando como parámetros el String en base64 y el content-type. Retorna el blob.
 
@@ -854,12 +858,12 @@ function b64toBlob(b64Data, contentType) {
     var byteCharacters = window.atob(b64Data);
 
     var byteArrays = [];
- 
+
 
     for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
 
         var slice = byteCharacters.slice(offset, offset + sliceSize); //hace porciones de 512 en 512 bytes.
- 
+
 
         var byteNumbers = new Array(slice.length); //crea un array del tamanyo del slice
 
@@ -869,14 +873,14 @@ function b64toBlob(b64Data, contentType) {
 
         }
 
- 
+
         var byteArray = new Uint8Array(byteNumbers); //genera array de entero sin signo de 8 bits, param: typedarray
- 
+
 
         byteArrays.push(byteArray);
 
     }
- 
+
 
     var blob = new Blob(byteArrays, {type: contentType}); //genera el objeto blob a partir de
 
@@ -992,59 +996,97 @@ function showEventDetail(id, layout) {
 
 //RELLENAR Y MOSTRAR VENTANA MODAL 
 
-        //Limpiar html antes de coger los datos:
+    //Limpiar html antes de coger los datos:
 
-        document.getElementById("descripcion").innerHTML = "";
-        document.getElementById("compartecon").innerHTML = "";
-        document.getElementsByClassName("iconos")[0].innerHTML = "";
-        $("div.logo img").remove(); //elimina cualquier imagen anyadida como child para el logo
-        icsDescription = ""; //limpiar variable global ICS
+    document.getElementById("descripcion").innerHTML = "";
+    document.getElementById("compartecon").innerHTML = "";
+    document.getElementsByClassName("iconos")[0].innerHTML = "";
+    $("div.logo img").remove(); //elimina cualquier imagen anyadida como child para el logo
+    icsDescription = ""; //limpiar variable global ICS
 
-        //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
+    //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
 
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
         var tipoReserva = consultia_events[id]._tipo;
         var colorfondo = consultia_events[id].color;
 
-        //fechas para calcular rangos de días
-        fechaInicioViaje = consultia_events[id]._fechaInicio;
-        hoy = new Date();
-        diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); //diferencia entre hoy y la fecha inicio viaje (para clima y para seguimiento vuelo)
+    //fechas para calcular rangos de días
+    fechaInicioViaje = consultia_events[id]._fechaInicio;
+    hoy = new Date();
+    diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); //diferencia entre hoy y la fecha inicio viaje (para clima y para seguimiento vuelo)
 
-        //Coordenadas origen
-        var lat = consultia_events[id]._latitudOrigen;
-        var lon = consultia_events[id]._longitudOrigen;
+    //Coordenadas origen
+    var lat = consultia_events[id]._latitudOrigen;
+    var lon = consultia_events[id]._longitudOrigen;
 
-        // Coordenadas destino (clima)
-        var latDestino = consultia_events[id]._latitudDestino;
-        var lonDestino = consultia_events[id]._longitudDestino;
+    // Coordenadas destino (clima)
+    var latDestino = consultia_events[id]._latitudDestino;
+    var lonDestino = consultia_events[id]._longitudDestino;
 
-        console.log("Latitud: " + lat + " y Longitud: " + lon);
-        var coordenadas = lat + "%20" + lon;
+    console.log("Latitud: " + lat + " y Longitud: " + lon);
+    var coordenadas = lat + "%20" + lon;
 
-        //Ubicación en sección Mapa
-        var ubicacion = consultia_events[id]._ubicacion;
-        document.getElementById("ubicacion").innerHTML = "<h5 class='p5 modaltext'>" + ubicacion + "</h5>";
-        document.getElementById("verMapa").addEventListener("click", function () {
-            console.log(tipoReserva);
-            if (tipoReserva === "Aereo")   {
-                window.open( ' https://www.google.com/maps/dir/?api=1&origin='+lat+','+lon+'&destination='+latDestino+','+lonDestino+'&travelmode=fly');
-            }else if(tipoReserva === "Tren"){
-                  window.open( ' https://www.google.com/maps/dir/?api=1&origin='+lat+','+lon+'&destination='+latDestino+','+lonDestino+'&travelmode=transit&mode[]=train');
-            }else if(tipoReserva === "Barco"){
-            }else{
-                 window.open('http://maps.google.es/?q=' + coordenadas);
-            };
-        });
-        var geocoder = new google.maps.Geocoder;
-        var localizacion = {lat: latDestino, lng: lonDestino};
-        // var localizacion = {lat: 45.808123, lng: 3.085775};
+    //Ubicación en sección Mapa
+    var ubicacion = consultia_events[id]._ubicacion;
+    document.getElementById("ubicacion").innerHTML = "<h5 class='p5 modaltext'>" + ubicacion + "</h5>";
+    document.getElementById("verMapa").addEventListener("click", function () {
+        console.log(tipoReserva);
+        if (tipoReserva === "Aereo") {
+            window.open(' https://www.google.com/maps/dir/?api=1&origin=' + lat + ',' + lon + '&destination=' + latDestino + ',' + lonDestino + '&travelmode=fly');
+        } else if (tipoReserva === "Tren") {
+            window.open(' https://www.google.com/maps/dir/?api=1&origin=' + lat + ',' + lon + '&destination=' + latDestino + ',' + lonDestino + '&travelmode=transit&mode[]=train');
+        } else if (tipoReserva === "Barco") {
+        } else {
+            window.open('http://maps.google.es/?q=' + coordenadas);
+        }
+        ;
+    });
+    var geocoder = new google.maps.Geocoder;
+    var localizacion = {lat: latDestino, lng: lonDestino};
+    // var localizacion = {lat: 45.808123, lng: 3.085775};
 
-        geocoder.geocode({'location': localizacion}, function (results, status) {
-            if (status === 'OK') {
-                pais = results[results.length - 1].formatted_address; // aqui se filtra el listado para obtener el pais
-                var campoCiudad = results[results.length - 3].formatted_address;
-                ciudad = campoCiudad.split(",")[0];
+    geocoder.geocode({'location': localizacion}, function (results, status) {
+        if (status === 'OK') {
+            pais = results[results.length - 1].formatted_address; // aqui se filtra el listado para obtener el pais
+            var campoCiudad = results[results.length - 3].formatted_address;
+            ciudad = campoCiudad.split(",")[0];
+
+        }
+        //creación de la cadena de texto para el contenido del archivo ICS
+        var icsFormat =
+                'BEGIN:VCALENDAR\n' +
+                'PRODID:-//Schedule a Meeting\n' +
+                'VERSION:2.0\n' +
+                'METHOD:REQUEST\n' +
+                'BEGIN:VEVENT\n' +
+                'DTSTART:' + consultia_events[id]._fechaInicio.replace("-", "") + '\n' +
+                'DTSTAMP:' + consultia_events[id]._fechaInicio.replace("-", "") + '\n' +
+                'DTEND:' + consultia_events[id]._fechaFin.replace("-", "") + '\n' +
+                'LOCATION:' + consultia_events[id]._ubicacion + '\n' +
+                'UID:40ddbba4-abb2-4969-b9b6-9c75c3b9f5c2\n' +
+                icsDescription +
+                'BEGIN:VALARM\n' +
+                'TRIGGER:-PT48H\n' +
+                'ACTION:DISPLAY\n' +
+                'DESCRIPTION:Reminder\n' +
+                'END:VALARM\n' +
+                'END:VEVENT\n' +
+                'END:VCALENDAR';
+
+        //Si es IE, 
+        if (detectIE()) {
+            //eliminamos el atributo 'download' al vínculo (el atributo aparece en cada evento click de una reserva de viaje)
+            document.getElementsByClassName('descargaics')[0].removeAttribute('download');
+
+            if (window.navigator.msSaveBlob) {
+                //generamos el objeto blob (equivalente a un archivo)
+                var blob = new Blob([icsFormat]);
+                //asignamos evento al vínculo para descarga
+                document.getElementsByClassName('descargaics')[0].onclick = function () {
+
+                    window.navigator.msSaveBlob(blob, 'documento.ics');
+
+                };
 
             }
             
@@ -1081,74 +1123,65 @@ function showEventDetail(id, layout) {
                         //asignamos evento al vínculo para descarga
                         document.getElementsByClassName('descargaics')[0].onclick = function(){
 
-                            window.navigator.msSaveBlob(blob, 'documento.ics');
+            //Descarga de archivo en formato ICS
+            $(".descargaics").on("click", function () {
 
-                        }; 
-                                      
-                   }
-             //Si no es IE,
-            } else {
-                
-                //Descarga de archivo en formato ICS
-                    $(".descargaics").on("click", function () {
-                        
-                       //anyadiendo url descarga al vínculo
-                        this.href = 'data:text/calendar;charset=utf-8,' + icsFormat;
+                //anyadiendo url descarga al vínculo
+                this.href = 'data:text/calendar;charset=utf-8,' + icsFormat;
 
-
-                    });
-                
-            }
-            
-            
-            // Mostrar la información recomendada según el pais de destino 
-
-            document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
-
-                buscarPais = "recomendaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
-                window.open('http://www.google.com/search?q=' + buscarPais);
 
             });
 
+        }
+
+
+        // Mostrar la información recomendada según el pais de destino 
+
+        document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
+
+            buscarPais = "recomendaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
+            window.open('http://www.google.com/search?q=' + buscarPais);
+
         });
-        //Colorear cabecera ventana según tipo reserva
-        var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
-        document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
-        document.getElementById("asunto").classList.add("color-" + colorfondo);
-        document.getElementById("linea").classList.add("color-" + colorfondo);
 
-        //Fechas salida-llegada / origen-destino
-        var fechaInicioEvento = consultia_events[id].day + "/" + consultia_events[id].month + "/" + consultia_events[id].year; //formato dd/mm/aaaa
-        var fechaFinEvento = consultia_events[id]._diaFin + "/" + consultia_events[id]._mesFin + "/" + consultia_events[id]._anyoFin;
-        document.getElementById("fecha-o").innerHTML = fechaInicioEvento;
-        document.getElementById("fecha-d").innerHTML = fechaFinEvento;
+    });
+    //Colorear cabecera ventana según tipo reserva
+    var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
+    document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
+    document.getElementById("asunto").classList.add("color-" + colorfondo);
+    document.getElementById("linea").classList.add("color-" + colorfondo);
 
-        //Variables para las horas
-        var horaOrigen = consultia_events[id].time; //siempre hora inicio
-        var horaDestino = consultia_events[id]._horaFin;
-        var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local en cada país.";
+    //Fechas salida-llegada / origen-destino
+    var fechaInicioEvento = consultia_events[id].day + "/" + consultia_events[id].month + "/" + consultia_events[id].year; //formato dd/mm/aaaa
+    var fechaFinEvento = consultia_events[id]._diaFin + "/" + consultia_events[id]._mesFin + "/" + consultia_events[id]._anyoFin;
+    document.getElementById("fecha-o").innerHTML = fechaInicioEvento;
+    document.getElementById("fecha-d").innerHTML = fechaFinEvento;
 
-        //Localizador de la reserva
-        var localizadorReserva = consultia_events[id]._localizador;
-        document.getElementById("localizador").innerHTML = "<h5 class='destacado modaltext'>LOCALIZADOR RESERVA: " + localizadorReserva + "</h5>";
+    //Variables para las horas
+    var horaOrigen = consultia_events[id].time; //siempre hora inicio
+    var horaDestino = consultia_events[id]._horaFin;
+    var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local en cada país.";
 
-        //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva 
-        document.getElementById("asunto").innerHTML = formatCabecera(consultia_events[id].name, tipoReserva, "modal", null);
+    //Localizador de la reserva
+    var localizadorReserva = consultia_events[id]._localizador;
+    document.getElementById("localizador").innerHTML = "<h5 class='destacado modaltext'>LOCALIZADOR RESERVA: " + localizadorReserva + "</h5>";
+
+    //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva 
+    document.getElementById("asunto").innerHTML = formatCabecera(consultia_events[id].name, tipoReserva, "modal", null);
 
 //BLOQUES PARTICULARIDADES POR TIPO DE RESERVA          
-        if (tipoReserva === "Aereo") {
-                                  
-            var codigoV = consultia_events[id]._NVuelo;
-            var companyiaAerea = codigoV.split("-"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
-          console.log(companyiaAerea[0]);
-            codigoV = codigoV.replace("-", ""); //para buscador google el código debe salir sin slash
+    if (tipoReserva === "Aereo") {
 
-           if (diccionarioLogos.length >0){
-               for (var i = 0; i < diccionarioLogos.length; i++) {
-                    if(companyiaAerea[0] == diccionarioLogos[i].IATA){
-                        logoAerolinea = diccionarioLogos[i].Logo;
-                        $('.logo').append("<img src='" + logoAerolinea + "' alt='Logo-Aerolinea'>");
-                    }
+        var codigoV = consultia_events[id]._NVuelo;
+        var companyiaAerea = codigoV.split("-"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
+        console.log(companyiaAerea[0]);
+        codigoV = codigoV.replace("-", ""); //para buscador google el código debe salir sin slash
+
+        if (diccionarioLogos.length > 0) {
+            for (var i = 0; i < diccionarioLogos.length; i++) {
+                if (companyiaAerea[0] == diccionarioLogos[i].IATA) {
+                    logoAerolinea = diccionarioLogos[i].Logo;
+                    $('.logo').append("<img src='" + logoAerolinea + "' alt='Logo-Aerolinea'>");
                 }
            }else{
                $('.logo').append("<img src='assets/images/Consultia.png' alt='Logo-Aerolinea'>");
@@ -1540,176 +1573,525 @@ function showEventDetail(id, layout) {
                         }
 
 
-                    });
+        };
 
-                });
-                
-            });
+        //nombre aerolinea ESTE CAMPO ES INDEPENDIENTE DEL IDPROVEEDOR (NO SE DISPONE DICCIONARIO DE AEROLINEAS)
+        var aerolinea = consultia_events[id]._Aerolinea;
+
+        //Bloque horarios
+        var salidaIata = consultia_events[id]._SalidaIATA;
+        var llegadaIata = consultia_events[id]._LlegadaIATA;
+
+        document.getElementById("ciudad-o").innerHTML = consultia_events[id]._ciudadOrigen + " (" + salidaIata + ")";
+        document.getElementById("hora-o").innerHTML = horaOrigen;
+        document.getElementById("ciudad-d").innerHTML = consultia_events[id]._ciudadDestino + " (" + llegadaIata + ")";
+        document.getElementById("hora-d").innerHTML = horaDestino;
+
+        //Bloque descripción
+        var aeropuertoSalida = consultia_events[id]._AeropuertoSalida;
+        var aeropuertoLlegada = consultia_events[id]._AeropuertoLlegada;
+        var duracionHoras = consultia_events[id]._DuracionHoras;
+        duracionHoras = duracionHoras.split(":");
+        var horas = duracionHoras[0];
+        var minutos = duracionHoras[1];
+
+        document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>NÚMERO VUELO: " + codigoV + "</h5><h5 class='destacado modaltext'>AEROLÍNEA: " + aerolinea + "</h5>"
+                + "<h5 class='modaltext'>Aeropuerto Salida: " + salidaIata + " - " + aeropuertoSalida + "</h5>" +
+                "<h5 class='modaltext'>Aeropuerto Llegada: " + llegadaIata + " - " + aeropuertoLlegada + "</h5>" +
+                "<h5 class='modaltext'>Duración vuelo: " + horas + " horas y " + minutos + " minutos. </h5><h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
+        //Bloque descripción ICS
+        icsDescription =
+                'DESCRIPTION: Tiene una reserva de VUELO para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                ' Localizador: ' + localizadorReserva + '\\n' +
+                ' Aerolínea: ' + aerolinea + '\\n' +
+                ' Número Vuelo: ' + codigoV + '\\n' +
+                ' Duración: ' + horas + ' horas y ' + minutos + ' minutos.\\n\\n' +
+                ' SALIDA_________________________________________\\n\\n' +
+                ' Fecha y Hora de Salida: ' + fechaInicioEvento + " " + horaOrigen + '\\n' +
+                ' Aeropuerto: ' + salidaIata + " - " + aeropuertoSalida + '\\n\\n' +
+                ' LLEGADA________________________________________\\n\\n' +
+                ' Fecha y Hora de Llegada: ' + fechaFinEvento + " " + horaDestino + '\\n' +
+                ' Aeropuerto: ' + llegadaIata + " - " + aeropuertoLlegada + '\\n\\n' +
+                avisoHorario + '\n' +
+                'SUMMARY: VUELO: ' + fechaInicioEvento + " " + horaOrigen + " " + aeropuertoSalida + " --> " + fechaFinEvento + " " + horaDestino + " " + aeropuertoLlegada + '\n' +
+                'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+
+    } else if (tipoReserva === "Hotel") { //POSIBLE IF o SWITCH CON TODAS LAS OPCIONES QUE DIFIERAN
+
+        document.getElementById("googlesearchvuelo").style.display = "none";
+        document.getElementById("ciudad-o").innerHTML = "ENTRADA";
+        document.getElementById("ciudad-d").innerHTML = "SALIDA";
+        document.getElementById("hora-o").innerHTML = "14:00 aprox.";   //consultia_events[id].time
+        document.getElementById("hora-d").innerHTML = "12:00 aprox."; //consultia_events[id]._horaFin
+        //
+        //Bloque descripción
+        var nombreHotel = consultia_events[id]._nombreHotel;
+        var direccionHotel = consultia_events[id]._direccion;
+        var regimen = consultia_events[id]._regimen;
+        var tipoHabitacion = consultia_events[id]._tipohabita;
+        var acompanyantes = consultia_events[id]._acompanyantes;
+        //TODO: Obtención de la ciudad a partir de la dirección postal que viene de base datos PROVISIONAL
+        var laCiudad = direccionHotel.split(',');
+        laCiudad = laCiudad[laCiudad.length - 2];
+        console.log(acompanyantes);
+        var html = "";
+        for (i = 0; i < acompanyantes.length; i++) {
+            html += "<h5 class='modaltext'>Acompañante: " + acompanyantes[i].Nombre + "</h5>";
+        }
+        document.getElementById("descripcion").innerHTML = "<h5 class='modaltext'>Hotel: " + nombreHotel +
+                "</h5><h5 class='modaltext'>Dirección: " + direccionHotel +
+                "</h5><h5 class='modaltext'>Régimen: " + regimen + "</h5><h5 class='modaltext'>Tipo Habitación: " +
+                tipoHabitacion + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
+        document.getElementById("compartecon").innerHTML = html;
+        //Bloque descripción ICS
+        icsDescription =
+                'DESCRIPTION: Tiene una reserva de HOTEL para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                ' Localizador: ' + localizadorReserva + '\\n' +
+                ' Hotel: ' + nombreHotel + '\\n' +
+                ' Ubicación: ' + laCiudad + '\\n' +
+                ' Dirección: ' + direccionHotel + '\\n' +
+                ' Régimen: ' + regimen + '\\n' +
+                ' Tipo habitación: ' + tipoHabitacion + '\\n\\n' +
+                ' ENTRADA_________________________________________\\n\\n' +
+                ' Fecha: ' + fechaInicioEvento + '\\n\\n' +
+                ' SALIDA________________________________________\\n\\n' +
+                ' Fecha: ' + fechaFinEvento + '\\n\\n' +
+                avisoHorario + '\n' +
+                'SUMMARY: HOTEL EN: ' + laCiudad + " " + fechaInicioEvento + " " + horaOrigen + " --> " + fechaFinEvento + " " + horaDestino + '\n' +
+                'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+
+    } else if (tipoReserva === "Coche") {
+        //logo coches
+        var codigoRent = consultia_events[id]._idProveedor; //string con el código
+        var proveedor = "";
+
+        info_cars.forEach(function (agencia) {
 
 
-        } else if (consultia_events[id]._adjuntos === null) {
+            if (agencia.id == codigoRent) { //compara un int con un string
+                rentacar = agencia.img;
+                proveedor = agencia.proveedor;
 
-            document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";
+                $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + proveedor + "'>");
+            }
+
+        });
+
+        document.getElementById("googlesearchvuelo").style.display = "none";
+        //horas
+        document.getElementById("hora-o").innerHTML = horaOrigen; //recogida
+        document.getElementById("hora-d").innerHTML = horaDestino; //entrega
+        //para la cabecera            
+        document.getElementById("ciudad-o").innerHTML = "RECOGIDA";
+        document.getElementById("ciudad-d").innerHTML = "ENTREGA";
+
+        var acompanyantes = consultia_events[id]._acompanyantes;
+        console.log(acompanyantes);
+        var html = "";
+        for (i = 0; i < acompanyantes.length; i++) {
+            html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + acompanyantes[i].Nombre + "</h5>";
+        }
+        //Bloque Descripción
+        var categoria = consultia_events[id]._categoria;
+        var transmision = consultia_events[id]._transmision;
+        var combustible = consultia_events[id]._combustible;
+        var direccionRecogida = consultia_events[id]._direccionRecogida;
+        var direccionEntrega = consultia_events[id]._direccionEntrega;
+
+        document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
+                "</h5><h5 class='modaltext'>Categoría: " + categoria +
+                "</h5><h5 class='modaltext'>Transmisión: " + transmision + "</h5><h5 class='modaltext'>Combustible: " +
+                combustible + "</h5><h5 class='modaltext'>Dirección Recogida: " +
+                direccionRecogida + "</h5><h5 class='modaltext'>Dirección Entrega: " +
+                direccionEntrega + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
+        document.getElementById("compartecon").innerHTML = html;
+
+        icsDescription =
+                'DESCRIPTION: Tiene una reserva de COCHE para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                ' Localizador: ' + localizadorReserva + '\\n' +
+                ' Proveedor: ' + proveedor + '\\n' +
+                ' Categoría: ' + categoria + '\\n' +
+                ' Transmisión: ' + transmision + '\\n' +
+                ' Combustible: ' + combustible + '\\n\\n' +
+                ' RECOGIDA_________________________________________\\n\\n' +
+                ' Fecha: ' + fechaInicioEvento + '\\n' +
+                ' Hora recogida: ' + horaOrigen + '\\n' +
+                ' Dirección: ' + direccionRecogida + '\\n\\n' +
+                ' ENTREGA________________________________________\\n\\n' +
+                ' Fecha: ' + fechaFinEvento + '\\n' +
+                ' Hora entregas: ' + horaDestino + '\\n' +
+                ' Dirección: ' + direccionEntrega + '\\n\\n' +
+                avisoHorario + '\n' +
+                'SUMMARY: COCHE: ' + fechaInicioEvento + " " + horaOrigen + " --> " + fechaFinEvento + " " + horaDestino + '\n' +
+                'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+
+    } else if (tipoReserva === "Tren") {
+        //logo renfe
+
+        var estacionOrigen = consultia_events[id]._EstacionOrigen;
+        var estacionDestino = consultia_events[id]._EstacionDestino;
+        document.getElementById("googlesearchvuelo").style.display = "none";
+        document.getElementById("ciudad-o").innerHTML = estacionOrigen;
+        document.getElementById("hora-o").innerHTML = horaOrigen;
+        document.getElementById("ciudad-d").innerHTML = estacionDestino;
+        document.getElementById("hora-d").innerHTML = horaDestino;
+
+        //bloque descripción
+        var proveedor = consultia_events[id]._idProveedor; //ahora viene un entero para el código proveedor
+        if (proveedor == 3) {
+            proveedor = "Renfe";
+            $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>"); //de momento sólo hay Logo de Renfe
+        } else {
+            $('.logo').append("<img src='assets/images/img_proveedores/logo_tren_generico.png' alt='Logo-renfe'>");
+        }
+        var tipotren = consultia_events[id]._TipoTren;
+        var clase = consultia_events[id]._Clase;
+        var DireccionOrigen = consultia_events[id]._DireccionOrigen;
+        var DireccionDestino = consultia_events[id]._DireccionDestino;
+
+        document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
+                "</h5><h5 class='destacado modaltext'>Tipo de Tren: " + tipotren +
+                "</h5><h5 class='modaltext'>Clase: " + clase + "</h5>" +
+                "<h5 class='destacado modaltext'>Estación de SALIDA: " + estacionOrigen + "</h5>" +
+                "<h5 class='modaltext'>Dirección: " + DireccionOrigen + "</h5>" +
+                "<h5 class='destacado modaltext'>Estación de LLEGADA: " + estacionDestino + "</h5>" +
+                "<h5 class='modaltext'>Dirección: " + DireccionDestino + "</h5>" +
+                "<h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
+
+        //Bloque descripción ICS
+        icsDescription =
+                'DESCRIPTION: Tiene una reserva de TREN para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                ' Localizador: ' + localizadorReserva + '\\n' +
+                ' Compañía: ' + proveedor + '\\n' +
+                ' Tipo Tren: ' + tipotren + '\\n' +
+                ' Clase: ' + clase + '\\n\\n' +
+                ' SALIDA_________________________________________\\n\\n' +
+                ' Fecha: ' + fechaInicioEvento + '\\n' +
+                ' Hora Salida: ' + horaOrigen + '\\n' +
+                ' Estación origen: ' + estacionOrigen + '\\n' +
+                ' Dirección: ' + DireccionOrigen + '\\n\\n' +
+                ' LLEGADA________________________________________\\n\\n' +
+                ' Fecha: ' + fechaFinEvento + '\\n' +
+                ' Hora Llegada: ' + horaDestino + '\\n' +
+                ' Estación destino: ' + estacionDestino + '\\n' +
+                ' Dirección: ' + DireccionDestino + '\\n\\n' +
+                avisoHorario + '\n' +
+                'SUMMARY: TREN: ' + fechaInicioEvento + " " + horaOrigen + " " + estacionOrigen + " --> " + fechaFinEvento + " " + horaDestino + " " + estacionDestino + '\n' +
+                'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+
+    } else if (tipoReserva === "Barco") {
+
+        //logo FIJO
+        $('.logo').append("<img src='assets/images/img_proveedores/logo_crucero_generico.png' alt='Logo-barco'>");
+
+        document.getElementById("googlesearchvuelo").style.display = "none";
+        //horas
+        document.getElementById("hora-o").innerHTML = horaOrigen;
+        document.getElementById("hora-d").innerHTML = horaDestino;
+        //Bloque descripción       //TODO: DICCIONARIO PROVEEDORES   
+        var proveedor = consultia_events[id]._proveedor;
+        var origen = consultia_events[id]._origen;
+        var destino = consultia_events[id]._destino;
+        document.getElementById("ciudad-o").innerHTML = origen;
+        document.getElementById("ciudad-d").innerHTML = destino;
+        var acomodacion = consultia_events[id]._acomodacion;
+        var vehiculos = consultia_events[id]._vehiculos;
+        var matriculas = " ";
+        for (i = 0; i < vehiculos.length; i++) {
+            matriculas += "<span class=\"matricula\">" + vehiculos[i].Matricula + "</span>";
         }
 
-        //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
+        document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
+                "</h5><h5 class='modaltext'>Origen: " + origen +
+                "</h5><h5 class='modaltext'>Destino: " + destino + "<h5>Acomodación: " + acomodacion +
+                "</h5><span class='modaltext'>Vehículos (" + vehiculos.length + "): </span>" + matriculas + "<h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
 
-        if (latDestino !== null && lonDestino !== null) {
-            var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
+        //Bloque descripción ICS
+        icsDescription =
+                'DESCRIPTION: Tiene una reserva de BARCO para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
+                ' Localizador: ' + localizadorReserva + '\\n' +
+                ' Compañía: ' + proveedor + '\\n' +
+                ' Acomodación: ' + acomodacion + '\\n' +
+                ' Vehículos a bordo: ' + vehiculos.length + '\\n\\n' +
+                ' SALIDA_________________________________________\\n\\n' +
+                ' Fecha: ' + fechaInicioEvento + '\\n' +
+                ' Origen: ' + origen + '\\n\\n' +
+                ' LLEGADA________________________________________\\n\\n' +
+                ' Fecha: ' + fechaFinEvento + '\\n' +
+                ' Destino: ' + destino + '\\n\\n' +
+                avisoHorario + '\n' +
+                'SUMMARY: BARCO: ' + fechaInicioEvento + " " + horaOrigen + " " + origen + " --> " + fechaFinEvento + " " + horaDestino + " " + destino + '\n' +
+                'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
+                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
 
-            console.log("diferencia (llamada función): " + diasDif);
-            //Asignar evento al botón del clima
-            $("#info-clima").on('click', function () {
-                $('.iconos').html("");
-                //caso1: si la diferencia es menor de 5 días anteriores a hoy, pero el evento dura como mínimo hasta hoy //caso2: eventos con fecha inicio desde hoy hasta 5 días después  //caso3: eventos con fechas inicio anteriores 5 días desde hoy cuya duración llega hasta hoy (hoy es primer día previsión meteo)
-                if (((diasDif >= -5) && (consultia_events[id].duration >= Math.abs(diasDif))) || ((diasDif <= 5) && (diasDif >= 0)) || ((diasDif < -5) && (consultia_events[id].duration >= Math.abs(diasDif)))) {
-                    console.log("Es menor de 5 días");
-                    if ($(".iconos").attr("id") === "iconos") {
-                        $(".iconos").attr("id", "noMostrar");
-                    } else {
-                        $(".iconos").attr("id", "iconos");
-                    }
-                    var listadoMediciones = [];
-                    var fechasUnicas = [];
-                    var paneles = "";
+    } else if (tipoReserva === "Otros") {
+        document.getElementById("googlesearchvuelo").style.display = "none";
+        //TODO: por determinar la estructura y optimización en general
+    }
 
-                    $.ajax({
 
-                        url: urlclima,
-                        type: 'get',
-                        dataType: 'json',
+    //GESTIÓN DE LOS ADJUNTOS
+    if (consultia_events[id]._adjuntos !== null) { //el campo Adjuntos o es null o es un array con una posición mínimo
 
-                        success: function (datosClima) {
-                            paneles += ' <h2 class="card-tittle">' + ciudad + ',&nbsp;&nbsp;' + pais + '</h2>  ';
-                            console.log(pais);
-                            console.log(ciudad);
-                                                     
-                            datosClima.list.forEach( function (medicion) {
-                                    listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
-                                    fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
-                            }); 
-                            
-                            
-                            for (var i = 0; i < fechasUnicas.length; i++) {
-                                var dias = [];
+        var adjuntos = "";
+        var numdocs = consultia_events[id]._adjuntos.length;
 
-                                var array_id_meteo = [];
+        for (n = 0; n < numdocs; n++) {
+            var tipodoc = consultia_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
+            var idadjunto = consultia_events[id]._adjuntos[n].idAdjunto;
+            var nombreAdjunto = consultia_events[id]._adjuntos[n].Nombre;
 
-                                for (var j = 0; j < datosClima.list.length; j++) {
-                                    if (datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]) {
+            if (detectIE()) {
+                //el vínculo se generará sin el atributo 'download'
+                adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="' + nombreAdjunto + '"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
 
-                                        dias.push(datosClima.list[j]);
+            } else {
 
-                                    }
-                                }
-                                var temp_minima = 100;
-                                var temp_maxima = -200;
-                                var humedad = 0;
-                                for (var k = 0; k < dias.length; k++) {
-                                    if (temp_minima > dias[k].main.temp_min) {
-                                        temp_minima = dias[k].main.temp_min;
-                                    }
-                                    if (temp_maxima < dias[k].main.temp_max) {
-                                        temp_maxima = dias[k].main.temp_max;
-                                    }
-                                    humedad += dias[k].main.humidity;
+                adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="' + nombreAdjunto + '" download="' + nombreAdjunto + '.' + tipodoc + '"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+            }
 
-                                    var codClima = dias[k].weather[0].id;
-                                    var codClima = codClima.toString();
-                                    console.log("Codigo string " + codClima);
-                                    var cod = codClima.charAt(0);
-                                    if (cod === '8') {
-                                        codClima = codClima.replace('8', '1');
-                                        console.log("Código string sustituido " + codClima);
-                                    }
 
-                                    var intId = parseInt(codClima);
-                                    array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
-                                }
+            console.log(consultia_events[id]._adjuntos[n].idAdjunto);
+        }
+        document.getElementById("docs").innerHTML = adjuntos;
 
-                                console.log("Listado ids: " + array_id_meteo);
-                                maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
-                                console.log("El máximo diario es: " + maximo);
+        var arrayAdjuntos = $('a.linkadjunto');
 
-                                var descripcion = "";
-                                icono_meteo = "";
-                                                         
-                                info_meteoro.forEach( function(medicion) {
-                                    if (medicion.id == maximo) {
-                                        descripcion = medicion.descripcion;
-                                        icono_meteo = medicion.icono; console.log(icono_meteo);
-                                        
-                                    }
-                                    if (icono_meteo === null || icono_meteo === "" || icono_meteo === 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
-                                            icono_meteo = 'Consultia';
-                                        }
+        $.each(arrayAdjuntos, function (idx, val) {  //para cada elemento de la clase linkadjunto
+
+            var numadjunto = $(this).attr("id");
+
+            $(this).ready(function () {
+
+                $.ajax({
+                    url: "http://192.168.0.250:5556/api/Calendario?idUsuario=2&idadjunto=" + numadjunto,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (churro) {
+                        console.log(churro);
+                        //Sacar el content-type y asignarlo a variable para parámetro de la función b64toBlob
+
+                        var arrayString = churro.split(":"); //genera un array de 2 elementos, 'data' y el resto del churro 
+                        var contentType = arrayString[1].split(";");  //genera un array de 2 elementos, el primero es el content-type y el segundo es  'base64,stringchurro'
+                        var content_type = contentType[0];
+                        console.log("El content-type es: " + content_type); //string con el mime type
+
+                        //Sacar el string en base64 para pasarlo por parámetro a la función b64b64toBlob()
+                        var arrayBase64 = contentType[1].split(',');
+                        var stringBase64 = arrayBase64[1];  // console.log(stringBase64);//string en base64 
+
+
+                        //Detectado IE 
+                        if (detectIE()) {
+
+
+                            if (window.navigator.msSaveBlob) {
+
+                                //generamos el objeto blob a partir del String en base64 (churro) con la función b64toBlob
+                                // var blob = b64toBlob(churro, 'application/pdf'); //TODO: AVERIGUAR POR QUÉ HA FUNCIONADO CON EL EXCEL SI LOS PARÁMETROS NO SON LOS QUE ESPERA LA FUNCIÓN
+                                var blob = b64toBlob(stringBase64, content_type);
+                                console.log(blob);
+                                //asignamos evento al vínculo para que se descargue al click
+                                $('#' + numadjunto).on('click', function () {
+
+                                    window.navigator.msSaveBlob(blob, 'Adjunto_' + numadjunto + '.' + tipodoc);
 
                                 });
-                                
-                                
-                                
-                                var diaSemana = new Date(fechasUnicas[i]);
-                                var mediaHumedad = humedad / dias.length;
-                                paneles += '   <div id="' + fechasUnicas[i] + '" class="card card-cascade narrower">  ' +
-                                        '                <h4 style="color:' + 'green' + '";><b>' + diasSemana[diaSemana.getDay()] + ', ' + fechasUnicas[i].substring(8, 10) + '</b></h4>  ' +
-                                        '                <!--Card image-->  ' +
-                                        '                <div class="view overlay hm-white-slight">  ' +
-                                        '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + '.png' + '" class="img-fluid iconos__logo" alt="">  ' +
-                                        '                <a>  ' +
-                                        '                <div class="mask"></div>  ' +
-                                        '                </a>  ' +
-                                        '                </div>  ' +
-                                        '                <!--/.Card image-->  ' +
-                                        '                <!--Card content-->  ' +
-                                        '                <div class="card-body">  ' +
-                                        '                <!--Title-->  ' +
-                                        '                <!--Text-->  ' +
-                                        '                <p class="card-text"><b>Temperatura: </b><br>' + '<b>Min </b>' + temp_minima + '<b>ºC - Max </b>' + temp_maxima + 'ºC</p>  ' +
-                                        '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
-                                        '                <p class="card-text"><b>Humedad: </b>' + mediaHumedad.toFixed(2) + '%</p>  ' +
-                                        '                </div>  ' +
-                                        '               </div>  ';
-                                console.log("nuevo dia");
-                                console.log(dias);
-
 
                             }
-                            console.log(fechasUnicas);
 
+                        } else {
+                            //Navegadores distintos de IE se anyade el atributo href con el valor del String base64
+                            //console.log("churro");
+                            var blob = b64toBlob(stringBase64, content_type);
+                            console.log(blob);
+                            var descargarAdjunto = URL.createObjectURL(blob);
+                            console.log(descargarAdjunto);
+                            $('#' + numadjunto).attr("href", descargarAdjunto);
 
-
-
-                            $(".iconos").html("");
-                            $(".iconos").append(paneles);
-                        },
-                        error: function () {
-                            console.log("Se ha producido un error API u otra causa.");
                         }
-                    });
 
-                    //si no, aviso al usuario 
+                    },
+                    error: function () {
+                        console.log("Se ha producido un error API adjuntos u otra causa.");
+                    }
 
-                } else { //resto de casos, cuando la diferencia de días con la fecha de inicio es mayor a 5 en el pasado (y no dura hasta hoy mínimo) o más de 5 días en el futuro(días máximos previsión desde hoy)
 
-                    variableTexto = '<div class="toast-text">Evento pasado o demasiado lejano, no hay previsiones disponibles.</div>';
-                    $('<div class="toaster toast-warning">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
-                    $('#info-clima').addClass('isDisabled');
-                    setTimeout(function () {
-                        $('.toaster').fadeOut('slow', 'linear');
-                        $('#info-clima').removeClass('isDisabled');
-                    }, 3000);
+                });
 
+            });
+        });
+
+
+
+    } else if (consultia_events[id]._adjuntos === null || consultia_events[id]._adjuntos === 'undefined') {
+
+        document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";
+    }
+
+    //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
+
+    if (latDestino !== null && lonDestino !== null) {
+        var urlclima = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latDestino + '&lon=' + lonDestino + '&lang=es&units=metric&APPID=eb49663a0809388193782a1fa7698518&cnt=40';  //cnt es la cantidad de líneas (máximo 40 para el plan gratuito suscrito)
+
+        console.log("diferencia (llamada función): " + diasDif);
+        //Asignar evento al botón del clima
+        $("#info-clima").on('click', function () {
+            $('.iconos').html("");
+            //caso1: si la diferencia es menor de 5 días anteriores a hoy, pero el evento dura como mínimo hasta hoy //caso2: eventos con fecha inicio desde hoy hasta 5 días después  //caso3: eventos con fechas inicio anteriores 5 días desde hoy cuya duración llega hasta hoy (hoy es primer día previsión meteo)
+            if (((diasDif >= -5) && (consultia_events[id].duration >= Math.abs(diasDif))) || ((diasDif <= 5) && (diasDif >= 0)) || ((diasDif < -5) && (consultia_events[id].duration >= Math.abs(diasDif)))) {
+                console.log("Es menor de 5 días");
+                if ($(".iconos").attr("id") === "iconos") {
+                    $(".iconos").attr("id", "noMostrar");
+                } else {
+                    $(".iconos").attr("id", "iconos");
                 }
+                var listadoMediciones = [];
+                var fechasUnicas = [];
+                var paneles = "";
 
-            }); //fin información clima
+                $.ajax({
 
-        } else {
-            $('#info-clima').addClass('isDisabled');
-        }
+                    url: urlclima,
+                    type: 'get',
+                    dataType: 'json',
 
-        $("#fichaDetalle").modal("show");
+                    success: function (datosClima) {
+                        paneles += ' <h2 class="card-tittle">' + ciudad + ',&nbsp;&nbsp;' + pais + '</h2>  ';
+                        console.log(pais);
+                        console.log(ciudad);
 
-  
+                        datosClima.list.forEach(function (medicion) {
+                            listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 fechas máximo)  
+                            fechasUnicas = Array.from(new Set(listadoMediciones)); //agrupa datos por coincidencias -> fechas de los días en los que se ofrecen las previsiones
+                        });
+
+
+                        for (var i = 0; i < fechasUnicas.length; i++) {
+                            var dias = [];
+
+                            var array_id_meteo = [];
+
+                            for (var j = 0; j < datosClima.list.length; j++) {
+                                if (datosClima.list[j].dt_txt.substring(0, 10) === fechasUnicas[i]) {
+
+                                    dias.push(datosClima.list[j]);
+
+                                }
+                            }
+                            var temp_minima = 100;
+                            var temp_maxima = -200;
+                            var humedad = 0;
+                            for (var k = 0; k < dias.length; k++) {
+                                if (temp_minima > dias[k].main.temp_min) {
+                                    temp_minima = dias[k].main.temp_min;
+                                }
+                                if (temp_maxima < dias[k].main.temp_max) {
+                                    temp_maxima = dias[k].main.temp_max;
+                                }
+                                humedad += dias[k].main.humidity;
+
+                                var codClima = dias[k].weather[0].id;
+                                var codClima = codClima.toString();
+                                console.log("Codigo string " + codClima);
+                                var cod = codClima.charAt(0);
+                                if (cod === '8') {
+                                    codClima = codClima.replace('8', '1');
+                                    console.log("Código string sustituido " + codClima);
+                                }
+
+                                var intId = parseInt(codClima);
+                                array_id_meteo.push(intId); //construye un array (para cada día) con los id asociados a los iconos/descripción para ese día
+                            }
+
+                            console.log("Listado ids: " + array_id_meteo);
+                            maximo = Math.max.apply(null, array_id_meteo); //obtencion máximo en el array de ids (para cada día)
+                            console.log("El máximo diario es: " + maximo);
+
+                            var descripcion = "";
+                            icono_meteo = "";
+
+                            info_meteoro.forEach(function (medicion) {
+                                if (medicion.id == maximo) {
+                                    descripcion = medicion.descripcion;
+                                    icono_meteo = medicion.icono;
+                                    console.log(icono_meteo);
+
+                                }
+                                if (icono_meteo === null || icono_meteo === "" || icono_meteo === 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
+                                    icono_meteo = 'Consultia';
+                                }
+
+                            });
+
+
+
+                            var diaSemana = new Date(fechasUnicas[i]);
+                            var mediaHumedad = humedad / dias.length;
+                            paneles += '   <div id="' + fechasUnicas[i] + '" class="card card-cascade narrower">  ' +
+                                    '                <h4 style="color:' + 'green' + '";><b>' + diasSemana[diaSemana.getDay()] + ', ' + fechasUnicas[i].substring(8, 10) + '</b></h4>  ' +
+                                    '                <!--Card image-->  ' +
+                                    '                <div class="view overlay hm-white-slight">  ' +
+                                    '                <img src="' + 'assets/images/iconos_meteo/' + icono_meteo + '.png' + '" class="img-fluid iconos__logo" alt="">  ' +
+                                    '                <a>  ' +
+                                    '                <div class="mask"></div>  ' +
+                                    '                </a>  ' +
+                                    '                </div>  ' +
+                                    '                <!--/.Card image-->  ' +
+                                    '                <!--Card content-->  ' +
+                                    '                <div class="card-body">  ' +
+                                    '                <!--Title-->  ' +
+                                    '                <!--Text-->  ' +
+                                    '                <p class="card-text"><b>Temperatura: </b><br>' + '<b>Min </b>' + temp_minima + '<b>ºC - Max </b>' + temp_maxima + 'ºC</p>  ' +
+                                    '                <p class="card-text"><b> ' + descripcion + '</b></p>  ' +
+                                    '                <p class="card-text"><b>Humedad: </b>' + mediaHumedad.toFixed(2) + '%</p>  ' +
+                                    '                </div>  ' +
+                                    '               </div>  ';
+                            console.log("nuevo dia");
+                            console.log(dias);
+
+
+                        }
+                        console.log(fechasUnicas);
+
+
+
+
+                        $(".iconos").html("");
+                        $(".iconos").append(paneles);
+                    },
+                    error: function () {
+                        console.log("Se ha producido un error API u otra causa.");
+                    }
+                });
+
+                //si no, aviso al usuario 
+
+            } else { //resto de casos, cuando la diferencia de días con la fecha de inicio es mayor a 5 en el pasado (y no dura hasta hoy mínimo) o más de 5 días en el futuro(días máximos previsión desde hoy)
+
+                variableTexto = '<div class="toast-text">Evento pasado o demasiado lejano, no hay previsiones disponibles.</div>';
+                $('<div class="toaster toast-warning">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
+                $('#info-clima').addClass('isDisabled');
+                setTimeout(function () {
+                    $('.toaster').fadeOut('slow', 'linear');
+                    $('#info-clima').removeClass('isDisabled');
+                }, 3000);
+
+            }
+
+        }); //fin información clima
+
+    } else {
+        $('#info-clima').addClass('isDisabled');
+    }
+
+    $("#fichaDetalle").modal("show");
+
+
 }
 
 //////////////////////
@@ -1800,7 +2182,7 @@ function promesaAjax(url) {
         url: url,
 
         dataType: 'json',
-       
+
         type: "GET",
 
         beforeSend: function () {
@@ -1821,7 +2203,7 @@ function cargaCalendario() {
     $('.consultia-events-calendar.full').html("");
     if (jQuery('.consultia-events-calendar.full').length) {
         jQuery('.consultia-events-calendar.full').html('<div class="events-calendar-bar">'
-                + '<div class="btn-cambio-interfaz"><button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
+                + '<div class="btn-cambio-interfaz"><button class=" btn btn-primary calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
                 + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button></div>'
                 + ' <!--Grid row-->'
                 + ' <div class="barras-fechas">'
@@ -1853,8 +2235,8 @@ function cargaCalendario() {
                 + ' </div>'
                 + ' <!--Grid row-->'
                 //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
-                + '<div class="btn-cambio-filtro"><button id="filtro-fechas" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
-                + '<button id="limpiar-filtro" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button></div>'
+                + '<div class="btn-cambio-filtro"><button id="filtro-fechas" class="btn btn-primary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
+                + '<button id="limpiar-filtro" class="btn btn-primary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button></div>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
                 + '<div class="consultia-events-calendar-wrap">'
@@ -1919,7 +2301,7 @@ function cargaCalendario() {
 
 
     promesaDatos = promesaAjax(url);
-    $.when(promesaDatos).done(function(entradas){
+    $.when(promesaDatos).done(function (entradas) {
 //            jQuery.ajax({
 //
 //                url: url,
@@ -1933,131 +2315,131 @@ function cargaCalendario() {
 //                    alert('A jQuery error has occurred. Status: ' + status + ' - Message: ' + message);
 //                },
 //                success: function (entradas) {
-            
-            diccionarioLogos = entradas.DiccionarioLogos; //array 
-         
-            j = -1; //contador para asignar las IP a los eventos
-            entradas.Pedidos.forEach(function(entrada) {
-                j++;
-                var color = "1";
-                tipo = entrada.Tipo;
 
-                // Asigna un color  cada evento, dependiendo del tipo de evento 
-                switch (tipo) {
-                    case "Aereo":
-                        color = "1";
-                        break;
-                    case "Hotel":
-                        color = "2";
-                        break;
-                    case "Tren":
-                        color = "3";
-                        break;
-                    case "Barco":
-                        color = "4";
-                        break;
-                    case "Coche":
-                        color = "5";
-                        break;
-                    case "Otros":
-                        color = "6";
-                        break;
-                    case "Parking":
-                        color = "7";
-                        break;
-                    case "Seguro":
-                        color = "8";
-                        break;
-                    default:
-                        color = "9";
-                        break;
+        diccionarioLogos = entradas.DiccionarioLogos; //array 
 
-                }
+        j = -1; //contador para asignar las IP a los eventos
+        entradas.Pedidos.forEach(function (entrada) {
+            j++;
+            var color = "1";
+            tipo = entrada.Tipo;
+
+            // Asigna un color  cada evento, dependiendo del tipo de evento 
+            switch (tipo) {
+                case "Aereo":
+                    color = "1";
+                    break;
+                case "Hotel":
+                    color = "2";
+                    break;
+                case "Tren":
+                    color = "3";
+                    break;
+                case "Barco":
+                    color = "4";
+                    break;
+                case "Coche":
+                    color = "5";
+                    break;
+                case "Otros":
+                    color = "6";
+                    break;
+                case "Parking":
+                    color = "7";
+                    break;
+                case "Seguro":
+                    color = "8";
+                    break;
+                default:
+                    color = "9";
+                    break;
+
+            }
 
 
 
 // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
-                evento = {
+            evento = {
 
-                    "color": color,
-                    "day": entrada.FechaInicio.substring(8, 10),
-                    "description": "",
-                    "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
-                    "image": "",
-                    "location": entrada.Detalles.Direccion,
-                    "month": entrada.FechaInicio.substring(5, 7),
-                    "name": entrada.Asunto,
-                    "time": entrada.FechaInicio.substring(11, 16),
-                    "year": entrada.FechaInicio.substring(0, 4),
-                    "_tipo": entrada.Tipo,
-                    "_refPedido": entrada.idPedido, //numero de referencia - hay otro campo que es idServicio 
-                    "_ciudadOrigen": entrada.Detalles.SalidaCiudad,
-                    "_ciudadDestino": entrada.Detalles.LlegadaCiudad,
-                    "_diaFin": entrada.FechaFin.substring(8, 10),
-                    "_mesFin": entrada.FechaFin.substring(5, 7),
-                    "_anyoFin": entrada.FechaFin.substring(0, 4),
-                    "_horaFin": entrada.FechaFin.substring(11, 16),
-                    "_adjuntos": entrada.Detalles.Adjuntos, //array
-                    "_fechaInicio": entrada.FechaInicio,
-                    "_fechaFin": entrada.FechaFin,
-                    "_ubicacion": entrada.Ubicacion, //dirección postal
-                    "_latitudDestino": entrada.Detalles.LatitudDestino,
-                    "_longitudDestino": entrada.Detalles.LongitudDestino,
-                    "_latitudOrigen": entrada.LatitudOrigen,
-                    "_longitudOrigen": entrada.LongitudOrigen,
+                "color": color,
+                "day": entrada.FechaInicio.substring(8, 10),
+                "description": "",
+                "duration": dayDifference(entrada.FechaInicio, entrada.FechaFin),
+                "image": "",
+                "location": entrada.Detalles.Direccion,
+                "month": entrada.FechaInicio.substring(5, 7),
+                "name": entrada.Asunto,
+                "time": entrada.FechaInicio.substring(11, 16),
+                "year": entrada.FechaInicio.substring(0, 4),
+                "_tipo": entrada.Tipo,
+                "_refPedido": entrada.idPedido, //numero de referencia - hay otro campo que es idServicio 
+                "_ciudadOrigen": entrada.Detalles.SalidaCiudad,
+                "_ciudadDestino": entrada.Detalles.LlegadaCiudad,
+                "_diaFin": entrada.FechaFin.substring(8, 10),
+                "_mesFin": entrada.FechaFin.substring(5, 7),
+                "_anyoFin": entrada.FechaFin.substring(0, 4),
+                "_horaFin": entrada.FechaFin.substring(11, 16),
+                "_adjuntos": entrada.Detalles.Adjuntos, //array
+                "_fechaInicio": entrada.FechaInicio,
+                "_fechaFin": entrada.FechaFin,
+                "_ubicacion": entrada.Ubicacion, //dirección postal
+                "_latitudDestino": entrada.Detalles.LatitudDestino,
+                "_longitudDestino": entrada.Detalles.LongitudDestino,
+                "_latitudOrigen": entrada.LatitudOrigen,
+                "_longitudOrigen": entrada.LongitudOrigen,
 
-                    //para Vuelo
-                    "_NVuelo": entrada.Detalles.NVuelo,
-                    "_Aerolinea": entrada.Detalles.Aerolinea,
-                    "_AeropuertoSalida": entrada.Detalles.SalidaNombreAeropuerto,
-                    "_AeropuertoLlegada": entrada.Detalles.LlegadaNombreAeropuerto,
-                    "_SalidaIATA": entrada.Detalles.SalidaIATA,
-                    "_LlegadaIATA": entrada.Detalles.LlegadaIATA,
-                    "_DuracionHoras": entrada.Detalles.DuracionHoras,
-                    
-                    //para hotel
-                    "_direccion": entrada.Detalles.Direccion,
-                    "_nombreHotel": entrada.Detalles.NombreHotel,
-                    "_regimen": entrada.Detalles.Regimen,
-                    "_tipohabita": entrada.Detalles.TipoHabitacion,
-                    "_localizador": entrada.Detalles.Localizador,
-                    "_acompanyantes": entrada.Viajeros, //array
+                //para Vuelo
+                "_NVuelo": entrada.Detalles.NVuelo,
+                "_Aerolinea": entrada.Detalles.Aerolinea,
+                "_AeropuertoSalida": entrada.Detalles.SalidaNombreAeropuerto,
+                "_AeropuertoLlegada": entrada.Detalles.LlegadaNombreAeropuerto,
+                "_SalidaIATA": entrada.Detalles.SalidaIATA,
+                "_LlegadaIATA": entrada.Detalles.LlegadaIATA,
+                "_DuracionHoras": entrada.Detalles.DuracionHoras,
 
-                    //para Tren
-                    "_proveedor": entrada.Detalles.Proveedor, //común con barco (Nombre proveedor)
-                    "_TipoTren": entrada.Detalles.TipoTren,
-                    "_Clase": entrada.Detalles.Clase,
-                    "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
-                    "_EstacionDestino": entrada.Detalles.EstacionDestino,
-                    "_DireccionOrigen": entrada.DireccionOrigen,
-                    "_DireccionDestino": entrada.Detalles.DireccionDestino,
-                    "_idProveedor": entrada.idProveedor, //común para Tren y Coche
+                //para hotel
+                "_direccion": entrada.Detalles.Direccion,
+                "_nombreHotel": entrada.Detalles.NombreHotel,
+                "_regimen": entrada.Detalles.Regimen,
+                "_tipohabita": entrada.Detalles.TipoHabitacion,
+                "_localizador": entrada.Detalles.Localizador,
+                "_acompanyantes": entrada.Viajeros, //array
 
-                    //para Coche
+                //para Tren
+                "_proveedor": entrada.Detalles.Proveedor, //común con barco (Nombre proveedor)
+                "_TipoTren": entrada.Detalles.TipoTren,
+                "_Clase": entrada.Detalles.Clase,
+                "_EstacionOrigen": entrada.Detalles.EstacionOrigen,
+                "_EstacionDestino": entrada.Detalles.EstacionDestino,
+                "_DireccionOrigen": entrada.DireccionOrigen,
+                "_DireccionDestino": entrada.Detalles.DireccionDestino,
+                "_idProveedor": entrada.idProveedor, //común para Tren y Coche
 
-                    "_categoria": entrada.Detalles.Categoria,
-                    "_transmision": entrada.Detalles.Transmision,
-                    "_combustible": entrada.Detalles.Combustible_AC,
-                    "_direccionRecogida": entrada.Detalles.DireccionRecogida,
-                    "_direccionEntrega": entrada.Detalles.DireccionEntrega,
+                //para Coche
 
-                    //para Barco
-                    "_vehiculos": entrada.Detalles.Vehiculos, //array
-                    "_origen": entrada.Detalles.Origen,
-                    "_destino": entrada.Detalles.Destino,
-                    "_acomodacion": entrada.Detalles.Acomodacion,
-                    "_ProveedorCoches": entrada.Detalles.Proveedor
+                "_categoria": entrada.Detalles.Categoria,
+                "_transmision": entrada.Detalles.Transmision,
+                "_combustible": entrada.Detalles.Combustible_AC,
+                "_direccionRecogida": entrada.Detalles.DireccionRecogida,
+                "_direccionEntrega": entrada.Detalles.DireccionEntrega,
+
+                //para Barco
+                "_vehiculos": entrada.Detalles.Vehiculos, //array
+                "_origen": entrada.Detalles.Origen,
+                "_destino": entrada.Detalles.Destino,
+                "_acomodacion": entrada.Detalles.Acomodacion,
+                "_ProveedorCoches": entrada.Detalles.Proveedor
 
 
-                };
+            };
 // Adapta la duracion a cada evento, fijando el valor a 1 en caso de que sea un evento que implique un billete
 // y contemplando el dia de salida/devolucion en los eventos de alquiler de habitaciones en hoteles o coches
 
 
-                if (evento._tipo === "Aereo" || evento._tipo === "Barco" || evento._tipo === "Tren") {
-                    evento.duration = 1;
-                } else {
-                    evento.duration = evento.duration + 1;
+            if (evento._tipo === "Aereo" || evento._tipo === "Barco" || evento._tipo === "Tren") {
+                evento.duration = 1;
+            } else {
+                evento.duration = evento.duration + 1;
 
                 }
 
@@ -2077,32 +2459,47 @@ function cargaCalendario() {
             }
 
 
+            var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
+
+            evento.date = event_date.getTime();
+
+            consultia_events.push(evento);
+
+
+        }); //forEach entrada
+
+        consultia_events.sort(sortEventsByDate);
+        for (var i = 0; i < consultia_events.length; i++) {
+            consultia_events[i].id = i;
+        }
+
+
 // Create calendar
-            changedate('current', 'full');
+        changedate('current', 'full');
 //  changedate('current', 'compact'); crea el calendario en forma compacta
-            if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
+        if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
+            $(".list-view").click();
+            returnView = "lista";
+
+        } else {
+            $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
+             el tipo de vista entre calendario o vista */
+            if (returnView === "lista") {
                 $(".list-view").click();
-                returnView = "lista";
-
             } else {
-                $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
-                 el tipo de vista entre calendario o vista */
-                if (returnView === "lista") {
-                    $(".list-view").click();
-                } else {
-                    $(".calendar-view").click();
-                }
+                $(".calendar-view").click();
             }
+        }
 
 
-            jQuery('.consultia-events-calendar').each(function (index) {
-                // Initial view
-                var initial_view = (typeof jQuery(this).attr('data-view') !== "undefined") ? jQuery(this).attr('data-view') : 'calendar';
-                if (initial_view === 'list') {
-                    jQuery(this).find('.list-view').click();
-                }
-            });
-        
+        jQuery('.consultia-events-calendar').each(function (index) {
+            // Initial view
+            var initial_view = (typeof jQuery(this).attr('data-view') !== "undefined") ? jQuery(this).attr('data-view') : 'calendar';
+            if (initial_view === 'list') {
+                jQuery(this).find('.list-view').click();
+            }
+        });
+
     });
 //    }
 

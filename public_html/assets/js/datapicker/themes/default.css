@@ -23,7 +23,7 @@
   cursor: default;
 }
 /**
- * When the picker is opened, the input element is “activated”.
+ * When the picker is opened, the input element is “acconsultiated”.
  */
 .picker__input.picker__input--active {
   border-color: #0089ec;
