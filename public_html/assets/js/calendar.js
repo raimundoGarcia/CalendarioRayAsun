@@ -441,7 +441,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                         }
 
                         // Tooltip
-                        calendarString += '<div class=\"tiva-event-tooltip\"><\/div>';
+                        calendarString += '<div class=\"consultia-event-tooltip\"><\/div>';
                         calendarString += '<\/div>';
                     } else {
                         calendarString += daycounter_s;
@@ -456,7 +456,7 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
     calendarString += '</table>';
 
     if (layout === 'full') {
-        jQuery('.tiva-calendar-full').html(calendarString);
+        jQuery('.consultia-calendar-full').html(calendarString);
     } 
     thisDate = 1;
 }//fin create calendar
@@ -557,20 +557,20 @@ function showTooltip(id, layout, day, month, year, el) {
         var index = jQuery(el).parent().find('.calendar-event-name').index(el);
         var count = jQuery(el).parent().find('.calendar-event-name').length;
         var bottom = 32 + ((count - index - 1) * 25);
-        jQuery(el).parent().find('.tiva-event-tooltip').css('bottom', bottom + 'px');
+        jQuery(el).parent().find('.consultia-event-tooltip').css('bottom', bottom + 'px');
 
-        jQuery(el).parent().find('.tiva-event-tooltip').html('<div class="event-tooltip-item">'
+        jQuery(el).parent().find('.consultia-event-tooltip').html('<div class="event-tooltip-item">'
                 + event_time
                 + '<div class="event-name">' + tiva_events[id].name + '</div>'  //DIV NOMBRE EVENTO
                 + '<div class="event-image">' + event_image + '</div>'
                 + '<div class="event-intro">' + getShortText(tiva_events[id].description, 10) + '</div>'
                 + '</div>'
                 );
-        jQuery(el).parent().find('.tiva-event-tooltip').css('opacity', '1');
-        jQuery(el).parent().find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
-        jQuery(el).parent().find('.tiva-event-tooltip').css('transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
+        jQuery(el).parent().find('.consultia-event-tooltip').css('opacity', '1');
+        jQuery(el).parent().find('.consultia-event-tooltip').css('-webkit-transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
+        jQuery(el).parent().find('.consultia-event-tooltip').css('transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
     } else {
-        jQuery(el).find('.tiva-event-tooltip').html('');
+        jQuery(el).find('.consultia-event-tooltip').html('');
         var events = getEvents(day, month, year);
         for (var i = 0; i < events.length; i++) {
             if (typeof events[i] !== "undefined") {
@@ -585,7 +585,7 @@ function showTooltip(id, layout, day, month, year, el) {
                     var event_time = '';
                 }
 
-                jQuery(el).find('.tiva-event-tooltip').append('<div class="event-tooltip-item">'
+                jQuery(el).find('.consultia-event-tooltip').append('<div class="event-tooltip-item">'
                         + event_time
                         + '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
                         + '<div class="event-image">' + event_image + '</div>'
@@ -594,18 +594,18 @@ function showTooltip(id, layout, day, month, year, el) {
                         );
             }
         }
-        jQuery(el).find('.tiva-event-tooltip').css('opacity', '1');
-        jQuery(el).find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
-        jQuery(el).find('.tiva-event-tooltip').css('transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
+        jQuery(el).find('.consultia-event-tooltip').css('opacity', '1');
+        jQuery(el).find('.consultia-event-tooltip').css('-webkit-transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
+        jQuery(el).find('.consultia-event-tooltip').css('transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
     }
 }
 
 // Clear tooltip when mouse out TODO: ocultar TOOLTIP onmouseover
 function clearTooltip(layout, el) {
     if (layout === 'full') {
-        jQuery(el).parent().find('.tiva-event-tooltip').css('opacity', '0');
-        jQuery(el).parent().find('.tiva-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
-        jQuery(el).parent().find('.tiva-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
+        jQuery(el).parent().find('.consultia-event-tooltip').css('opacity', '0');
+        jQuery(el).parent().find('.consultia-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
+        jQuery(el).parent().find('.consultia-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
     } else {
         //antiguo calendario compact
     }
@@ -622,10 +622,10 @@ function showEventList(layout, max_events) {
     tiva_list_events = tiva_list_events.slice(0, max_events);
 
     if (layout === 'full') {
-        jQuery('.tiva-event-list-full').html('');
-        jQuery('.tiva-event-list-full').append('<div class="cambiarEventos" ><button id="cambiarEventos" class="btn btn-primary btn-lg ">Ver eventos pasados</button></div>');
-        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-pendientes"><span class="titulo-lista">Eventos Pendientes</span></div>');
-        jQuery('.tiva-event-list-full').append('<div class="listado-eventos-terminados"><span class="titulo-lista">Eventos Finalizados</span></div>');
+        jQuery('.consultia-event-list-full').html('');
+        jQuery('.consultia-event-list-full').append('<div class="cambiarEventos" ><button id="cambiarEventos" class="btn btn-primary btn-lg ">Ver eventos pasados</button></div>');
+        jQuery('.consultia-event-list-full').append('<div class="listado-eventos-pendientes"><span class="titulo-lista">Eventos Pendientes</span></div>');
+        jQuery('.consultia-event-list-full').append('<div class="listado-eventos-terminados"><span class="titulo-lista">Eventos Finalizados</span></div>');
 
         $("#cambiarEventos").on("click", function () {
 
@@ -1868,7 +1868,7 @@ function promesaAjax(url) {
         type: "GET",
 
         beforeSend: function () {
-            jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
+            jQuery('.consultia-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
         },
         error: function (status, message)
         {
@@ -1882,9 +1882,9 @@ function promesaAjax(url) {
 
 // Init calendar full
 function cargaCalendario() {
-    $('.tiva-events-calendar.full').html("");
-    if (jQuery('.tiva-events-calendar.full').length) {
-        jQuery('.tiva-events-calendar.full').html('<div class="events-calendar-bar">'
+    $('.consultia-events-calendar.full').html("");
+    if (jQuery('.consultia-events-calendar.full').length) {
+        jQuery('.consultia-events-calendar.full').html('<div class="events-calendar-bar">'
                 + '<div class="btn-cambio-interfaz"><button class=" btn btn-info calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
                 + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button></div>'
                 + ' <!--Grid row-->'
@@ -1921,36 +1921,36 @@ function cargaCalendario() {
                 + '<button id="limpiar-filtro" class="btn btn-secondary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button></div>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
-                + '<div class="tiva-events-calendar-wrap">'
-                + '<div class="tiva-calendar-full tiva-calendar"></div>'
-                + '<div class="tiva-event-list-full tiva-event-list"></div>'
-                + '<div class="tiva-event-detail-full tiva-event-detail"></div>'
+                + '<div class="consultia-events-calendar-wrap">'
+                + '<div class="consultia-calendar-full consultia-calendar"></div>'
+                + '<div class="consultia-event-list-full consultia-event-list"></div>'
+                + '<div class="consultia-event-detail-full consultia-event-detail"></div>'
                 + '</div>'
                 );
     }
 
 // Init calendar compact
-    if (jQuery('.tiva-events-calendar.compact').length) {
-        jQuery('.tiva-events-calendar.compact').html('<div class="events-calendar-bar">'
+    if (jQuery('.consultia-events-calendar.compact').length) {
+        jQuery('.consultia-events-calendar.compact').html('<div class="events-calendar-bar">'
                 + '<span class="bar-btn calendar-view calendar-btn active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
                 + '<span class="bar-btn list-view calendar-btn"><i class="fa fa-list"></i>' + list_view + '</span>'
                 //          + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
                 + '</div>'
                 + '<div class="cleardiv"></div>'
-                + '<div class="tiva-events-calendar-wrap">'
-                + '<div class="tiva-calendar-compact tiva-calendar"></div>'
-                + '<div class="tiva-event-list-compact tiva-event-list"></div>'
-                + '<div class="tiva-event-detail-compact tiva-event-detail"></div>'
+                + '<div class="consultia-events-calendar-wrap">'
+                + '<div class="consultia-calendar-compact consultia-calendar"></div>'
+                + '<div class="consultia-event-list-compact consultia-event-list"></div>'
+                + '<div class="consultia-event-detail-compact consultia-event-detail"></div>'
                 + '</div>'
                 );
     }
 
 // Show - Hide view
 
-    jQuery('.tiva-event-list').hide();
-    jQuery('.tiva-event-detail').hide();
+    jQuery('.consultia-event-list').hide();
+    jQuery('.consultia-event-detail').hide();
 
-    jQuery('.tiva-events-calendar').each(function (index) {
+    jQuery('.consultia-events-calendar').each(function (index) {
         // Hide switch button
         var switch_button = (typeof jQuery(this).attr('data-switch') !== "undefined") ? jQuery(this).attr('data-switch') : 'show';
         if (switch_button === 'hide') {
@@ -1960,12 +1960,12 @@ function cargaCalendario() {
             // Change css of button back
             jQuery(this).find('.events-calendar-bar').css('position', 'relative');
             //    jQuery(this).find('.back-calendar').css({"position": "absolute", "margin-top": "15px", "right": "15px"});
-            jQuery(this).find('.tiva-event-detail').css('padding-top', '60px');
+            jQuery(this).find('.consultia-event-detail').css('padding-top', '60px');
         }
     });
 
     // Set wordDay 
-    date_start = (typeof jQuery('.tiva-events-calendar').attr('data-start') !== "undefined") ? jQuery('.tiva-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
+    date_start = (typeof jQuery('.consultia-events-calendar').attr('data-start') !== "undefined") ? jQuery('.consultia-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
     if (date_start === 'sunday') {
         wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
     } else { // Start with Monday
@@ -1990,7 +1990,7 @@ function cargaCalendario() {
 //                dataType: 'JSON',
 //                type: "GET",
 //                beforeSend: function () {
-//                    jQuery('.tiva-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
+//                    jQuery('.consultia-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
 //                },
 //                error: function (status, message)
 //                {
@@ -2159,7 +2159,7 @@ function cargaCalendario() {
             }
 
 
-            jQuery('.tiva-events-calendar').each(function (index) {
+            jQuery('.consultia-events-calendar').each(function (index) {
                 // Initial view
                 var initial_view = (typeof jQuery(this).attr('data-view') !== "undefined") ? jQuery(this).attr('data-view') : 'calendar';
                 if (initial_view === 'list') {
@@ -2171,30 +2171,30 @@ function cargaCalendario() {
 //    }
 
 // Click - Calendar view btn
-    jQuery('.tiva-events-calendar .calendar-view').click(function () {
-        //   jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').fadeIn(500);
+    jQuery('.consultia-events-calendar .calendar-view').click(function () {
+        //   jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
+        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').hide();
+        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-detail').hide();
+        jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').fadeIn(500);
 
-        jQuery(this).parents('.tiva-events-calendar').find('.list-view').removeClass('active');
-        jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').addClass('active');
+        jQuery(this).parents('.consultia-events-calendar').find('.list-view').removeClass('active');
+        jQuery(this).parents('.consultia-events-calendar').find('.calendar-view').addClass('active');
         returnView = "calendario";
     });
 
 // Click - List view btn
-    jQuery('.tiva-events-calendar .list-view').click(function () {
-        //  jQuery(this).parents('.tiva-events-calendar').find('.back-calendar').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-calendar').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-detail').hide();
-        jQuery(this).parents('.tiva-events-calendar').find('.tiva-event-list').fadeIn(500);
+    jQuery('.consultia-events-calendar .list-view').click(function () {
+        //  jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
+        jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').hide();
+        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-detail').hide();
+        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').fadeIn(500);
 
-        jQuery(this).parents('.tiva-events-calendar').find('.calendar-view').removeClass('active');
-        jQuery(this).parents('.tiva-events-calendar').find('.list-view').addClass('active');
+        jQuery(this).parents('.consultia-events-calendar').find('.calendar-view').removeClass('active');
+        jQuery(this).parents('.consultia-events-calendar').find('.list-view').addClass('active');
         returnView = "lista";
 
-        var layout = jQuery(this).parents('.tiva-events-calendar').attr('class') ? jQuery(this).parents('.tiva-events-calendar').attr('class') : 'full';
-        var max_events = jQuery(this).parents('.tiva-events-calendar').attr('data-events') ? jQuery(this).parents('.tiva-events-calendar').attr('data-events') : 1000;
+        var layout = jQuery(this).parents('.consultia-events-calendar').attr('class') ? jQuery(this).parents('.consultia-events-calendar').attr('class') : 'full';
+        var max_events = jQuery(this).parents('.consultia-events-calendar').attr('data-events') ? jQuery(this).parents('.consultia-events-calendar').attr('data-events') : 1000;
         if (layout.indexOf('full') !== -1) {
             showEventList('full', max_events);
         } else {
