@@ -746,17 +746,6 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
     return texto;
 }
 
-//función deshabilitar enlace de <a>  y anyadir este atributo a la etiqueta: onclick="deshabilitar(this)"
-
-function deshabilitar(link) {
-    link.style.pointerEvents = 'none';
-    link.style.color = '#bbb';
-
-    setTimeout(function () {
-        link.style.pointerEvents = null;
-        link.style.color = 'blue';
-    }, 3000);
-}
 //calcula la diferencia de días entre el día de consulta de la previsión del tiempo con el día de inicio del viaje
 // se llama dentro de la función para mostrar detalle evento (ventana modal)
 function diferenciaDiasClima(hoy, inicioViaje) {
@@ -1860,7 +1849,6 @@ function cargaCalendario() {
                 + '<div class="consultia-events-calendar-wrap">'
                 + '<div class="consultia-calendar-full consultia-calendar"></div>'
                 + '<div class="consultia-event-list-full consultia-event-list"></div>'
-                + '<div class="consultia-event-detail-full consultia-event-detail"></div>'
                 + '</div>'
                 );
     }
@@ -1876,7 +1864,6 @@ function cargaCalendario() {
                 + '<div class="consultia-events-calendar-wrap">'
                 + '<div class="consultia-calendar-compact consultia-calendar"></div>'
                 + '<div class="consultia-event-list-compact consultia-event-list"></div>'
-                + '<div class="consultia-event-detail-compact consultia-event-detail"></div>'
                 + '</div>'
                 );
     }
@@ -1884,7 +1871,7 @@ function cargaCalendario() {
 // Show - Hide view
 
     jQuery('.consultia-event-list').hide();
-    jQuery('.consultia-event-detail').hide();
+  
 
     jQuery('.consultia-events-calendar').each(function (index) {
         // Hide switch button
@@ -1896,7 +1883,6 @@ function cargaCalendario() {
             // Change css of button back
             jQuery(this).find('.events-calendar-bar').css('position', 'relative');
             //    jQuery(this).find('.back-calendar').css({"position": "absolute", "margin-top": "15px", "right": "15px"});
-            jQuery(this).find('.consultia-event-detail').css('padding-top', '60px');
         }
     });
 
@@ -2110,7 +2096,6 @@ function cargaCalendario() {
     jQuery('.consultia-events-calendar .calendar-view').click(function () {
         //   jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-detail').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').fadeIn(500);
 
         jQuery(this).parents('.consultia-events-calendar').find('.list-view').removeClass('active');
@@ -2122,7 +2107,6 @@ function cargaCalendario() {
     jQuery('.consultia-events-calendar .list-view').click(function () {
         //  jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-detail').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').fadeIn(500);
 
         jQuery(this).parents('.consultia-events-calendar').find('.calendar-view').removeClass('active');
