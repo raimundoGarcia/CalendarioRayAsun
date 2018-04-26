@@ -51,26 +51,3 @@ h4 {
 .code-value {
 	color: #de935f;
 }
-
-.calendar-day-event .consultia-event-tooltip::before, .calendar-day-event .consultia-event-tooltip::after {
-	top: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-}
-.calendar-day-event .consultia-event-tooltip::after {
-	border-color: rgba(245, 245, 245, 0);
-	border-top-color: #f5f5f5;
-	border-width: 8px;
-	margin-left: -8px;
-}
-.calendar-day-event .consultia-event-tooltip::before {
-	border-color: rgba(204, 204, 204, 0);
-	border-top-color: #cccccc;
-	border-width: 9px;
-	margin-left: -9px;
-}

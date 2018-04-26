@@ -440,9 +440,6 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                             calendarString += '<span class="calendar-event-mark"></span>';
                         }
 
-                        // Tooltip
-                        calendarString += '<div class=\"consultia-event-tooltip\"><\/div>';
-                        calendarString += '<\/div>';
                     } else {
                         calendarString += daycounter_s;
                     }
@@ -539,77 +536,6 @@ function getEvents(day, month, year) {
     return events;
 }
 
-// Show tooltip when mouse over  -- mostrar TOOLTIP onmouseover
-function showTooltip(id, layout, day, month, year, el) {
-    if (layout === 'full') {
-        if (tiva_events[id].image) {
-            var event_image = '<img src="' + tiva_events[id].image + '" alt="' + tiva_events[id].name + '" />';
-        } else {
-            var event_image = '';
-        }
-        if (tiva_events[id].time) {
-            var event_time = '<div class="event-time">' + tiva_events[id].time + '</div>';
-        } else {
-            var event_time = '';
-        }
-
-        // Change position of tooltip
-        var index = jQuery(el).parent().find('.calendar-event-name').index(el);
-        var count = jQuery(el).parent().find('.calendar-event-name').length;
-        var bottom = 32 + ((count - index - 1) * 25);
-        jQuery(el).parent().find('.consultia-event-tooltip').css('bottom', bottom + 'px');
-
-        jQuery(el).parent().find('.consultia-event-tooltip').html('<div class="event-tooltip-item">'
-                + event_time
-                + '<div class="event-name">' + tiva_events[id].name + '</div>'  //DIV NOMBRE EVENTO
-                + '<div class="event-image">' + event_image + '</div>'
-                + '<div class="event-intro">' + getShortText(tiva_events[id].description, 10) + '</div>'
-                + '</div>'
-                );
-        jQuery(el).parent().find('.consultia-event-tooltip').css('opacity', '1');
-        jQuery(el).parent().find('.consultia-event-tooltip').css('-webkit-transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
-        jQuery(el).parent().find('.consultia-event-tooltip').css('transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
-    } else {
-        jQuery(el).find('.consultia-event-tooltip').html('');
-        var events = getEvents(day, month, year);
-        for (var i = 0; i < events.length; i++) {
-            if (typeof events[i] !== "undefined") {
-                if (tiva_events[events[i].id].image) {
-                    var event_image = '<img src="' + tiva_events[events[i].id].image + '" alt="' + tiva_events[events[i].id].name + '" />';
-                } else {
-                    var event_image = '';
-                }
-                if (tiva_events[events[i].id].time) {
-                    var event_time = '<div class="event-time">' + tiva_events[events[i].id].time + '</div>';
-                } else {
-                    var event_time = '';
-                }
-
-                jQuery(el).find('.consultia-event-tooltip').append('<div class="event-tooltip-item">'
-                        + event_time
-                        + '<div class="event-name">' + tiva_events[events[i].id].name + '</div>'
-                        + '<div class="event-image">' + event_image + '</div>'
-                        + '<div class="event-intro">' + getShortText(tiva_events[events[i].id].description, 10) + '</div>'
-                        + '</div>'
-                        );
-            }
-        }
-        jQuery(el).find('.consultia-event-tooltip').css('opacity', '1');
-        jQuery(el).find('.consultia-event-tooltip').css('-webkit-transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
-        jQuery(el).find('.consultia-event-tooltip').css('transform', 'translate3d(0,0,0) rotate3d(0,0,0,0)');
-    }
-}
-
-// Clear tooltip when mouse out TODO: ocultar TOOLTIP onmouseover
-function clearTooltip(layout, el) {
-    if (layout === 'full') {
-        jQuery(el).parent().find('.consultia-event-tooltip').css('opacity', '0');
-        jQuery(el).parent().find('.consultia-event-tooltip').css('-webkit-transform', 'translate3d(0,-10px,0)');
-        jQuery(el).parent().find('.consultia-event-tooltip').css('transform', 'translate3d(0,-10px,0)');
-    } else {
-        //antiguo calendario compact
-    }
-}
 
 // Show event detail -- mostrar lista de eventos por venir (upcoming) ordenados
 function showEventList(layout, max_events) {
