@@ -28,7 +28,7 @@
 }
 .consultia-calendar-full .calendar-title , .consultia-calendar-full .calendar-btn {
     text-align: center !important;
-    background: #5AA4A3;
+    background: #4285f4;
     color: #ffffff;
     /*  height: 30px;*/
     vertical-align: middle !important;
@@ -78,6 +78,9 @@
     text-align: right !important;
     padding: 2px 3px !important; /* cambiado estaba a 6 10, */
     color: #666;
+}
+.calendar-day-normal{
+    font-weight: bold;
 }
 .consultia-calendar-full .calendar-day-today {
     background: #d5e9e9;
@@ -809,6 +812,9 @@ table td{
 }
 .card-text{
     font-size: 13px !important;
+}
+#startingDate,#endingDate{
+    cursor: pointer;
 }
 @media  (max-width: 991px) {
 
