@@ -568,6 +568,10 @@
    font-size: 1.75vh; 
 }
 
+.cursor-not-allowed{
+    cursor: not-allowed;
+}
+
 /*TOASTS - AVISOS*/
 
 .toaster{
