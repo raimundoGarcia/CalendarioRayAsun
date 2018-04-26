@@ -39,7 +39,7 @@ var rangoFechaFin = "";
 function getShortText(text, num) {
     if (text) {
 
-        var ancho = $(window).width();
+        var ancho = $(window).width();//delimita el número de caracteres que se puede mostrar de un asunto, en función del ancho de la pantalla del dispositivo
         var caracteres = 1;
         switch (true) {
             case (ancho >= 601 && ancho <= 650):
@@ -147,7 +147,7 @@ function getShortText(text, num) {
 
         var textArray = text.substring(0, caracteres);
 
-        if (text.length > textArray.length) {
+        if (text.length > textArray.length) { //muestra 3 puntos suspensivos si el texto del asunto no se muestra completo
             textArray = textArray + "...";
         }
         return textArray;
@@ -1904,7 +1904,7 @@ function cargaCalendario() {
     }
     consultia_events = []; //resetea los eventos, para que no se acumulen al realizar filtrados
     if (filtrar) {
-        /* var url = "./events/ejemplo_agenda.json";*/
+        
         var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + rangoFechaIni + "&FechaFin=" + rangoFechaFin;
     } else {
         var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + fechaIniDefault + "&FechaFin=" + fechaFinDefault;

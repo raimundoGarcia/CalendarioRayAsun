@@ -785,7 +785,6 @@ table td{
 }
 .cambiarEventos{
     display:flex;
-    justify-content: center;
     align-items: center;
 }
 /* ICONOS TIEMPO MODAL */
