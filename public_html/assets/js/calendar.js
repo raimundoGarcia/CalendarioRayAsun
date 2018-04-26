@@ -634,6 +634,12 @@ function showEventList(layout, max_events) {
 
         }
         mostrarSegunFiltrado(filtrado, consultia_list_events.length);
+        if ($(".listado-eventos-pendientes").children().length === 1) {
+            $(".listado-eventos-pendientes").append('<div>No hay eventos disponibles</div>');
+        }
+        if ($(".listado-eventos-terminados").children().length === 1) {
+            $(".listado-eventos-terminados").append('<div>No hay eventos disponibles</div>');
+        }
     } else {
         //antiguo calendario compact
     }
