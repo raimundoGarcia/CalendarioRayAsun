@@ -39,7 +39,7 @@ var rangoFechaFin = "";
 function getShortText(text, num) {
     if (text) {
 
-        var ancho = $(window).width();
+        var ancho = $(window).width();//delimita el número de caracteres que se puede mostrar de un asunto, en función del ancho de la pantalla del dispositivo
         var caracteres = 1;
         switch (true) {
             case (ancho >= 601 && ancho <= 650):
@@ -147,7 +147,7 @@ function getShortText(text, num) {
 
         var textArray = text.substring(0, caracteres);
 
-        if (text.length > textArray.length) {
+        if (text.length > textArray.length) { //muestra 3 puntos suspensivos si el texto del asunto no se muestra completo
             textArray = textArray + "...";
         }
         return textArray;
@@ -634,6 +634,12 @@ function showEventList(layout, max_events) {
 
         }
         mostrarSegunFiltrado(filtrado, consultia_list_events.length);
+        if ($(".listado-eventos-pendientes").children().length === 1) {
+            $(".listado-eventos-pendientes").append('<div>No hay eventos disponibles</div>');
+        }
+        if ($(".listado-eventos-terminados").children().length === 1) {
+            $(".listado-eventos-terminados").append('<div>No hay eventos disponibles</div>');
+        }
     } else {
         //antiguo calendario compact
     }
@@ -1849,7 +1855,6 @@ function cargaCalendario() {
                 + '<div class="consultia-events-calendar-wrap">'
                 + '<div class="consultia-calendar-full consultia-calendar"></div>'
                 + '<div class="consultia-event-list-full consultia-event-list"></div>'
-                + '<div class="consultia-event-detail-full consultia-event-detail"></div>'
                 + '</div>'
                 );
     }
@@ -1865,7 +1870,6 @@ function cargaCalendario() {
                 + '<div class="consultia-events-calendar-wrap">'
                 + '<div class="consultia-calendar-compact consultia-calendar"></div>'
                 + '<div class="consultia-event-list-compact consultia-event-list"></div>'
-                + '<div class="consultia-event-detail-compact consultia-event-detail"></div>'
                 + '</div>'
                 );
     }
@@ -1873,7 +1877,7 @@ function cargaCalendario() {
 // Show - Hide view
 
     jQuery('.consultia-event-list').hide();
-    jQuery('.consultia-event-detail').hide();
+  
 
     jQuery('.consultia-events-calendar').each(function (index) {
         // Hide switch button
@@ -1885,7 +1889,6 @@ function cargaCalendario() {
             // Change css of button back
             jQuery(this).find('.events-calendar-bar').css('position', 'relative');
             //    jQuery(this).find('.back-calendar').css({"position": "absolute", "margin-top": "15px", "right": "15px"});
-            jQuery(this).find('.consultia-event-detail').css('padding-top', '60px');
         }
     });
 
@@ -1898,7 +1901,7 @@ function cargaCalendario() {
     }
     consultia_events = []; //resetea los eventos, para que no se acumulen al realizar filtrados
     if (filtrar) {
-        /* var url = "./events/ejemplo_agenda.json";*/
+        
         var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + rangoFechaIni + "&FechaFin=" + rangoFechaFin;
     } else {
         var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + fechaIniDefault + "&FechaFin=" + fechaFinDefault;
@@ -2099,7 +2102,6 @@ function cargaCalendario() {
     jQuery('.consultia-events-calendar .calendar-view').click(function () {
         //   jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-detail').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').fadeIn(500);
 
         jQuery(this).parents('.consultia-events-calendar').find('.list-view').removeClass('active');
@@ -2111,7 +2113,6 @@ function cargaCalendario() {
     jQuery('.consultia-events-calendar .list-view').click(function () {
         //  jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-detail').hide();
         jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').fadeIn(500);
 
         jQuery(this).parents('.consultia-events-calendar').find('.calendar-view').removeClass('active');
