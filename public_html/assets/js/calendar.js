@@ -746,17 +746,6 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
     return texto;
 }
 
-//función deshabilitar enlace de <a>  y anyadir este atributo a la etiqueta: onclick="deshabilitar(this)"
-
-function deshabilitar(link) {
-    link.style.pointerEvents = 'none';
-    link.style.color = '#bbb';
-
-    setTimeout(function () {
-        link.style.pointerEvents = null;
-        link.style.color = 'blue';
-    }, 3000);
-}
 //calcula la diferencia de días entre el día de consulta de la previsión del tiempo con el día de inicio del viaje
 // se llama dentro de la función para mostrar detalle evento (ventana modal)
 function diferenciaDiasClima(hoy, inicioViaje) {
