@@ -20,7 +20,7 @@ var yearNum_full = todaysYear;
 var monthNum_compact = todaysMonth;
 var yearNum_compact = todaysYear;
 
-var tiva_events = []; //para los eventos recogidos en events.json
+var consultia_events = []; //para los eventos recogidos en events.json
 var order_num = 0;
 
 // Config variable
@@ -181,14 +181,14 @@ function sortEventsByUpcoming(a, b) {
 function getEventsByTime(type) {
     var events = [];
     var today_date = new Date(todaysYear, todaysMonth - 1, todaysDate);
-    for (var i = 0; i < tiva_events.length; i++) {
+    for (var i = 0; i < consultia_events.length; i++) {
         if (type === 'upcoming') {
-            if (tiva_events[i].date >= today_date.getTime()) {
-                events.push(tiva_events[i]);
+            if (consultia_events[i].date >= today_date.getTime()) {
+                events.push(consultia_events[i]);
             }
         } else {
-            if (tiva_events[i].date < today_date.getTime()) {
-                events.push(tiva_events[i]);
+            if (consultia_events[i].date < today_date.getTime()) {
+                events.push(consultia_events[i]);
             }
         }
     }
@@ -363,8 +363,8 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
                                             palabrasSegunDuracion = duracion;
                                             console.log(duracion);
-                                            console.log(tiva_events[t].name);
-                                            console.log(tiva_events[t]._fechaInicio);
+                                            console.log(consultia_events[t].name);
+                                            console.log(consultia_events[t]._fechaInicio);
                                             divSize = " length-" + duracion;
                                             if (duracion > 7) {
                                                 divSize = " length-7 ";
@@ -462,9 +462,9 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 function checkEvents(day, month, year) {
     numevents = 0;
     var date_check = new Date(year, Number(month) - 1, day);
-    for (var i = 0; i < tiva_events.length; i++) {
-        var start_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, tiva_events[i].day);
-        var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1);
+    for (var i = 0; i < consultia_events.length; i++) {
+        var start_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, consultia_events[i].day);
+        var end_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, Number(consultia_events[i].day) + Number(consultia_events[i].duration) - 1);
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) {
             numevents++;
         }
@@ -480,13 +480,13 @@ function checkEvents(day, month, year) {
 function getOrderNumber(id, day, month, year) {  
     var date_check = new Date(year, Number(month) - 1, day); //fecha actual
     var events = [];  //array para trabajar con los eventos recibidos en el json y ordenarlos después en cliente
-    for (var i = 0; i < tiva_events.length; i++) {
-        var start_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, tiva_events[i].day); //FECHA INICIO EVENTO
-        var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1); //FECHA FIN EVENTO = fecha inicio + duración - 1
+    for (var i = 0; i < consultia_events.length; i++) {
+        var start_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, consultia_events[i].day); //FECHA INICIO EVENTO
+        var end_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, Number(consultia_events[i].day) + Number(consultia_events[i].duration) - 1); //FECHA FIN EVENTO = fecha inicio + duración - 1
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) { //si la FECHA ACTUAL está entre la INICIO y la FIN del evento
             var first_day = (start_date.getTime() === date_check.getTime()) ? true : false; //si la fecha inicio coincide con la fecha actual, first_day es TRUE
-            var event = {id: tiva_events[i].id, name: tiva_events[i].name, day: tiva_events[i].day, month: tiva_events[i].month,
-                year: tiva_events[i].year, first_day: first_day}; //se crea el evento  y se insertará en la lista
+            var event = {id: consultia_events[i].id, name: consultia_events[i].name, day: consultia_events[i].day, month: consultia_events[i].month,
+                year: consultia_events[i].year, first_day: first_day}; //se crea el evento  y se insertará en la lista
             events.push(event);
         }
     }
@@ -516,16 +516,16 @@ function getEvents(day, month, year) {
     var date_check = new Date(year, Number(month) - 1, day);
     var events = [];
 
-    for (var i = 0; i < tiva_events.length; i++) {
-        var start_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, tiva_events[i].day);
-        var end_date = new Date(tiva_events[i].year, Number(tiva_events[i].month) - 1, Number(tiva_events[i].day) + Number(tiva_events[i].duration) - 1);
+    for (var i = 0; i < consultia_events.length; i++) {
+        var start_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, consultia_events[i].day);
+        var end_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, Number(consultia_events[i].day) + Number(consultia_events[i].duration) - 1);
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) {
             var first_day = (start_date.getTime() === date_check.getTime()) ? true : false;
             var last_day = (end_date.getTime() === date_check.getTime()) ? true : false;
-            var event = {id: tiva_events[i].id, name: tiva_events[i].name, first_day: first_day, last_day: last_day, color: tiva_events[i].color, tipo: tiva_events[i]._tipo, duracion: tiva_events[i].duration}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
+            var event = {id: consultia_events[i].id, name: consultia_events[i].name, first_day: first_day, last_day: last_day, color: consultia_events[i].color, tipo: consultia_events[i]._tipo, duracion: consultia_events[i].duration}; //TODO: ANYADIDA PROPIEDAD DURATION AL ARRAY event
 
             if (!first_day) {
-                n = getOrderNumber(tiva_events[i].id, tiva_events[i].day, tiva_events[i].month, tiva_events[i].year);
+                n = getOrderNumber(consultia_events[i].id, consultia_events[i].day, consultia_events[i].month, consultia_events[i].year);
             }
 
             events[n] = event;
@@ -544,8 +544,8 @@ function showEventList(layout, max_events) {
     upcoming_events.sort(sortEventsByUpcoming);
     var past_events = getEventsByTime('past');
     past_events.sort(sortEventsByUpcoming);
-    var tiva_list_events = upcoming_events.concat(past_events);
-    tiva_list_events = tiva_list_events.slice(0, max_events);
+    var consultia_list_events = upcoming_events.concat(past_events);
+    consultia_list_events = consultia_list_events.slice(0, max_events);
 
     if (layout === 'full') {
         jQuery('.consultia-event-list-full').html('');
@@ -569,10 +569,10 @@ function showEventList(layout, max_events) {
         });
 
 
-        for (var i = 0; i < tiva_list_events.length; i++) {
+        for (var i = 0; i < consultia_list_events.length; i++) {
             // Start date
 
-            var day = new Date(tiva_list_events[i].year, Number(tiva_list_events[i].month) - 1, tiva_list_events[i].day);
+            var day = new Date(consultia_list_events[i].year, Number(consultia_list_events[i].month) - 1, consultia_list_events[i].day);
             if (date_start === 'sunday') {
                 var event_day = wordDay[day.getDay()];
             } else {
@@ -582,12 +582,12 @@ function showEventList(layout, max_events) {
                     var event_day = wordDay[6];
                 }
             }
-            var event_date = wordMonth[Number(tiva_list_events[i].month) - 1] + ' ' + tiva_list_events[i].day + ', ' + tiva_list_events[i].year;
+            var event_date = wordMonth[Number(consultia_list_events[i].month) - 1] + ' ' + consultia_list_events[i].day + ', ' + consultia_list_events[i].year;
 
             // End date
             var event_end_time = '';
-            if (tiva_list_events[i].duration > 1) {
-                var end_date = new Date(tiva_list_events[i].year, Number(tiva_list_events[i].month) - 1, Number(tiva_list_events[i].day) + Number(tiva_list_events[i].duration) - 1);
+            if (consultia_list_events[i].duration > 1) {
+                var end_date = new Date(consultia_list_events[i].year, Number(consultia_list_events[i].month) - 1, Number(consultia_list_events[i].day) + Number(consultia_list_events[i].duration) - 1);
 
                 if (date_start === 'sunday') {
                     var event_end_day = wordDay[end_date.getDay()];
@@ -603,30 +603,25 @@ function showEventList(layout, max_events) {
             }
 
             // Event time
-            if (tiva_list_events[i].time) {
-                var event_time = '<i class="far fa-clock"></i>&nbsp;&nbsp;' + tiva_list_events[i].time;
+            if (consultia_list_events[i].time) {
+                var event_time = '<i class="far fa-clock"></i>&nbsp;&nbsp;' + consultia_list_events[i].time;
             } else {
                 var event_time = '';
             }
 
-            // Event image
-            if (tiva_list_events[i].image) {
-                var event_image = '<img src="' + tiva_list_events[i].image + '" alt="' + tiva_list_events[i].name + '" />';
-            } else {
-                var event_image = '';
-            }
+            
 
-            var eventoListado = '<div class="list__event" onclick="showEventDetail(' + tiva_list_events[i].id + ', \'full\')">' +
-                    '<div class="event__cabecera color-' + tiva_list_events[i].color + ' " >' +
-                    formatCabecera(tiva_list_events[i].name, tiva_list_events[i]._tipo, "lista", null) +
+            var eventoListado = '<div class="list__event" onclick="showEventDetail(' + consultia_list_events[i].id + ', \'full\')">' +
+                    '<div class="event__cabecera color-' + consultia_list_events[i].color + ' " >' +
+                    formatCabecera(consultia_list_events[i].name, consultia_list_events[i]._tipo, "lista", null) +
                     '</div>' +
                     '<div class=event__fecha><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time + '</div>' +
                     '<div class=event__hora>' + event_time + '</div>' +
-                    '<div class=event__ubicacion>' + tiva_list_events[i]._ubicacion + '</div>' +
+                    '<div class=event__ubicacion>' + consultia_list_events[i]._ubicacion + '</div>' +
                     '</div>';
             var today = new Date;
 
-            var ultimoDia = Date.parse(tiva_list_events[i]._fechaFin);
+            var ultimoDia = Date.parse(consultia_list_events[i]._fechaFin);
 
             var resta = (ultimoDia - today.getTime());
 
@@ -638,7 +633,7 @@ function showEventList(layout, max_events) {
             ;
 
         }
-        mostrarSegunFiltrado(filtrado, tiva_list_events.length);
+        mostrarSegunFiltrado(filtrado, consultia_list_events.length);
     } else {
         //antiguo calendario compact
     }
@@ -888,12 +883,21 @@ function b64toBlob(b64Data, contentType) {
     return blob;
 
   }
+  
+  function showInfoFlightWarning(aviso){
+      $('<div class="toaster toast-warning">' + aviso + '</div>').insertAfter($('#googlesearchvuelo'));
+                    $('#googlesearchvuelo').addClass('isDisabled');
+                    setTimeout(function () {
+                        $('.toaster').fadeOut('slow', 'linear');
+                        $('#googlesearchvuelo').removeClass('isDisabled');
+                    }, 3000);
+  }
 
 // Show event detail -- mostrar detalles de los eventos
 function showEventDetail(id, layout) {
     var pais = "";
     var ciudad = "";
-    
+        
     var myvar = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '            <div class="modal-dialog modal-lg" role="document">' +
             '                <!--Content-->' +
@@ -999,27 +1003,27 @@ function showEventDetail(id, layout) {
         //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
 
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
-        var tipoReserva = tiva_events[id]._tipo;
-        var colorfondo = tiva_events[id].color;
+        var tipoReserva = consultia_events[id]._tipo;
+        var colorfondo = consultia_events[id].color;
 
         //fechas para calcular rangos de días
-        fechaInicioViaje = tiva_events[id]._fechaInicio;
+        fechaInicioViaje = consultia_events[id]._fechaInicio;
         hoy = new Date();
         diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); //diferencia entre hoy y la fecha inicio viaje (para clima y para seguimiento vuelo)
 
         //Coordenadas origen
-        var lat = tiva_events[id]._latitudOrigen;
-        var lon = tiva_events[id]._longitudOrigen;
+        var lat = consultia_events[id]._latitudOrigen;
+        var lon = consultia_events[id]._longitudOrigen;
 
         // Coordenadas destino (clima)
-        var latDestino = tiva_events[id]._latitudDestino;
-        var lonDestino = tiva_events[id]._longitudDestino;
+        var latDestino = consultia_events[id]._latitudDestino;
+        var lonDestino = consultia_events[id]._longitudDestino;
 
         console.log("Latitud: " + lat + " y Longitud: " + lon);
         var coordenadas = lat + "%20" + lon;
 
         //Ubicación en sección Mapa
-        var ubicacion = tiva_events[id]._ubicacion;
+        var ubicacion = consultia_events[id]._ubicacion;
         document.getElementById("ubicacion").innerHTML = "<h5 class='p5 modaltext'>" + ubicacion + "</h5>";
         document.getElementById("verMapa").addEventListener("click", function () {
             console.log(tipoReserva);
@@ -1043,6 +1047,8 @@ function showEventDetail(id, layout) {
                 ciudad = campoCiudad.split(",")[0];
 
             }
+            
+        //BLOQUE ICS
             //creación de la cadena de texto para el contenido del archivo ICS
             var icsFormat =
                                 'BEGIN:VCALENDAR\n' +
@@ -1050,10 +1056,10 @@ function showEventDetail(id, layout) {
                                 'VERSION:2.0\n' +
                                 'METHOD:REQUEST\n' +
                                 'BEGIN:VEVENT\n' +
-                                'DTSTART:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
-                                'DTSTAMP:' + tiva_events[id]._fechaInicio.replace("-", "") + '\n' +
-                                'DTEND:' + tiva_events[id]._fechaFin.replace("-", "") + '\n' +
-                                'LOCATION:' + tiva_events[id]._ubicacion + '\n' +
+                                'DTSTART:' + consultia_events[id]._fechaInicio.replace("-", "") + '\n' +
+                                'DTSTAMP:' + consultia_events[id]._fechaInicio.replace("-", "") + '\n' +
+                                'DTEND:' + consultia_events[id]._fechaFin.replace("-", "") + '\n' +
+                                'LOCATION:' + consultia_events[id]._ubicacion + '\n' +
                                 'UID:40ddbba4-abb2-4969-b9b6-9c75c3b9f5c2\n' +
                                 icsDescription +
                                 'BEGIN:VALARM\n' +
@@ -1112,27 +1118,27 @@ function showEventDetail(id, layout) {
         document.getElementById("linea").classList.add("color-" + colorfondo);
 
         //Fechas salida-llegada / origen-destino
-        var fechaInicioEvento = tiva_events[id].day + "/" + tiva_events[id].month + "/" + tiva_events[id].year; //formato dd/mm/aaaa
-        var fechaFinEvento = tiva_events[id]._diaFin + "/" + tiva_events[id]._mesFin + "/" + tiva_events[id]._anyoFin;
+        var fechaInicioEvento = consultia_events[id].day + "/" + consultia_events[id].month + "/" + consultia_events[id].year; //formato dd/mm/aaaa
+        var fechaFinEvento = consultia_events[id]._diaFin + "/" + consultia_events[id]._mesFin + "/" + consultia_events[id]._anyoFin;
         document.getElementById("fecha-o").innerHTML = fechaInicioEvento;
         document.getElementById("fecha-d").innerHTML = fechaFinEvento;
 
         //Variables para las horas
-        var horaOrigen = tiva_events[id].time; //siempre hora inicio
-        var horaDestino = tiva_events[id]._horaFin;
+        var horaOrigen = consultia_events[id].time; //siempre hora inicio
+        var horaDestino = consultia_events[id]._horaFin;
         var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local en cada país.";
 
         //Localizador de la reserva
-        var localizadorReserva = tiva_events[id]._localizador;
+        var localizadorReserva = consultia_events[id]._localizador;
         document.getElementById("localizador").innerHTML = "<h5 class='destacado modaltext'>LOCALIZADOR RESERVA: " + localizadorReserva + "</h5>";
 
         //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva 
-        document.getElementById("asunto").innerHTML = formatCabecera(tiva_events[id].name, tipoReserva, "modal", null);
+        document.getElementById("asunto").innerHTML = formatCabecera(consultia_events[id].name, tipoReserva, "modal", null);
 
 //BLOQUES PARTICULARIDADES POR TIPO DE RESERVA          
         if (tipoReserva === "Aereo") {
                                   
-            var codigoV = tiva_events[id]._NVuelo;
+            var codigoV = consultia_events[id]._NVuelo;
             var companyiaAerea = codigoV.split("-"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
           console.log(companyiaAerea[0]);
             codigoV = codigoV.replace("-", ""); //para buscador google el código debe salir sin slash
@@ -1168,42 +1174,32 @@ function showEventDetail(id, layout) {
 
                 } else if (diasDif < -1) {
                     variableAviso = '<div class="toast-text">La fecha del vuelo es anterior. Información no disponible.</div>';
-                    $('<div class="toaster toast-warning">' + variableAviso + '</div>').insertAfter($('#googlesearchvuelo'));
-                    $('#googlesearchvuelo').addClass('isDisabled');
-                    setTimeout(function () {
-                        $('.toaster').fadeOut('slow', 'linear');
-                        $('#googlesearchvuelo').removeClass('isDisabled');
-                    }, 3000);
+                    showInfoFlightWarning(variableAviso);
 
                 } else {
                     variableAviso = '<div class="toast-text">La fecha del vuelo es demasiado lejana. Información no disponible.</div>';
-                    $('<div class="toaster toast-warning">' + variableAviso + '</div>').insertAfter($('#googlesearchvuelo'));
-                    $('#googlesearchvuelo').addClass('isDisabled');
-                    setTimeout(function () {
-                        $('.toaster').fadeOut('slow', 'linear');
-                        $('#googlesearchvuelo').removeClass('isDisabled');
-                    }, 3000);
+                    showInfoFlightWarning(variableAviso);
                 }
 
 
             };
 
             //nombre aerolinea ESTE CAMPO ES INDEPENDIENTE DEL IDPROVEEDOR (NO SE DISPONE DICCIONARIO DE AEROLINEAS)
-            var aerolinea = tiva_events[id]._Aerolinea;
+            var aerolinea = consultia_events[id]._Aerolinea;
 
             //Bloque horarios
-            var salidaIata = tiva_events[id]._SalidaIATA;
-            var llegadaIata = tiva_events[id]._LlegadaIATA;
+            var salidaIata = consultia_events[id]._SalidaIATA;
+            var llegadaIata = consultia_events[id]._LlegadaIATA;
 
-            document.getElementById("ciudad-o").innerHTML = tiva_events[id]._ciudadOrigen + " (" + salidaIata + ")";
+            document.getElementById("ciudad-o").innerHTML = consultia_events[id]._ciudadOrigen + " (" + salidaIata + ")";
             document.getElementById("hora-o").innerHTML = horaOrigen;
-            document.getElementById("ciudad-d").innerHTML = tiva_events[id]._ciudadDestino + " (" + llegadaIata + ")";
+            document.getElementById("ciudad-d").innerHTML = consultia_events[id]._ciudadDestino + " (" + llegadaIata + ")";
             document.getElementById("hora-d").innerHTML = horaDestino;
 
             //Bloque descripción
-            var aeropuertoSalida = tiva_events[id]._AeropuertoSalida;
-            var aeropuertoLlegada = tiva_events[id]._AeropuertoLlegada;
-            var duracionHoras = tiva_events[id]._DuracionHoras;
+            var aeropuertoSalida = consultia_events[id]._AeropuertoSalida;
+            var aeropuertoLlegada = consultia_events[id]._AeropuertoLlegada;
+            var duracionHoras = consultia_events[id]._DuracionHoras;
             duracionHoras = duracionHoras.split(":");
             var horas = duracionHoras[0];
             var minutos = duracionHoras[1];
@@ -1235,15 +1231,15 @@ function showEventDetail(id, layout) {
             document.getElementById("googlesearchvuelo").style.display = "none";
             document.getElementById("ciudad-o").innerHTML = "ENTRADA";
             document.getElementById("ciudad-d").innerHTML = "SALIDA";
-            document.getElementById("hora-o").innerHTML = "14:00 aprox.";   //tiva_events[id].time
-            document.getElementById("hora-d").innerHTML = "12:00 aprox."; //tiva_events[id]._horaFin
+            document.getElementById("hora-o").innerHTML = "14:00 aprox.";   //consultia_events[id].time
+            document.getElementById("hora-d").innerHTML = "12:00 aprox."; //consultia_events[id]._horaFin
             //
             //Bloque descripción
-            var nombreHotel = tiva_events[id]._nombreHotel;
-            var direccionHotel = tiva_events[id]._direccion;
-            var regimen = tiva_events[id]._regimen;
-            var tipoHabitacion = tiva_events[id]._tipohabita;
-            var acompanyantes = tiva_events[id]._acompanyantes;
+            var nombreHotel = consultia_events[id]._nombreHotel;
+            var direccionHotel = consultia_events[id]._direccion;
+            var regimen = consultia_events[id]._regimen;
+            var tipoHabitacion = consultia_events[id]._tipohabita;
+            var acompanyantes = consultia_events[id]._acompanyantes;
             //TODO: Obtención de la ciudad a partir de la dirección postal que viene de base datos PROVISIONAL
             var laCiudad = direccionHotel.split(',');
             laCiudad = laCiudad[laCiudad.length-2];
@@ -1277,7 +1273,7 @@ function showEventDetail(id, layout) {
 
         } else if (tipoReserva === "Coche") {
             //logo coches
-            var codigoRent = tiva_events[id]._idProveedor; //string con el código
+            var codigoRent = consultia_events[id]._idProveedor; //string con el código
             var proveedor = "";
                        
            info_cars.forEach( function (agencia) {
@@ -1300,18 +1296,18 @@ function showEventDetail(id, layout) {
             document.getElementById("ciudad-o").innerHTML = "RECOGIDA";
             document.getElementById("ciudad-d").innerHTML = "ENTREGA";
 
-            var acompanyantes = tiva_events[id]._acompanyantes;
+            var acompanyantes = consultia_events[id]._acompanyantes;
             console.log(acompanyantes);
             var html = "";
             for (i = 0; i < acompanyantes.length; i++) {
                 html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + acompanyantes[i].Nombre + "</h5>";
             }
             //Bloque Descripción
-            var categoria = tiva_events[id]._categoria;
-            var transmision = tiva_events[id]._transmision;
-            var combustible = tiva_events[id]._combustible;
-            var direccionRecogida = tiva_events[id]._direccionRecogida;
-            var direccionEntrega = tiva_events[id]._direccionEntrega;
+            var categoria = consultia_events[id]._categoria;
+            var transmision = consultia_events[id]._transmision;
+            var combustible = consultia_events[id]._combustible;
+            var direccionRecogida = consultia_events[id]._direccionRecogida;
+            var direccionEntrega = consultia_events[id]._direccionEntrega;
 
             document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
                     "</h5><h5 class='modaltext'>Categoría: " + categoria +
@@ -1344,8 +1340,8 @@ function showEventDetail(id, layout) {
         } else if (tipoReserva === "Tren") {
             //logo renfe
             
-            var estacionOrigen = tiva_events[id]._EstacionOrigen;
-            var estacionDestino = tiva_events[id]._EstacionDestino;
+            var estacionOrigen = consultia_events[id]._EstacionOrigen;
+            var estacionDestino = consultia_events[id]._EstacionDestino;
             document.getElementById("googlesearchvuelo").style.display = "none";
             document.getElementById("ciudad-o").innerHTML = estacionOrigen;
             document.getElementById("hora-o").innerHTML = horaOrigen;
@@ -1353,17 +1349,17 @@ function showEventDetail(id, layout) {
             document.getElementById("hora-d").innerHTML = horaDestino;
 
             //bloque descripción
-            var proveedor = tiva_events[id]._idProveedor; //ahora viene un entero para el código proveedor
+            var proveedor = consultia_events[id]._idProveedor; //ahora viene un entero para el código proveedor
             if(proveedor == 3){
                 proveedor = "Renfe";
                 $('.logo').append("<img src='assets/images/img_proveedores/Renfe.svg' alt='Logo-renfe'>"); //de momento sólo hay Logo de Renfe
             }else{
                 $('.logo').append("<img src='assets/images/img_proveedores/logo_tren_generico.png' alt='Logo-renfe'>"); 
             }
-            var tipotren = tiva_events[id]._TipoTren;
-            var clase = tiva_events[id]._Clase;
-            var DireccionOrigen = tiva_events[id]._DireccionOrigen;
-            var DireccionDestino = tiva_events[id]._DireccionDestino;
+            var tipotren = consultia_events[id]._TipoTren;
+            var clase = consultia_events[id]._Clase;
+            var DireccionOrigen = consultia_events[id]._DireccionOrigen;
+            var DireccionDestino = consultia_events[id]._DireccionDestino;
 
             document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
                     "</h5><h5 class='destacado modaltext'>Tipo de Tren: " + tipotren +
@@ -1406,13 +1402,13 @@ function showEventDetail(id, layout) {
             document.getElementById("hora-o").innerHTML = horaOrigen;
             document.getElementById("hora-d").innerHTML = horaDestino;
             //Bloque descripción       //TODO: DICCIONARIO PROVEEDORES   
-            var proveedor = tiva_events[id]._proveedor;
-            var origen = tiva_events[id]._origen;
-            var destino = tiva_events[id]._destino;
+            var proveedor = consultia_events[id]._proveedor;
+            var origen = consultia_events[id]._origen;
+            var destino = consultia_events[id]._destino;
             document.getElementById("ciudad-o").innerHTML = origen;
             document.getElementById("ciudad-d").innerHTML = destino;
-            var acomodacion = tiva_events[id]._acomodacion;
-            var vehiculos = tiva_events[id]._vehiculos;
+            var acomodacion = consultia_events[id]._acomodacion;
+            var vehiculos = consultia_events[id]._vehiculos;
             var matriculas = " ";
             for (i = 0; i < vehiculos.length; i++) {
                 matriculas += "<span class=\"matricula\">" + vehiculos[i].Matricula + "</span>";
@@ -1448,27 +1444,28 @@ function showEventDetail(id, layout) {
 
 
         //GESTIÓN DE LOS ADJUNTOS
-        if (tiva_events[id]._adjuntos !== null) { //el campo Adjuntos o es null o es un array con una posición mínimo
+        
+        if (consultia_events[id]._adjuntos !== null) { //el campo Adjuntos o es null o es un array con una posición mínimo
 
-            var adjuntos = "";
-            var numdocs = tiva_events[id]._adjuntos.length;
+                var adjuntos = "";
+                var numdocs = consultia_events[id]._adjuntos.length;
 
-            for (n = 0; n < numdocs; n++) {
-                var tipodoc = tiva_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
-                var idadjunto = tiva_events[id]._adjuntos[n].idAdjunto;
-                var nombreAdjunto = tiva_events[id]._adjuntos[n].Nombre;
-                
-               if (detectIE()){
-                   //el vínculo se generará sin el atributo 'download'
-                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="'+nombreAdjunto+'"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
-                
-               } else {
-                    
-                    adjuntos += '<a id="' + idadjunto + '" class="linkadjunto" title="'+nombreAdjunto+'" download="'+nombreAdjunto+'.'+tipodoc+'"><img class="mimeType" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
-                }
-               
-                               
-               console.log(tiva_events[id]._adjuntos[n].idAdjunto);
+                for (n = 0; n < numdocs; n++) {
+                    var tipodoc = consultia_events[id]._adjuntos[n].Tipo.toLowerCase(); //cada imagen de tipo de documento tendrá el nombre del tipo y la misma extensión (png en este caso)
+                    var idadjunto = consultia_events[id]._adjuntos[n].idAdjunto;
+                    var nombreAdjunto = consultia_events[id]._adjuntos[n].Nombre;
+
+                   
+                         if (detectIE()){
+                           //el vínculo se generará sin el atributo 'download'
+                            adjuntos += '<a id="' + idadjunto + '" class="linkadjunto mimeType" title="'+nombreAdjunto+'"><img class="" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+
+                       } else {
+
+                            adjuntos += '<a id="' + idadjunto + '" class="linkadjunto mimeType" title="'+nombreAdjunto+'" download="'+nombreAdjunto+'.'+tipodoc+'"><img class="" src="assets/images/' + tipodoc + '.png" alt="" ></a>';
+                       }
+     
+            //console.log(consultia_events[id]._adjuntos[n].idAdjunto);
             }
             document.getElementById("docs").innerHTML = adjuntos;
             
@@ -1486,8 +1483,20 @@ function showEventDetail(id, layout) {
                         dataType: 'json',
                         success: function (churro) {
                             console.log(churro);
-                            //Sacar el content-type y asignarlo a variable para parámetro de la función b64toBlob
+                            var  cuatroDigitosCadena =  churro.substring(0,4); console.log(cuatroDigitosCadena);
+                           //Si el String que devuelve la API de adjuntos no es del tipo data:[mime-type];base64;[...]
+                            if (cuatroDigitosCadena !== 'data'){
+                                    
+                                    //mensaje error personalizable
+                                    var mensajeErrorAdjunto = 'Ha habido un problema con el archivo.';
+                                    //anyadir clase para que modifique el tipo de cursor a 'prohibido'
+                                    $('#'+ numadjunto).addClass('cursor-not-allowed');
+                                    //modificar el mensaje al acercar el ratón por encima de la imagen del adjunto
+                                    document.getElementById(numadjunto).setAttribute('title',mensajeErrorAdjunto);
+                                    
 
+                            } else {
+                                     //Sacar el content-type y asignarlo a variable para parámetro de la función b64toBlob
                                     var arrayString = churro.split(":"); //genera un array de 2 elementos, 'data' y el resto del churro 
                                     var contentType = arrayString[1].split(";");  //genera un array de 2 elementos, el primero es el content-type y el segundo es  'base64,stringchurro'
                                     var content_type = contentType[0]; console.log("El content-type es: " + content_type); //string con el mime type
@@ -1495,33 +1504,34 @@ function showEventDetail(id, layout) {
                                     //Sacar el string en base64 para pasarlo por parámetro a la función b64b64toBlob()
                                     var arrayBase64 = contentType[1].split(','); 
                                     var stringBase64 = arrayBase64[1];  // console.log(stringBase64);//string en base64 
-                            
-                            
-                            //Detectado IE 
-                            if (detectIE()) {
-                                                                              
 
-                                    if (window.navigator.msSaveBlob) {
-                                       
-                                        //generamos el objeto blob a partir del String en base64 (churro) con la función b64toBlob
-                                        // var blob = b64toBlob(churro, 'application/pdf'); //TODO: AVERIGUAR POR QUÉ HA FUNCIONADO CON EL EXCEL SI LOS PARÁMETROS NO SON LOS QUE ESPERA LA FUNCIÓN
-                                        var blob = b64toBlob(stringBase64,content_type); console.log(blob);
-                                      //asignamos evento al vínculo para que se descargue al click
-                                      $('#'+numadjunto).on('click', function(){
-                                          
-                                          window.navigator.msSaveBlob(blob, 'Adjunto_' + numadjunto +'.'+ tipodoc);
-                                          
-                                      });
-                                      
-                                    }
 
-                            } else {
-                                 //Navegadores distintos de IE se anyade el atributo href con el valor del String base64
-                                 //console.log("churro");
-                                 var blob = b64toBlob(stringBase64,content_type);console.log(blob);
-                                 var descargarAdjunto = URL.createObjectURL(blob); console.log(descargarAdjunto);
-                                 $('#' + numadjunto).attr("href", descargarAdjunto);
+                                //Detectado IE 
+                                if (detectIE()) {
+
+
+                                        if (window.navigator.msSaveBlob) {
+
+                                            //generamos el objeto blob a partir del String en base64 (churro) con la función b64toBlob
+                                            // var blob = b64toBlob(churro, 'application/pdf'); //TODO: AVERIGUAR POR QUÉ HA FUNCIONADO CON EL EXCEL SI LOS PARÁMETROS NO SON LOS QUE ESPERA LA FUNCIÓN
+                                            var blob = b64toBlob(stringBase64,content_type); console.log(blob);
+                                          //asignamos evento al vínculo para que se descargue al click
+                                          $('#'+numadjunto).on('click', function(){
+
+                                              window.navigator.msSaveBlob(blob, 'Adjunto_' + numadjunto +'.'+ tipodoc);
+
+                                          });
+
+                                        }
+
+                                } else {
+                                    //Navegadores distintos de IE se anyade el atributo href con el valor del String base64
+                                    //console.log("churro");
+                                    var blob = b64toBlob(stringBase64,content_type);console.log(blob);
+                                    var descargarAdjunto = URL.createObjectURL(blob); console.log(descargarAdjunto);
+                                    $('#' + numadjunto).attr("href", descargarAdjunto);
                                 
+                                }
                             }
                                                                                   
                         },
@@ -1533,11 +1543,11 @@ function showEventDetail(id, layout) {
                     });
 
                 });
+                
             });
 
 
-
-        } else if (tiva_events[id]._adjuntos === null || tiva_events[id]._adjuntos === 'undefined') {
+        } else if (consultia_events[id]._adjuntos === null) {
 
             document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";
         }
@@ -1552,7 +1562,7 @@ function showEventDetail(id, layout) {
             $("#info-clima").on('click', function () {
                 $('.iconos').html("");
                 //caso1: si la diferencia es menor de 5 días anteriores a hoy, pero el evento dura como mínimo hasta hoy //caso2: eventos con fecha inicio desde hoy hasta 5 días después  //caso3: eventos con fechas inicio anteriores 5 días desde hoy cuya duración llega hasta hoy (hoy es primer día previsión meteo)
-                if (((diasDif >= -5) && (tiva_events[id].duration >= Math.abs(diasDif))) || ((diasDif <= 5) && (diasDif >= 0)) || ((diasDif < -5) && (tiva_events[id].duration >= Math.abs(diasDif)))) {
+                if (((diasDif >= -5) && (consultia_events[id].duration >= Math.abs(diasDif))) || ((diasDif <= 5) && (diasDif >= 0)) || ((diasDif < -5) && (consultia_events[id].duration >= Math.abs(diasDif)))) {
                     console.log("Es menor de 5 días");
                     if ($(".iconos").attr("id") === "iconos") {
                         $(".iconos").attr("id", "noMostrar");
@@ -1897,7 +1907,7 @@ function cargaCalendario() {
     } else { // Start with Monday
         wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun);
     }
-    tiva_events = []; //resetea los eventos, para que no se acumulen al realizar filtrados
+    consultia_events = []; //resetea los eventos, para que no se acumulen al realizar filtrados
     if (filtrar) {
         /* var url = "./events/ejemplo_agenda.json";*/
         var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + rangoFechaIni + "&FechaFin=" + rangoFechaFin;
@@ -2056,14 +2066,14 @@ function cargaCalendario() {
 
                 evento.date = event_date.getTime();
 
-                tiva_events.push(evento);
+                consultia_events.push(evento);
 
 
             }); //forEach entrada
 
-            tiva_events.sort(sortEventsByDate);
-            for (var i = 0; i < tiva_events.length; i++) {
-                tiva_events[i].id = i;
+            consultia_events.sort(sortEventsByDate);
+            for (var i = 0; i < consultia_events.length; i++) {
+                consultia_events[i].id = i;
             }
 
 
