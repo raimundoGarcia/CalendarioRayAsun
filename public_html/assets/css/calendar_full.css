@@ -666,6 +666,7 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
     flex-flow: row wrap;
     text-align: center;
     align-items: center;
+    margin-top: 20px;
 
 }
 @media (max-width:954px){

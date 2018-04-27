@@ -246,6 +246,10 @@ function changedate(btn, layout) {
 function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
     calendarString = '';
     daycounter = 0;
+    console.log(firstDay + "y el tipo es: "+ typeof(firstDay));
+    console.log(numbDays + "y el tipo es: "+ typeof(numbDays));
+    console.log(monthNum + "y el tipo es: "+ typeof(monthNum));
+    console.log(yearNum + "y el tipo es: "+ typeof(yearNum));
 
     calendarString += '<table class=\"calendar-table table table-bordered\">';
     calendarString += '<tbody>';
@@ -274,8 +278,8 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
     thisDate === 1;
 
-    for (var i = 1; i <= 6; i++) {
-        var k = (i - 1) * 7 + 1;
+    for (var i = 1; i <= 6; i++) { 
+        var k = (i - 1) * 7 + 1; //corresponde con el día de la semana (día del mes) que cae en domingo (en nuestro caso, programado para comenzar la semana en lunes
         if (k < (firstDay + numbDays)) {  //( día semana del día 1 del mes + num días del mes )
             calendarString += '<tr>';
             for (var x = 1; x <= 7; x++) {
@@ -465,7 +469,7 @@ function checkEvents(day, month, year) {
     for (var i = 0; i < consultia_events.length; i++) {
         var start_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, consultia_events[i].day);
         var end_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, Number(consultia_events[i].day) + Number(consultia_events[i].duration) - 1);
-        if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) {
+        if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) { 
             numevents++;
         }
     }
@@ -478,16 +482,16 @@ function checkEvents(day, month, year) {
 }
 
 function getOrderNumber(id, day, month, year) {  
-    var date_check = new Date(year, Number(month) - 1, day); //fecha actual
+    var date_check = new Date(year, Number(month) - 1, day); //fecha 
     var events = [];  //array para trabajar con los eventos recibidos en el json y ordenarlos después en cliente
     for (var i = 0; i < consultia_events.length; i++) {
         var start_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, consultia_events[i].day); //FECHA INICIO EVENTO
         var end_date = new Date(consultia_events[i].year, Number(consultia_events[i].month) - 1, Number(consultia_events[i].day) + Number(consultia_events[i].duration) - 1); //FECHA FIN EVENTO = fecha inicio + duración - 1
         if ((start_date.getTime() <= date_check.getTime()) && (date_check.getTime() <= end_date.getTime())) { //si la FECHA ACTUAL está entre la INICIO y la FIN del evento
-            var first_day = (start_date.getTime() === date_check.getTime()) ? true : false; //si la fecha inicio coincide con la fecha actual, first_day es TRUE
+            var first_day = (start_date.getTime() === date_check.getTime()) ? true : false; //si la fecha inicio coincide con la fecha pasada por parámetro, first_day es TRUE
             var event = {id: consultia_events[i].id, name: consultia_events[i].name, day: consultia_events[i].day, month: consultia_events[i].month,
                 year: consultia_events[i].year, first_day: first_day}; //se crea el evento  y se insertará en la lista
-            events.push(event);
+            events.push(event); //array de eventos 
         }
     }
 
