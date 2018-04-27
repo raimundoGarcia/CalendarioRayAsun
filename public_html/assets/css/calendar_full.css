@@ -65,7 +65,8 @@ tbody{
 }
 .consultia-calendar-full .calendar-table tr th {
     text-align: center;
-    color: #5AA4A3;
+    color: #4285F4;
+    font-weight: bold;
     background: #eeeeee;
     font-size: 14px;
 }
@@ -85,6 +86,8 @@ tbody{
 }
 .calendar-day-normal{
     font-weight: bold;
+    color: #4285F4 !important;
+    
 }
 .consultia-calendar-full .calendar-day-today {
     background: #d5e9e9;
@@ -337,6 +340,15 @@ tbody{
 }
 .consultia-event-detail-full .event-link a:hover {
     text-decoration: none;
+    color:#4285F4;
+}
+input, select, textarea{
+    color:#4285F4;
+    background-color: #4285F4;
+}
+
+textarea:focus, input:focus {
+    color:#4285F4;
 }
 .consultia-event-detail-full .event-link a i {
     margin-right: 5px;
@@ -719,6 +731,22 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 
 }
 /* /////////////////////DATE PICKER/////////////////////////// */
+.md-form .form-control{
+    color:#FFA732 !important;
+    border-bottom-color: #FFA732 !important ;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #FFA732 !important;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #FFA732 !important;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #FFA732 !important;
+}
 .datepicker{
     width: 28vw;
     text-align: center;
