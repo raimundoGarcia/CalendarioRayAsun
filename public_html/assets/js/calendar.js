@@ -305,11 +305,9 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
                         calendarString += '<td class=\"calendar-day-normal\">';
                     }
                     if (checkEvents(daycounter, monthNum, yearNum)) {
-                        if (layout === 'full') {
+                      
                             calendarString += '<div class=\"calendar-day-event\">';
-                        } else {
-                            calendarString += '<div class=\"calendar-day-event\" onmouseover=\"showTooltip(0, \'compact\', ' + daycounter + ', ' + monthNum + ', ' + yearNum + ', this)\" onmouseout=\"clearTooltip(\'compact\', this)\" onclick=\"showEventDetail(0, \'compact\')\">';
-                        }
+                        
                         calendarString += daycounter_s;
 
                         // Get events of day
@@ -414,14 +412,14 @@ function createCalendar(layout, firstDay, numbDays, monthNum, yearNum) {
 
                                     if (event_class === "first-day" || event_class === "one-day") {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
-                                                ' \" onclick=\"showEventDetail(' + events[t].id + ', \'full\')\"> <span class="event-name"  >' +
+                                                ' \" onclick=\"showEventDetail(' + events[t].id + ')\"> <span class="event-name"  >' +
                                                 formatCabecera(events[t].name, events[t].tipo, "calendario", palabrasEvento) +
                                                 //    getShortText(events[t].name, palabrasEvento).replace("-", '<i class="fas fa-arrow-right"></i>') + //limita el número de caractres y cambia el "-" por una ->
                                                 '</span><\/div>';
 
                                     } else {
                                         calendarString += '<div class=\"calendar-event-name ' + event_class + maxDiv + divSize + ' color-' + color + '\" id=\"' + events[t].id +
-                                                '\" onclick=\"showEventDetail(' + events[t].id + ', \'full\')\"> <span class="event-name"  >' + "." +
+                                                '\" onclick=\"showEventDetail( '+ events[t].id +' )"> <span class="event-name"  >' + "." +
                                                 '</span><\/div>';
 
                                     }
@@ -608,7 +606,7 @@ function showEventList() {
 
 
 
-        var eventoListado = '<div class="list__event" onclick="showEventDetail(' + consultia_list_events[i].id + ', \'full\')">' +
+        var eventoListado = '<div class="list__event" onclick="showEventDetail(' + consultia_list_events[i].id + ')">' +
                 '<div class="event__cabecera color-' + consultia_list_events[i].color + ' " >' +
                 formatCabecera(consultia_list_events[i].name, consultia_list_events[i]._tipo, "lista", null) +
                 '</div>' +
@@ -882,7 +880,7 @@ function showInfoFlightWarning(aviso) {
 }
 
 // Show event detail -- mostrar detalles de los eventos
-function showEventDetail(id, layout) {
+function showEventDetail(id) {
     var pais = "";
     var ciudad = "";
 
@@ -1873,7 +1871,8 @@ function cargaCalendario() {
     });
 
     // Set wordDay 
-    date_start = (typeof jQuery('.consultia-events-calendar').attr('data-start') !== "undefined") ? jQuery('.consultia-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
+    date_start = (typeof jQuery('.consultia-events-calendar').attr('data-start')
+            !== "undefined") ? jQuery('.consultia-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
     if (date_start === 'sunday') {
         wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
     } else { // Start with Monday
