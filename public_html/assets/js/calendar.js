@@ -1092,10 +1092,12 @@ function showEventDetail(id) {
         // Mostrar la información recomendada según el pais de destino 
 
         document.getElementById("info-lugar").addEventListener("click", function () { // esta funcion obtiene un listado de resultados con la dirección, siendo el pais la ultima 
-
+            if(pais ==="España"){
+                alert("No hay recomendaciones para viajes en España");
+            }else{
             buscarPais = "recomendaciones+viaje+" + pais + "&btnI"; // usamos google "im feeling lucky" para acceder a una buscada y abrir el primer resultado
             window.open('http://www.google.com/search?q=' + buscarPais);
-
+        }
         });
 
     });
