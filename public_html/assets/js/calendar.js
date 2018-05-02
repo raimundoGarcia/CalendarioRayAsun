@@ -989,9 +989,7 @@ function showEventDetail(id) {
     document.getElementsByClassName("iconos")[0].innerHTML = "";
     $("div.logo img").remove(); //elimina cualquier imagen anyadida como child para el logo
     icsDescription = ""; //limpiar variable global ICS
-
-    //   document.getElementsByClassName("iconos")[0].setAttribute('id', 'noMostrar');
-
+ 
 //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
     var tipoReserva = consultia_events[id]._tipo;
     var colorfondo = consultia_events[id].color;
@@ -1038,7 +1036,7 @@ function showEventDetail(id) {
 
         }
 
-        //BLOQUE ICS
+    //BLOQUE ICS
         //creación de la cadena de texto para el contenido del archivo ICS
         var icsFormat =
                 'BEGIN:VCALENDAR\n' +
