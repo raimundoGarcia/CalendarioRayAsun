@@ -32,8 +32,8 @@ tbody{
 }
 .consultia-calendar-full .calendar-title , .consultia-calendar-full .calendar-btn {
     text-align: center !important;
-    background: #4285f4;
-    color: #ffffff;
+    background: #92ACBE;
+    color: white;
     /*  height: 30px;*/
     vertical-align: middle !important;
 }
@@ -65,7 +65,7 @@ tbody{
 }
 .consultia-calendar-full .calendar-table tr th {
     text-align: center;
-    color: #4285F4;
+    color: #92ACBE;
     font-weight: bold;
     background: #eeeeee !important;
     font-size: 14px;
@@ -86,7 +86,7 @@ tbody{
 }
 .calendar-day-normal{
     font-weight: bold;
-    color: #4285F4 !important;
+    color: #92ACBE !important;
     
 }
 .consultia-calendar-full .calendar-day-today {
@@ -123,19 +123,19 @@ tbody{
 }
 /* Asignación de colores según tipo */
 .color-1{/* avion */
-    background-color:  #40d4e2;
+    background-color: #3DA5D9 ;
 }
 .color-2 {/* hotel */
-    background-color: #12a652;
+    background-color: #FF8533  ;
 }
 .color-3 { /* tren */
-    background-color: #756BB7;
+    background-color:#553DD9;
 }
 .color-4 { /* barco */
-    background-color: #327EE7;
+    background-color:  #FDDB35 ;
 }
 .color-5{ /* coche */
-    background:#E8412A;
+    background:#D73D90   ;
 }
 .color-6{ /* otros */
     background:greenyellow;
@@ -636,7 +636,7 @@ modal-body{
     border-radius: 2px !important;
 }
 
-CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
+/*CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA*/
 
 .modal-footer .btn+.btn {
     margin: 2.5rem !important;
@@ -732,19 +732,19 @@ CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA
 }
 /* /////////////////////DATE PICKER/////////////////////////// */
 .md-form .form-control{
-    color:#FFA732 !important; /* <----- texto al seleccionar */
-    border-bottom-color: #FFA732 !important ; /* <---- Barra baja*/
+    color:#92ACBE !important; /* <----- texto al seleccionar */
+    border-bottom-color: #92ACBE !important ; /* <---- Barra baja*/
 }
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #FFA732 !important;  /* <---- texto por defecto */
+    color: #92ACBE !important;  /* <---- texto por defecto */
     opacity: 1; /* Firefox */
 }
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #FFA732 !important;  /* <---- texto por defecto */
+    color: #92ACBE !important;  /* <---- texto por defecto */
 }
 
 ::-ms-input-placeholder { /* Microsoft Edge */
-    color: #FFA732 !important;  /* <---- texto por defecto */
+    color: #92ACBE !important;  /* <---- texto por defecto */
 }
 .datepicker{
     width: 28vw;
@@ -775,7 +775,9 @@ table td{
 
 
 /*///////// CONFIGUARCION DE LOS EVENTOS EN FORMATO LISTA //////////////*/
-
+.textoEvento{
+    color:black;
+}
 .list__event{
     margin-top: 1vh;
     border-radius: 5px;

@@ -38,7 +38,7 @@ var returnView = "calendario"; // asigna la vista a la que volver despues de mos
 var filtrar = false;
 var filtrado = 0;
 
-var fechaIniDefault = sumarDias(-15);
+var fechaIniDefault = sumarDias(-500);
 var fechaFinDefault = sumarDias(30);
 
 var rangoFechaIni = "";

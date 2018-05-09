@@ -78,9 +78,9 @@ function showEventList() {
                 '<div class="event__cabecera color-' + consultia_list_events[i].color + ' " >' +
                 formatCabecera(consultia_list_events[i].name, consultia_list_events[i]._tipo, "lista", null) +
                 '</div>' +
-                '<div class=event__fecha><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time + '</div>' +
-                '<div class=event__hora>' + event_time + '</div>' +
-                '<div class=event__ubicacion>' + consultia_list_events[i]._ubicacion + '</div>' +
+                '<div class="textoEvento event__fecha"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time + '</div>' +
+                '<div class="textoEvento event__hora">' + event_time + '</div>' +
+                '<div class="textoEvento event__ubicacion">' + consultia_list_events[i]._ubicacion + '</div>' +
                 '</div>';
         var today = new Date;
 
