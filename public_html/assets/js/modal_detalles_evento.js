@@ -4,7 +4,7 @@ function showEventDetail(id) {
     var pais = "";
     var ciudad = "";
 
-    var myvar = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+    var ventana_modal = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '            <div class="modal-dialog modal-lg" role="document">' +
             '                <!--Content-->' +
             '                <div class="modal-content">' +
@@ -94,7 +94,7 @@ function showEventDetail(id) {
             '            </div>' +
             '        </div>';
     $("#espacioModal").html("");
-    $("#espacioModal").append(myvar);
+    $("#espacioModal").append(ventana_modal);
 
 //RELLENAR Y MOSTRAR VENTANA MODAL 
 
