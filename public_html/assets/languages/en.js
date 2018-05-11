@@ -1,3 +1,5 @@
+//DATOS PARA UNA ESTRUCTURA DEL CALENDARIO EN INGLES
+
 // Day, Month
 var wordMonth = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 var wordDay_sun = "Sunday";

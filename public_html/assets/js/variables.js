@@ -1,8 +1,4 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 
 // Variable
@@ -38,8 +34,12 @@ var returnView = "calendario"; // asigna la vista a la que volver despues de mos
 var filtrar = false;
 var filtrado = 0;
 
-var fechaIniDefault = sumarDias(-500);
-var fechaFinDefault = sumarDias(30);
+var fechaIniDefault = sumarDias(-1000); //valor por defecto de dias que mostraran eventos anteriores de la fecha actual
+var fechaFinDefault = sumarDias(1000); //valor por defecto de dias que mostraran eventos a partir de la fecha actual
 
-var rangoFechaIni = "";
+var rangoFechaIni = ""; //variables que se cargan al seleccionar fechas en el datapicker
 var rangoFechaFin = "";
+
+var resolucionMinimaCalendario = 600; //ancho de la pantalla mínimo para que el calendario se muestre, de ser menor, se mostrará la lista
+var diasMaximoEntreFechas = 365; //rango máximo permitido entre dos fechas
+var eventosMaximoParaUnaSolaLista = 15; //cantidad de eventos máxima, para que tanto los eventos pendientes como finalizados se muestren en una sola lista

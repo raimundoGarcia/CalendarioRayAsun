@@ -232,6 +232,10 @@ tbody{
 .consultia-calendar-full .calendar-event-name.last-day span {
     opacity: 0;	
 }
+.consultia-calendar-full .calendar-event-name.cambioMes span{
+    opacity: 1 !important;
+    padding-left: 1vw;
+}
 
 /* Event list */
 .consultia-event-list-full {
@@ -792,6 +796,7 @@ table td{
     color:white;
     height: 4vh;
     font-size: 3vh;
+    cursor: pointer;
 }
 .event__fecha, .event__hora, .event__ubicacion, .numvuelo, .origen, .destino {
     font-size: 2vh;

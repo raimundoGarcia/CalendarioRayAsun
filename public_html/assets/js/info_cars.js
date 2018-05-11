@@ -1,3 +1,5 @@
+
+//Array de Json que relacionan el ID que nos da la API con el proveedor y su logo
 info_cars = [
     {"id":9, "proveedor": "Avis", "img":"Avis_logo.svg"},
     {"id":11, "proveedor": "Atesa", "img":"atesa_logo.svg"},

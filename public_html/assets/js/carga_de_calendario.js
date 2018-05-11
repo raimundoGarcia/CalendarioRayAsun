@@ -1,8 +1,11 @@
-
+/**
+ * @description Crea el inteface de el calendario, y carga todos los datos (es el CORE de el servicio web)
+ * @returns {undefined}
+ */
 // Init calendar full
 function cargaCalendario() {
-    $('.consultia-events-calendar.full').html("");
-    if (jQuery('.consultia-events-calendar.full').length) {
+    $('.consultia-events-calendar.full').html(""); //borra el calendario para no apilar varios
+    if (jQuery('.consultia-events-calendar.full').length) { //crea la barra de navegación y los div contenedores de la lista y el calendario
         jQuery('.consultia-events-calendar.full').html('<div class="events-calendar-bar">'
                 + '<div class="btn-cambio-interfaz"><button class=" btn btn-primary calendar-view calendar-btn boton-oculto calendar-bar__item active"><i class="far fa-calendar-alt"></i>&nbsp;' + calendar_view + '</button>'
                 + '<button class=" btn btn-primary list-view calendar-btn boton-oculto calendar-bar__item"><i class="fa fa-list"></i>&nbsp;' + list_view + '</button></div>'
@@ -35,7 +38,6 @@ function cargaCalendario() {
 
                 + ' </div>'
                 + ' <!--Grid row-->'
-                //         + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
                 + '<div class="btn-cambio-filtro"><button id="filtro-fechas" class="btn btn-primary  calendar-bar__item"><i class="fas fa-search"></i>&nbsp;Buscar</button>'
                 + '<button id="limpiar-filtro" class="btn btn-primary  calendar-bar__item"><i class="fas fa-undo-alt"></i></i>&nbsp;Deshacer</button></div>'
                 + '</div>'
@@ -47,24 +49,9 @@ function cargaCalendario() {
                 );
     }
 
-// Init calendar compact
-    if (jQuery('.consultia-events-calendar.compact').length) {
-        jQuery('.consultia-events-calendar.compact').html('<div class="events-calendar-bar">'
-                + '<span class="bar-btn calendar-view calendar-btn active"><i class="far fa-calendar-alt"></i>' + calendar_view + '</span>'
-                + '<span class="bar-btn list-view calendar-btn"><i class="fa fa-list"></i>' + list_view + '</span>'
-                //          + '<span class="bar-btn back-calendar pull-right active"><i class="fa fa-caret-left"></i>' + back + '</span>'
-                + '</div>'
-                + '<div class="cleardiv"></div>'
-                + '<div class="consultia-events-calendar-wrap">'
-                + '<div class="consultia-calendar-compact consultia-calendar"></div>'
-                + '<div class="consultia-event-list-compact consultia-event-list"></div>'
-                + '</div>'
-                );
-    }
-
 // Show - Hide view
 
-    jQuery('.consultia-event-list').hide();
+    jQuery('.consultia-event-list').hide(); //oculta el listado de eventos al iniciar
 
 
     jQuery('.consultia-events-calendar').each(function (index) {
@@ -84,80 +71,35 @@ function cargaCalendario() {
     date_start = (typeof jQuery('.consultia-events-calendar').attr('data-start')
             !== "undefined") ? jQuery('.consultia-events-calendar').attr('data-start') : 'monday'; //TODO: SELECTOR DE FORMATO PRIMER DÍA SEMANA
     if (date_start === 'sunday') {
-        wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat);
+        wordDay = new Array(wordDay_sun, wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat); //array con listado de dias
     } else { // Start with Monday
-        wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun);
+        wordDay = new Array(wordDay_mon, wordDay_tue, wordDay_wed, wordDay_thu, wordDay_fri, wordDay_sat, wordDay_sun); //array con listado de dias
     }
     consultia_events = []; //resetea los eventos, para que no se acumulen al realizar filtrados
     if (filtrar) {
-
-        var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + rangoFechaIni + "&FechaFin=" + rangoFechaFin;
+        //url para solicitar los eventos
+        var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + rangoFechaIni + "&FechaFin=" + rangoFechaFin; //ruta utilizada al introducir un rango de fechas
     } else {
-        var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + fechaIniDefault + "&FechaFin=" + fechaFinDefault;
+        var url = "http://192.168.0.250:5556/api/Calendario?idUsuario=2&FechaInicio=" + fechaIniDefault + "&FechaFin=" + fechaFinDefault;  //ruta utilizada por defecto
     }
-    filtrar = false;
+    filtrar = false; //reinicia el tipo de filtrado a por defecto despues de cada busqueda
 
 
 
-    promesaDatos = parametrosCabeceraAjax(url);
-    $.when(promesaDatos).done(function (entradas) {
-//            jQuery.ajax({
-//
-//                url: url,
-//                dataType: 'JSON',
-//                type: "GET",
-//                beforeSend: function () {
-//                    jQuery('.consultia-calendar').html('<div class="loading"><img src="assets/images/loading.gif" /></div>');
-//                },
-//                error: function (status, message)
-//                {
-//                    alert('A jQuery error has occurred. Status: ' + status + ' - Message: ' + message);
-//                },
-//                success: function (entradas) {
+    promesaDatos = parametrosCabeceraAjax(url); //petidición a la Api guardando los datos en "promesaDatos"
+    $.when(promesaDatos).done(function (entradas) { //promesa con petición a la API de eventos
 
-        diccionarioLogos = entradas.DiccionarioLogos; //array 
+        diccionarioLogos = entradas.DiccionarioLogos; //array con el listado de logos de empresas
 
-        j = -1; //contador para asignar las IP a los eventos
+
         entradas.Pedidos.forEach(function (entrada) {
-            j++;
-            var color = "1";
+
             tipo = entrada.Tipo;
 
-            // Asigna un color  cada evento, dependiendo del tipo de evento 
-            switch (tipo) {
-                case "Aereo":
-                    color = "1";
-                    break;
-                case "Hotel":
-                    color = "2";
-                    break;
-                case "Tren":
-                    color = "3";
-                    break;
-                case "Barco":
-                    color = "4";
-                    break;
-                case "Coche":
-                    color = "5";
-                    break;
-                case "Otros":
-                    color = "6";
-                    break;
-                case "Parking":
-                    color = "7";
-                    break;
-                case "Seguro":
-                    color = "8";
-                    break;
-                default:
-                    color = "9";
-                    break;
+            // Asigna un color a cada evento, dependiendo del tipo de evento 
+            color = colorAsignado(tipo);
 
-            }
-
-
-
-// asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
+            // asignación de los atributos al evento, usando substrings para fracionar la fecha formateada
             evento = {
 
                 "color": color,
@@ -242,26 +184,26 @@ function cargaCalendario() {
 
             }
 
-
+            // substring a las fechas de entrada para obtener la hora y minutos en formato "2018-04-04T20:25+02:00"
             var event_date = new Date(evento.year, Number(evento.month) - 1, evento.day, entrada.FechaInicio.substring(11, 13), entrada.FechaInicio.substring(14, 16));
 
-            evento.date = event_date.getTime();
+            evento.date = event_date.getTime(); //confierte la fecha en un número entero
 
-            consultia_events.push(evento);
+            consultia_events.push(evento); // añade el evento a el listado principal de eventos
 
 
         }); //forEach entrada
 
-        consultia_events.sort(sortEventsByDate);
+        consultia_events.sort(sortEventsByDate); //ordena los eventos por fecha 
         for (var i = 0; i < consultia_events.length; i++) {
-            consultia_events[i].id = i;
+            consultia_events[i].id = i; //asigna un id a cada evento despues de ordenarlo
         }
 
 
-// Create calendar
-        changedate('current', 'full');
-//  changedate('current', 'compact'); crea el calendario en forma compacta
-        if ($(window).width() <= 600) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
+// Create calendar en el mes actual
+        changedate('current');
+
+        if ($(window).width() <= resolucionMinimaCalendario) {  // da prioridad a la lista, y no muestra el calendario a partir de la resolucion absoluta X, en este caso 600px 
             $(".list-view").click();
             returnView = "lista";
 
@@ -269,89 +211,31 @@ function cargaCalendario() {
             $(".calendar-btn").removeClass("boton-oculto"); /* remueve la clase boton oculto en resoluciones superiores a X, para que tenga la opcion de cambiar 
              el tipo de vista entre calendario o vista */
             if (returnView === "lista") {
-                $(".list-view").click();
+                $(".list-view").click(); //emula un click en el boton mostrar lista
             } else {
-                $(".calendar-view").click();
+                $(".calendar-view").click(); //emula un click en el boton mostrar calendario
             }
         }
 
 
         jQuery('.consultia-events-calendar').each(function (index) {
             // Initial view
-            var initial_view = (typeof jQuery(this).attr('data-view') !== "undefined") ? jQuery(this).attr('data-view') : 'calendar';
-            if (initial_view === 'list') {
-                jQuery(this).find('.list-view').click();
+            var initial_view = (typeof jQuery(this).attr('data-view') !== "undefined") ? jQuery(this).attr('data-view') : 'calendar'; //define la vista inicial del calendario, 
+            if (initial_view === 'list') {                                                                                            // para cambiarlo a lista poner "list" en vez de calendar
+                jQuery(this).find('.list-view').click(); //emula un click en el boton mostrar lista
             }
         });
 
     });
 //    }
 
-// Click - Calendar view btn
-    jQuery('.consultia-events-calendar .calendar-view').click(function () {
-        //   jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').fadeIn(500);
 
-        jQuery(this).parents('.consultia-events-calendar').find('.list-view').removeClass('active');
-        jQuery(this).parents('.consultia-events-calendar').find('.calendar-view').addClass('active');
-        returnView = "calendario";
-    });
-
-// Click - List view btn
-    jQuery('.consultia-events-calendar .list-view').click(function () {
-        //  jQuery(this).parents('.consultia-events-calendar').find('.back-calendar').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-calendar').hide();
-        jQuery(this).parents('.consultia-events-calendar').find('.consultia-event-list').fadeIn(500);
-
-        jQuery(this).parents('.consultia-events-calendar').find('.calendar-view').removeClass('active');
-        jQuery(this).parents('.consultia-events-calendar').find('.list-view').addClass('active');
-        returnView = "lista";
-        showEventList();
-
-    });
 
 // Carga controles del DataPicker (al final de la carga completa del calendario)
     controlesDataPicker();
+    //carga los controles de los botones de la barra de navegación
+    botonesNavVar();
 
 
-    $("#filtro-fechas").on("click", function () {
 
-        FechaIni = $("#startingDate").val();
-        FechaFin = $("#endingDate").val();
-        if ((FechaIni !== "") && FechaFin !== "") {
-
-
-            rangoFechaIni = FechaIni.split("-").reverse().join("-");
-            rangoFechaFin = FechaFin.split("-").reverse().join("-");
-            var cantidadDiasFiltrado = dayDifference(rangoFechaIni, rangoFechaFin);
-            if (cantidadDiasFiltrado > 365) {
-                alert("No puede haber más de un año de diferencia entre la fecha inicial y la final");
-            } else {
-
-                if (diferenciaDiasClima(new Date, rangoFechaIni) > 0) {
-                    filtrar = true;
-                    filtrado = 1;
-                    cargaCalendario();
-                } else if (diferenciaDiasClima(new Date, rangoFechaFin) < 0) {
-                    filtrar = true;
-                    filtrado = 2;
-                    cargaCalendario();
-                } else {
-                    filtrar = true;
-                    filtrado = 3;
-                    cargaCalendario();
-                }
-            }
-        } else {
-            alert("Selecciona fecha de inicio y fin para realizar una busqueda");
-
-        }
-
-    });
-    $("#limpiar-filtro").on("click", function () {
-        filtrar = false;
-        filtrado = 0;
-        cargaCalendario();
-    });
 }

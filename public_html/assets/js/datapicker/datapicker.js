@@ -1,3 +1,7 @@
+/**
+ * @description controlador de los datapicker
+ * @returns {undefined}
+ */
 function controlesDataPicker() {
 
     $('.datepicker').pickadate({
@@ -96,7 +100,8 @@ function controlesDataPicker() {
             buttonToday: 'picker__button--today'
         }
     });
-    $("#startingDate").on("change", function () {
+   //funciones encargadas de que cuando se selecciona una fecha en un "datePicker", se bloqueen ciertas fechas en su homólogo
+    $("#startingDate").on("change", function () { //al seleccionar una fecha en el picker de fecha inicial, todas las fechas anteriores a esta se bloquearan en el picker de fecha final
         currentDate = $("#startingDate").val();
         var $input = $("#endingDate").pickadate();
         var ban = $input.pickadate('picker');
@@ -104,7 +109,7 @@ function controlesDataPicker() {
 
 
     });
-        $("#endingDate").on("change", function () {
+        $("#endingDate").on("change", function () { //al seleccionar una fecha en el picker de fecha final, todas las fechas posteriores a esta se bloquearan en el picker de fecha inicial
         currentDate = $("#endingDate").val();
         var $input = $("#startingDate").pickadate();
         var ban = $input.pickadate('picker');

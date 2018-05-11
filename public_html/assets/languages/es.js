@@ -1,3 +1,5 @@
+//DATOS PARA UNA ESTRUCTURA DEL CALENDARIO EN ESPAÑOL
+
 // Day, Month
 var wordMonth = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
 var wordDay_sun = "Domingo";

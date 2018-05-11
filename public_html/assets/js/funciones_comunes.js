@@ -1,14 +1,19 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @description da formato al asunto mostrado en la cabecera, añadiendole un icono segun el tipo, remplazando "-- >"
+ *  por un icono de flecha, y en el caso del calendario, adaptando los caracteres maximos a la resolucion
+ * @param {string} asunto dato recogido por la petición a la API, será la "cabecera" de nuestros eventos
+ * @param {string} tipo -Tipo de evento que tiene lugar ( aereo, hotel, tren, barco, coche, etc...)
+ * @param {string} formato , uno de los tres formatos disponibles ( calendario, lista, modal )
+ * @param {Number} maxCaracter (limitador de caracteres máximos)
+ * @returns {String} Cabecera formateada dependiendo del tipo de formato en el que se va a presentar
+ * @see 
  */
 
 function formatCabecera(asunto, tipo, formato, maxCaracter) {
     var texto = "";
     switch (formato) {
         case "calendario":
-            switch (tipo) {
+            switch (tipo) { // añade el icono correspondiente, recorta el texto acorde a la resolución, y sustituye la flecha por un icono de flecha
                 case "Aereo":
                     var cabecera = asunto.replace("-- >", "$");
                     texto = '<i class="fas fa-plane"></i>&nbsp;' + getShortText(cabecera, maxCaracter).replace("$", '<i class="fas fa-arrow-right"></i>');
@@ -42,7 +47,7 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
             }
             break;
         case "lista":
-            switch (tipo) {
+            switch (tipo) { // añade el icono según tipo, remplaza la flecha por el incono de flecha, y recorte la hora mostrada al principio en algunos de los eventos 
                 case "Aereo":
                     texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-- >", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
@@ -74,7 +79,7 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
             break;
 
         case "modal":
-            switch (tipo) {
+            switch (tipo) {  // añade el icono según tipo, remplaza la flecha por el incono de flecha, y recorte la hora mostrada al principio en algunos de los eventos 
                 case "Aereo":
                     texto = '<i class="fas fa-plane"></i>&nbsp;' + asunto.replace("-- >", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
@@ -114,7 +119,7 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
 
 
 //////////////////////
-function timeTo12HrFormat(time) //convierte el formato de 24 horas, en formato de 12 horas AM y PM
+function timeTo12HrFormat(time) //convierte el formato de 24:00 horas, en formato de 12:00 horas AM y PM
 {
     var time_part_array = time.split(":");
     var ampm = 'AM';
