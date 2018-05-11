@@ -400,14 +400,15 @@ function previsionMeteo(id,latDestino,lonDestino,diasDif){
                             icono_meteo = "";
                             //recorrer el diccionario de descripciones de fenómenos metereológicos.
                             info_meteoro.forEach(function (medicion) {
-                                //TODO: SEGUIR COMENTANDO...............................................................
+                               //cuando el código de identificación de las condiciones meteo coincida con el máximo obtenido
                                 if (medicion.id == maximo) {
+                                    //sacar los datos y la imagen para mostrar en el panel
                                     descripcion = medicion.descripcion;
                                     icono_meteo = medicion.icono;
 
                                 }
                                 if (icono_meteo === null || icono_meteo === "" || icono_meteo === 'undefined') { // Si la previsión corresponde a los grupos sin icono 90x , 9xx
-                                    icono_meteo = 'Consultia';
+                                    icono_meteo = 'Consultia'; //aparecerá el logo de consultia o cualquier otra imagen que se establezca como genérica.
                                 }
 
                             });
@@ -445,9 +446,10 @@ function previsionMeteo(id,latDestino,lonDestino,diasDif){
                     }
                 });
 
-                //si no, aviso al usuario 
+            
 
-            } else { //resto de casos, cuando la diferencia de días con la fecha de inicio es mayor a 5 en el pasado (y el evento no dura hasta hoy mínimo) o más de 5 días en el futuro(supera días máximos previsión desde hoy)
+            } else { //resto de casos, cuando la diferencia de días con la fecha de inicio es mayor a 5 en el pasado (y el evento no dura hasta hoy mínimo)
+                // o más de 5 días en el futuro(supera días máximos previsión desde hoy)
 
                 variableTexto = '<div class="toast-text">Evento pasado o demasiado lejano, no hay previsiones disponibles.</div>';
                 $('<div class="toaster toast-warning">' + variableTexto + '</div>').insertBefore($('#info-lugar'));
@@ -460,17 +462,31 @@ function previsionMeteo(id,latDestino,lonDestino,diasDif){
             }
 
         }); //fin información clima
-
+//si no hay datos de coordenadas del destino, se oculta el botón (código comentado) o bien se puede deshabilitar 
     } else {
-        $('#info-clima').addClass('isDisabled');
+        // document.getElementById('info-clima').style.display = 'none';
+       $('#info-clima').addClass('isDisabled');
     }
 }
 
+/**
+ * Método que muestra en el navegador una ventana modal con información detallada 
+ * sobre un evento del calendario. Asociado al click sobre un evento concreto tanto en la vista de calendario
+ * como en la vista de listado.
+ * @param {integer} id, número entero que identifica a un evento dentro del array de eventos totales consultia_events[] o el array diario events[]
+ * @returns {undefined}
+ * @see previsionMeteo(id,latDestino,lonDestino,diasDif), mostrarAdjuntosEvento(id), 
+ * mostrarInfoInteresDestino(latDestino, lonDestino), mostrarMapa(id,lat,lon,latDestino,lonDestino,tipoReserva), 
+ * descargaICS(id), seguimientoVueloGoogle(codigoV)
+ */
+
 function showEventDetail(id) {
+   //inicialización de variables que serán usadas en algunos de los métodos llamados dentro de esta función
     var pais = "";
     var ciudad = "";
-    icsDescription = ""; //variable global ICS 
-
+    //variable global ICS 
+    icsDescription = ""; 
+    //estructura de la ventana modal
     var ventana_modal = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '            <div class="modal-dialog modal-lg" role="document">' +
             '                <!--Content-->' +
@@ -534,10 +550,10 @@ function showEventDetail(id) {
             '                            <div class="info-interes">' +
             '                                <h4 class="modaltext-titulo destacado">Información de interés: </h4>' +
             '' +
-            '                                <a  href="#iconos" id="info-clima" class=" btn btn-success btn-sm textoboton"><i class="fas fa-cloud"></i> Clima</a><br/>' +
+            '                                <a  href="#iconos" id="info-clima" class=" btn btn-success textoboton"><i class="fas fa-cloud"></i> Clima</a><br/>' +
             '                                <div  class="iconos"></div>' +
             '                                <br/>' +
-            '                                <button id="info-lugar" class=" btn btn-success btn-sm textoboton "><i class="fas fa-info-circle"></i> Información adicional</button>' +
+            '                                <button id="info-lugar" class=" btn btn-success textoboton "><i class="fas fa-info-circle"></i> Información adicional</button>' +
             '                            </div>' +
             '                            <div id="adjuntos" class="adjuntos">' +
             '                                <h4 class="modaltext-titulo destacado">Documentos adjuntos:</h4>' +
@@ -560,42 +576,41 @@ function showEventDetail(id) {
             '                <!--/.Content-->' +
             '            </div>' +
             '        </div>';
+    //limpiar el html y anyadir la ventana al index.html
     $("#espacioModal").html("");
     $("#espacioModal").append(ventana_modal);
-
-//RELLENAR Y MOSTRAR VENTANA MODAL 
+    
+    //RELLENAR Y MOSTRAR VENTANA MODAL 
  
-//BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
+    //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
+    //obtener el tipo de reserva 
     var tipoReserva = consultia_events[id]._tipo;
+    //obtener el color de fondo
     var colorfondo = consultia_events[id].color;
+    //Colorear cabecera ventana según tipo reserva
+    document.getElementById("asunto").classList.add("color-" + colorfondo);
+    document.getElementById("linea").classList.add("color-" + colorfondo);
 
     //fechas para calcular rangos de días
     fechaInicioViaje = consultia_events[id]._fechaInicio;
     hoy = new Date();
-    diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); //diferencia entre hoy y la fecha inicio viaje (para clima y para seguimiento vuelo)
+    //diferencia entre hoy y la fecha inicio viaje (para clima y para seguimiento vuelo)
+    diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); 
 
     //Coordenadas origen
     var lat = consultia_events[id]._latitudOrigen;
     var lon = consultia_events[id]._longitudOrigen;
 
-    // Coordenadas destino (clima)
+    // Coordenadas destino
     var latDestino = consultia_events[id]._latitudDestino;
     var lonDestino = consultia_events[id]._longitudDestino;
    
-    //Ubicación en sección Mapa
-    
+    //Ubicación en sección Mapa o mostrar ruta en mapa si hay origen y destino
     mostrarMapa(id,lat,lon,latDestino,lonDestino,tipoReserva);
     
     //Mostrar web ministerio asuntos exteriores con recomendaciones para el país de destino
     mostrarInfoInteresDestino(latDestino, lonDestino);
-            
-    
-    //Colorear cabecera ventana según tipo reserva
-    var item = document.getElementById("asunto").classList.item(1); //si la selección está fuera de rango devuelve 'null'
-    document.getElementById("asunto").classList.remove(item); //eliminar 'null' no da errores en consola
-    document.getElementById("asunto").classList.add("color-" + colorfondo);
-    document.getElementById("linea").classList.add("color-" + colorfondo);
-
+         
     //Fechas salida-llegada / origen-destino
     var fechaInicioEvento = consultia_events[id].day + "/" + consultia_events[id].month + "/" + consultia_events[id].year; //formato dd/mm/aaaa
     var fechaFinEvento = consultia_events[id]._diaFin + "/" + consultia_events[id]._mesFin + "/" + consultia_events[id]._anyoFin;
@@ -603,28 +618,28 @@ function showEventDetail(id) {
     document.getElementById("fecha-d").innerHTML = fechaFinEvento;
 
     //Variables para las horas
-    var horaOrigen = consultia_events[id].time; //siempre hora inicio
+    var horaOrigen = consultia_events[id].time; //.time es siempre hora inicio
     var horaDestino = consultia_events[id]._horaFin;
+    //Mensaje personalizable para avisar al usuario
     var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local en cada país.";
 
     //Localizador de la reserva
     var localizadorReserva = consultia_events[id]._localizador;
     document.getElementById("localizador").innerHTML = "<h5 class='destacado modaltext'>LOCALIZADOR RESERVA: " + localizadorReserva + "</h5>";
 
-    //A continuación se llamará a una función para tratar el asunto correctamente según el tipo de reserva 
+    //A continuación se llamará a una función para tratar el String del asunto correctamente según el tipo de reserva 
     document.getElementById("asunto").innerHTML = formatCabecera(consultia_events[id].name, tipoReserva, "modal", null);
     
-    //BLOQUE ICS
-    descargaICS(id); 
-
-//BLOQUES PARTICULARIDADES POR TIPO DE RESERVA          
+    
+//BLOQUES PARTICULARIDADES POR TIPO DE RESERVA.    
+    //AEREO
     if (tipoReserva === "Aereo") {
-
+        //obtener el identificador del vuelo
         var codigoV = consultia_events[id]._NVuelo;
-        var companyiaAerea = codigoV.split("-"); //vector con [0] codigo companyia y con [1] numero vuelo, por si hay que usarlo para los logos
-
-        codigoV = codigoV.replace("-", ""); //para buscador google el código debe salir sin dash
-
+        var companyiaAerea = codigoV.split("-"); //vector con codigo companyia en la posición [0]  y numero vuelo en la posición [1] , por si hay que usarlo para los logos
+        //para buscador google el código debe salir sin dash:
+        codigoV = codigoV.replace("-", ""); 
+        //si se ha devuelto la información necesaria del servidor
         if (diccionarioLogos.length > 0) {
             for (var i = 0; i < diccionarioLogos.length; i++) {
                 if (companyiaAerea[0] == diccionarioLogos[i].IATA) {
@@ -632,17 +647,16 @@ function showEventDetail(id) {
                     $('.logo').append("<img src='" + logoAerolinea + "' alt='Logo-Aerolinea'>");
                 }
             }
+        //si no, aparecerá el logo de Consultia por defecto o cualquiera que se elija
         } else {
             $('.logo').append("<img src='assets/images/Consultia.png' alt='Logo-Aerolinea'>");
         }
 
-
-        //Búsqueda vuelo google según código vuelo formato sin separador entre código aerolínea y numero vuelo
-                
+        //Búsqueda vuelo google según código vuelo 
         seguimientoVueloGoogle(codigoV);
       
 
-        //nombre aerolinea ESTE CAMPO ES INDEPENDIENTE DEL IDPROVEEDOR (NO SE DISPONE DICCIONARIO DE AEROLINEAS)
+        //nombre aerolinea, ESTE CAMPO ES INDEPENDIENTE DEL ID PROVEEDOR (NO SE DISPONE DICCIONARIO DE AEROLINEAS)
         var aerolinea = consultia_events[id]._Aerolinea;
 
         //Bloque horarios
@@ -661,12 +675,12 @@ function showEventDetail(id) {
         duracionHoras = duracionHoras.split(":");
         var horas = duracionHoras[0];
         var minutos = duracionHoras[1];
-
+        //Damos estructura al apartado de descripción de la ventana modal
         document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>NÚMERO VUELO: " + codigoV + "</h5><h5 class='destacado modaltext'>AEROLÍNEA: " + aerolinea + "</h5>"
                 + "<h5 class='modaltext'>Aeropuerto Salida: " + salidaIata + " - " + aeropuertoSalida + "</h5>" +
                 "<h5 class='modaltext'>Aeropuerto Llegada: " + llegadaIata + " - " + aeropuertoLlegada + "</h5>" +
                 "<h5 class='modaltext'>Duración vuelo: " + horas + " horas y " + minutos + " minutos. </h5><h6 class='modaltext'><span class='highlight-color'>" + avisoHorario + "</span></h6>";
-        //Bloque descripción ICS
+        //Bloque descripción ICS con la información obtenida previamente
         icsDescription =
                 'DESCRIPTION: Tiene una reserva de VUELO para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
                 ' Localizador: ' + localizadorReserva + '\\n' +
@@ -682,15 +696,17 @@ function showEventDetail(id) {
                 avisoHorario + '\n' +
                 'SUMMARY: VUELO: ' + fechaInicioEvento + " " + horaOrigen + " " + aeropuertoSalida + " --> " + fechaFinEvento + " " + horaDestino + " " + aeropuertoLlegada + '\n' +
                 'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
-                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+                'ATTENDEE;CN=" Nombre del viajero principal "' + nombreViajeroPrincipal + ';RSVP=TRUE:mailto:' + emailViajeroPrincipal + '\n';
 
+    //HOTEL
     } else if (tipoReserva === "Hotel") { 
-
+        //Ocultar el botón para los vuelos
         document.getElementById("googlesearchvuelo").style.display = "none";
+        //Información fija  para hoteles
         document.getElementById("ciudad-o").innerHTML = "ENTRADA";
         document.getElementById("ciudad-d").innerHTML = "SALIDA";
-        document.getElementById("hora-o").innerHTML = "14:00 aprox.";   //consultia_events[id].time
-        document.getElementById("hora-d").innerHTML = "12:00 aprox."; //consultia_events[id]._horaFin
+        document.getElementById("hora-o").innerHTML = "14:00 aprox.";   
+        document.getElementById("hora-d").innerHTML = "12:00 aprox."; 
         //
         //Bloque descripción
         var nombreHotel = consultia_events[id]._nombreHotel;
@@ -698,19 +714,26 @@ function showEventDetail(id) {
         var regimen = consultia_events[id]._regimen;
         var tipoHabitacion = consultia_events[id]._tipohabita;
         var acompanyantes = consultia_events[id]._acompanyantes;
+        
         //TODO: Obtención de la ciudad a partir de la dirección postal que viene de base datos PROVISIONAL
         var laCiudad = direccionHotel.split(',');
         laCiudad = laCiudad[laCiudad.length - 2];
-
+        //Obtener los acompañantes (SUPONIENDO QUE DEL SERVIDOR VENGA LA INFORMACIÓN SÓLO DE LOS ACOMPAÑANTES)
         var html = "";
         for (i = 0; i < acompanyantes.length; i++) {
             html += "<h5 class='modaltext'>Acompañante: " + acompanyantes[i].Nombre + "</h5>";
+            //var emailAcompanyante = acompanyantes[i].
         }
+        //TODO: Obtener nombre y email del viajero principal
+        var nombreViajeroPrincipal = 'Nombre Viajero Principal';
+        var emailViajeroPrincipal = 'jm.rubio@consultia.es';
+        
         document.getElementById("descripcion").innerHTML = "<h5 class='modaltext'>Hotel: " + nombreHotel +
                 "</h5><h5 class='modaltext'>Dirección: " + direccionHotel +
                 "</h5><h5 class='modaltext'>Régimen: " + regimen + "</h5><h5 class='modaltext'>Tipo Habitación: " +
                 tipoHabitacion + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
         document.getElementById("compartecon").innerHTML = html;
+        
         //Bloque descripción ICS
         icsDescription =
                 'DESCRIPTION: Tiene una reserva de HOTEL para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
@@ -727,38 +750,43 @@ function showEventDetail(id) {
                 avisoHorario + '\n' +
                 'SUMMARY: HOTEL EN: ' + laCiudad + " " + fechaInicioEvento + " " + horaOrigen + " --> " + fechaFinEvento + " " + horaDestino + '\n' +
                 'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
-                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+                'ATTENDEE;CN=" Nombre del viajero principal "' + nombreViajeroPrincipal + ';RSVP=TRUE:mailto:' + emailViajeroPrincipal + '\n'; //TODO: obtención del nombre y email del viajero principal
 
+    //COCHE
     } else if (tipoReserva === "Coche") {
         //logo coches
         var codigoRent = consultia_events[id]._idProveedor; //string con el código
         var proveedor = "";
-
+        //recorrer el diccionario de logos para proveedores de coches en archivo info_cars.js
         info_cars.forEach(function (agencia) {
-
-
-            if (agencia.id == codigoRent) { //compara un int con un string
+            //localizar la información en el diccionario
+            if (agencia.id == codigoRent) { //compara un int con un string, no anyadir otro '='
                 rentacar = agencia.img;
                 proveedor = agencia.proveedor;
-
+                //anyadir el logo
                 $('.logo').append("<img src='assets/images/img_proveedores/" + rentacar + "' alt='" + proveedor + "'>");
             }
 
         });
-
+        //Ocultar el botón para vuelos
         document.getElementById("googlesearchvuelo").style.display = "none";
         //horas
         document.getElementById("hora-o").innerHTML = horaOrigen; //recogida
         document.getElementById("hora-d").innerHTML = horaDestino; //entrega
-        //para la cabecera            
+        //para la cabecera, cadenas fijas            
         document.getElementById("ciudad-o").innerHTML = "RECOGIDA";
         document.getElementById("ciudad-d").innerHTML = "ENTREGA";
-
+        //Obtener los acompañantes (SUPONIENDO QUE DEL SERVIDOR VENGA LA INFORMACIÓN SÓLO DE LOS ACOMPAÑANTES)
         var acompanyantes = consultia_events[id]._acompanyantes;
         var html = "";
         for (i = 0; i < acompanyantes.length; i++) {
             html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + acompanyantes[i].Nombre + "</h5>";
         }
+        
+        //TODO: Obtener nombre y email del viajero principal
+        var nombreViajeroPrincipal = 'Nombre Viajero Principal';
+        var emailViajeroPrincipal = 'jm.rubio@consultia.es';
+        
         //Bloque Descripción
         var categoria = consultia_events[id]._categoria;
         var transmision = consultia_events[id]._transmision;
@@ -773,7 +801,8 @@ function showEventDetail(id) {
                 direccionRecogida + "</h5><h5 class='modaltext'>Dirección Entrega: " +
                 direccionEntrega + "</h5><h6 class='modaltext'> <span class='highlight-color'>" + avisoHorario + "</span></h6>";
         document.getElementById("compartecon").innerHTML = html;
-
+        
+        //Bloque descripción ICS
         icsDescription =
                 'DESCRIPTION: Tiene una reserva de COCHE para el ' + fechaInicioEvento + ' con los siguientes detalles: \\n\\n' +
                 ' Localizador: ' + localizadorReserva + '\\n' +
@@ -792,8 +821,9 @@ function showEventDetail(id) {
                 avisoHorario + '\n' +
                 'SUMMARY: COCHE: ' + fechaInicioEvento + " " + horaOrigen + " --> " + fechaFinEvento + " " + horaDestino + '\n' +
                 'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
-                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
-
+                'ATTENDEE;CN=" Nombre del viajero principal "' + nombreViajeroPrincipal + ';RSVP=TRUE:mailto:' + emailViajeroPrincipal + '\n';
+    
+    //TREN
     } else if (tipoReserva === "Tren") {
         //logo renfe
 
@@ -847,13 +877,13 @@ function showEventDetail(id) {
                 avisoHorario + '\n' +
                 'SUMMARY: TREN: ' + fechaInicioEvento + " " + horaOrigen + " " + estacionOrigen + " --> " + fechaFinEvento + " " + horaDestino + " " + estacionDestino + '\n' +
                 'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
-                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
-
+                'ATTENDEE;CN=" Nombre del viajero principal "' + nombreViajeroPrincipal + ';RSVP=TRUE:mailto:' + emailViajeroPrincipal + '\n';
+    //BARCO
     } else if (tipoReserva === "Barco") {
 
         //logo FIJO
         $('.logo').append("<img src='assets/images/img_proveedores/logo_crucero_generico.png' alt='Logo-barco'>");
-
+        //Ocultar botón para vuelos
         document.getElementById("googlesearchvuelo").style.display = "none";
         //horas
         document.getElementById("hora-o").innerHTML = horaOrigen;
@@ -865,12 +895,13 @@ function showEventDetail(id) {
         document.getElementById("ciudad-o").innerHTML = origen;
         document.getElementById("ciudad-d").innerHTML = destino;
         var acomodacion = consultia_events[id]._acomodacion;
+        //Vehículos abordo
         var vehiculos = consultia_events[id]._vehiculos;
         var matriculas = " ";
         for (i = 0; i < vehiculos.length; i++) {
             matriculas += "<span class=\"matricula\">" + vehiculos[i].Matricula + "</span>";
         }
-
+        //Mostrar información 
         document.getElementById("descripcion").innerHTML = "<h5 class='destacado modaltext'>Proveedor: " + proveedor +
                 "</h5><h5 class='modaltext'>Origen: " + origen +
                 "</h5><h5 class='modaltext'>Destino: " + destino + "<h5>Acomodación: " + acomodacion +
@@ -892,24 +923,26 @@ function showEventDetail(id) {
                 avisoHorario + '\n' +
                 'SUMMARY: BARCO: ' + fechaInicioEvento + " " + horaOrigen + " " + origen + " --> " + fechaFinEvento + " " + horaDestino + " " + destino + '\n' +
                 'ORGANIZER:MAILTO:avisos@consultiatravel.es\n' +
-                'ATTENDEE;CN=" Nombre del viajero principal ";RSVP=TRUE:mailto:jm.rubio@consultiatravel.es\n';
+                'ATTENDEE;CN=" Nombre del viajero principal "' + nombreViajeroPrincipal + ';RSVP=TRUE:mailto:' + emailViajeroPrincipal + '\n';
 
+    //OTROS (SEGUROS, PARKING...)
     } else if (tipoReserva === "Otros") {
         document.getElementById("googlesearchvuelo").style.display = "none";
-        //TODO: por determinar la estructura y optimización en general
+        //TODO: por determinar la estructura y lógica
     }
 
 
     //GESTIÓN DE LOS ADJUNTOS
-    
     mostrarAdjuntosEvento(id);
 
 
     //GESTIÓN DE LOS DATOS DEL CLIMA EN DESTINO/UBICACIÓN
-    
     previsionMeteo(id,latDestino,lonDestino,diasDif);
+    
+    //BLOQUE ICS
+    descargaICS(id); 
 
-
+//Finalmente se muestra la ventana modal con toda la información obtenida
     $("#fichaDetalle").modal("show");
 
 
