@@ -1,12 +1,15 @@
+/**
+ * El método calcula la diferencia de días entre el día de consulta de la previsión del tiempo con el día de inicio del viaje
+ * se llama dentro de la función para mostrar detalle evento (ventana modal)
+ * @param {Object} hoy, Objeto Date fecha del sistema en el momento de ejecución de la función
+ * @param {Object} inicioViaje, fecha inicial del evento
+ * @returns {Number} devuelve la diferencia de tiempo en días (puede ser decimal)
+ */
 
-
-
-//calcula la diferencia de días entre el día de consulta de la previsión del tiempo con el día de inicio del viaje
-// se llama dentro de la función para mostrar detalle evento (ventana modal)
 function diferenciaDiasClima(hoy, inicioViaje) {
     //obtener fecha hoy en milisegundos    
     var ms_hoy = hoy.getTime();
-
+    
     //obtener fecha inicio viaje en ms
     var inicio = new Date(inicioViaje);
     var ms_inicio = inicio.getTime();
@@ -16,15 +19,20 @@ function diferenciaDiasClima(hoy, inicioViaje) {
     var timeDifference = ms_inicio - ms_hoy;
 
 
-    // en horas
+    // transformar los milisegundos en horas
     var timeDifferenceInHours = timeDifference / 3600000;
 
-    // and finaly, in days :)
+    // y finalmente, en días
     var timeDifferenceInDays = timeDifferenceInHours / 24;
 
     return timeDifferenceInDays;
 }
-//Detecta el navegador IExplorer devolviendo la versión del IE o False en caso de ser distinto navegador
+/**
+ * Método que detecta el navegador IExplorer devolviendo la versión del IE o False en caso de ser distinto navegador
+ * @returns {Boolean} o un String con la versión del navegador IE
+ */
+
+
 function detectIE() {
 
     var ua = window.navigator.userAgent;
@@ -80,13 +88,19 @@ function detectIE() {
 
 }
 
-//Convierte base64 a blob, pasando como parámetros el String en base64 y el content-type. Retorna el blob.
+/**
+ * Método que convierte la cadena base64 en un objeto blob para ser manipulado por el navegador
+ * y poder descargarse en el dispositivo del usuario.
+ * @param {String} b64Data, cadena en base 64 con la información contenida en el archivo.
+ * @param {String} contentType, cadena que indica el tipo de archivo (pdf, txt, xlsx...)
+ * @returns {Blob} Devuelve el objeto blob correspondiente al archivo en cuestión.
+ */
+
 
 function b64toBlob(b64Data, contentType) {
 
-//procesamiento de byteCharacters en trozos más pequeños de 512 bytes
     contentType = contentType || '';
-
+    //procesamiento de byteCharacters en trozos más pequeños de 512 bytes
     var sliceSize = 512;
 
     b64Data = b64Data.replace(/^[^,]+,/, '');
@@ -97,7 +111,7 @@ function b64toBlob(b64Data, contentType) {
 
     var byteArrays = [];
 
-
+//recorre la cadena por secciones según el tamanyo establecido
     for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
 
         var slice = byteCharacters.slice(offset, offset + sliceSize); //hace porciones de 512 en 512 bytes.
@@ -119,16 +133,23 @@ function b64toBlob(b64Data, contentType) {
 
     }
 
-
     var blob = new Blob(byteArrays, {type: contentType}); //genera el objeto blob a partir de
 
     return blob;
 
 }
+/**
+ * Método que muestra información advertencia cuando se consulta vuelos de los que no es posible tener información de google.
+ * @param {String} aviso, texto que aparecerá en el cartel de aviso cuando se consulta vuelos pasados o fuera de rango.
+ * @returns {undefined}
+ */
 
 function showInfoFlightWarning(aviso) {
+    //mostrar aviso en la ventana
     $('<div class="toaster toast-warning">' + aviso + '</div>').insertAfter($('#googlesearchvuelo'));
+    //deshabilitar el botón mientras el aviso esté en pantalla.
     $('#googlesearchvuelo').addClass('isDisabled');
+    //Retardo de 3 segundos para hacer desaparecer el aviso y volver a habilitar el botón.
     setTimeout(function () {
         $('.toaster').fadeOut('slow', 'linear');
         $('#googlesearchvuelo').removeClass('isDisabled');
