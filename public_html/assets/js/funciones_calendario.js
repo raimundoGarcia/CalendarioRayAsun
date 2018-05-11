@@ -445,7 +445,7 @@ function filtroEventoDuraciónDiaSemana(evento, duracion, diaSemana) {
             maxDiv = "";
             multiploDeCaracteresSegunDuracion = 0;
             divMaxSegunDiaSemana = 0;
-            break;
+            break; 
         case "first-day":
             // Delimita el máximo de caracteres que puede mostrar un evento y el tamaño del div, según la duración del evento
 
