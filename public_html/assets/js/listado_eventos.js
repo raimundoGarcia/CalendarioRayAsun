@@ -5,14 +5,10 @@
  */
 // Show event detail -- mostrar lista de eventos por venir (upcoming) ordenados
 function showEventList() {
-    // Sort event via upcoming
-    var upcoming_events = getEventsByTime('upcoming');
-    upcoming_events.sort(sortEventsByUpcoming);
-    var past_events = getEventsByTime('past');
-    past_events.sort(sortEventsByUpcoming);
-    var consultia_list_events = upcoming_events.concat(past_events);
-    consultia_list_events = consultia_list_events.slice(0, 1000);
-    // probar solo con consultia_list_events = consultia_events(sortEventsByUpcoming); si añade más eventos TODO
+//ordena los eventos por fecha
+consultia_list_events= consultia_events.sort(sortEventsByUpcoming);
+
+
 
 
     jQuery('.consultia-event-list-full').html(''); //limpia la lista de eventos
