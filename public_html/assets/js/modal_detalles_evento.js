@@ -550,7 +550,7 @@ function showEventDetail(id) {
             '                            <div class="info-interes">' +
             '                                <h4 class="modaltext-titulo destacado">Información de interés: </h4>' +
             '' +
-            '                                <a  href="#iconos" id="info-clima" class=" btn btn-success textoboton"><i class="fas fa-cloud"></i> Clima</a><br/>' +
+            '                                <a  href="#iconos" id="info-clima" class=" btn btn-success textoboton"><i class="fas fa-cloud"></i> Meteorología</a><br/>' +
             '                                <div  class="iconos"></div>' +
             '                                <br/>' +
             '                                <button id="info-lugar" class=" btn btn-success textoboton "><i class="fas fa-info-circle"></i> Información adicional</button>' +
@@ -620,8 +620,7 @@ function showEventDetail(id) {
     //Variables para las horas
     var horaOrigen = consultia_events[id].time; //.time es siempre hora inicio
     var horaDestino = consultia_events[id]._horaFin;
-    //Mensaje personalizable para avisar al usuario
-    var avisoHorario = "NOTA: La hora mostrada corresponde a la hora local en cada país.";
+    
 
     //Localizador de la reserva
     var localizadorReserva = consultia_events[id]._localizador;
@@ -713,20 +712,25 @@ function showEventDetail(id) {
         var direccionHotel = consultia_events[id]._direccion;
         var regimen = consultia_events[id]._regimen;
         var tipoHabitacion = consultia_events[id]._tipohabita;
-        var acompanyantes = consultia_events[id]._acompanyantes;
+        var viajeros = consultia_events[id]._acompanyantes;
         
         //TODO: Obtención de la ciudad a partir de la dirección postal que viene de base datos PROVISIONAL
         var laCiudad = direccionHotel.split(',');
         laCiudad = laCiudad[laCiudad.length - 2];
         //Obtener los acompañantes (SUPONIENDO QUE DEL SERVIDOR VENGA LA INFORMACIÓN SÓLO DE LOS ACOMPAÑANTES)
         var html = "";
-        for (i = 0; i < acompanyantes.length; i++) {
-            html += "<h5 class='modaltext'>Acompañante: " + acompanyantes[i].Nombre + "</h5>";
-            //var emailAcompanyante = acompanyantes[i].
+        for (i = 0; i < viajeros.length; i++) {
+//            if(!viajeros.campoboolean){
+                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros[i].Nombre + "</h5>";
+            //var emailAcompanyante = viajeros[i].Email;
+//            } else {
+//            //TODO: Obtener nombre y email del viajero principal
+//                var nombreViajeroPrincipal = viajeros[i].Nombre;
+//                var emailViajeroPrincipal = viajeros[i].Email;
+//            }
+            
         }
-        //TODO: Obtener nombre y email del viajero principal
-        var nombreViajeroPrincipal = 'Nombre Viajero Principal';
-        var emailViajeroPrincipal = 'jm.rubio@consultia.es';
+        
         
         document.getElementById("descripcion").innerHTML = "<h5 class='modaltext'>Hotel: " + nombreHotel +
                 "</h5><h5 class='modaltext'>Dirección: " + direccionHotel +
@@ -776,14 +780,21 @@ function showEventDetail(id) {
         //para la cabecera, cadenas fijas            
         document.getElementById("ciudad-o").innerHTML = "RECOGIDA";
         document.getElementById("ciudad-d").innerHTML = "ENTREGA";
-        //Obtener los acompañantes (SUPONIENDO QUE DEL SERVIDOR VENGA LA INFORMACIÓN SÓLO DE LOS ACOMPAÑANTES)
-        var acompanyantes = consultia_events[id]._acompanyantes;
+        //Obtener los acompañantes (AQUELLOS VIAJEROS CUYO CAMPO BOOLEAN SEA FALSE)
+        var viajeros = consultia_events[id]._acompanyantes;
         var html = "";
-        for (i = 0; i < acompanyantes.length; i++) {
-            html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + acompanyantes[i].Nombre + "</h5>";
+        for (i = 0; i < viajeros.length; i++) {
+//            if(!viajeros.campoboolean){
+                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros[i].Nombre + "</h5>";
+//            } else {
+//            //TODO: Obtener nombre y email del viajero principal
+//                var nombreViajeroPrincipal = viajeros[i].Nombre;
+//                var emailViajeroPrincipal = viajeros[i].Email;
+//            }
+            
         }
         
-        //TODO: Obtener nombre y email del viajero principal
+        //TODO: Obtener nombre y email del viajero principal, SI EL CAMPO BOOLEAN QUE VIENE DE API ES TRUE
         var nombreViajeroPrincipal = 'Nombre Viajero Principal';
         var emailViajeroPrincipal = 'jm.rubio@consultia.es';
         
