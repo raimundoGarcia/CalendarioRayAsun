@@ -290,10 +290,11 @@ function mostrarAdjuntosEvento(id){
 
         }); //cierre $.each 
 
-    //si desde la API se devuelve null porque no hay adjuntos, se muestra un mensaje en la ventana modal para el usuario.
+    //si desde la API se devuelve null porque no hay adjuntos, 
     } else if (consultia_events[id]._adjuntos === null) {
 
-        document.getElementById("docs").innerHTML = "No hay adjuntos que mostrar.";
+          //ocultar la caja <div> de la ventana modal que muestra los adjuntos para descargar.
+          document.getElementById('adjuntos').style.display = 'none';
     }
 }
 /**
