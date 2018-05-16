@@ -43,3 +43,7 @@ var rangoFechaFin = "";
 var resolucionMinimaCalendario = 600; //ancho de la pantalla mínimo para que el calendario se muestre, de ser menor, se mostrará la lista
 var diasMaximoEntreFechas = 365; //rango máximo permitido entre dos fechas
 var eventosMaximoParaUnaSolaLista = 15; //cantidad de eventos máxima, para que tanto los eventos pendientes como finalizados se muestren en una sola lista
+
+//VARIABLES EN VENTANA MODAL DETALLES
+//Mensaje personalizable para avisar al usuario
+ avisoHorario = "NOTA: La hora mostrada corresponde a la hora local en cada país.";
