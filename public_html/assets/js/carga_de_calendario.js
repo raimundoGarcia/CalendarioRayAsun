@@ -90,7 +90,7 @@ function cargaCalendario() {
     $.when(promesaDatos).done(function (entradas) { //promesa con petición a la API de eventos
 
         diccionarioLogos = entradas.DiccionarioLogos; //array con el listado de logos de empresas
-
+      
 
         entradas.Pedidos.forEach(function (entrada) {
 

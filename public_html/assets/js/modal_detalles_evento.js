@@ -17,6 +17,22 @@ function showEventDetail(id) {
     var ciudad = "";
     //variable global ICS 
     icsDescription = ""; 
+    //TODO: Obtener nombre y email del viajero principal
+     //ELIMINAR LAS DOS VARIABLES FIJAS A CONTINUACIÓN CUANDO SE MODIFIQUE LA INFO QUE VIENE DE API
+     var nombreViajeroPrincipal = 'Nombre Viajero Principal';
+     var emailViajeroPrincipal = 'jm.rubio@consultia.es';
+    //DETERMINAR EL VIAJERO PRINCIPAL PARA LA DESCRIPCIÓN EN EL BLOQUE ICS
+    
+    //for (i = 0; i < viajeros.length; i++) {
+    //CUANDO EL CAMPO QUE INDICA SI ES VIAJERO PRINCIPAL SEA TRUE
+//            if(viajeros[i].campoboolean){  //campoboolean debe corresponder con el nombre del campo que vendrá de la respuesta API
+//                var nombreViajeroPrincipal = viajeros[i].Nombre;
+//                var emailViajeroPrincipal = viajeros[i].Email;
+                            
+//            }
+            
+//        }
+    
     //estructura de la ventana modal
     var ventana_modal = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '            <div class="modal-dialog modal-lg" role="document">' +
@@ -248,21 +264,17 @@ function showEventDetail(id) {
         //TODO: Obtención de la ciudad a partir de la dirección postal que viene de base datos PROVISIONAL
         var laCiudad = direccionHotel.split(',');
         laCiudad = laCiudad[laCiudad.length - 2];
-        //Obtener los acompañantes (SUPONIENDO QUE DEL SERVIDOR VENGA LA INFORMACIÓN SÓLO DE LOS ACOMPAÑANTES)
+        //Obtener los acompañantes (AQUELLOS VIAJEROS CUYO CAMPO BOOLEAN que indica si es viajero principal SEA FALSE)
         var html = "";
         for (i = 0; i < viajeros.length; i++) {
-//            if(!viajeros.campoboolean){
-                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros[i].Nombre + "</h5>";
+//            if(!viajeros[i].campoboolean){  //campoboolean debe corresponder con el nombre del campo que vendrá de la respuesta API
+                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros[i].Nombre + "</h5>"; 
             //var emailAcompanyante = viajeros[i].Email;
-//            } else {
-//            //TODO: Obtener nombre y email del viajero principal
-//                var nombreViajeroPrincipal = viajeros[i].Nombre;
-//                var emailViajeroPrincipal = viajeros[i].Email;
-//            }
+//            } 
             
         }
         
-        
+                        
         document.getElementById("descripcion").innerHTML = "<h5 class='modaltext'>Hotel: " + nombreHotel +
                 "</h5><h5 class='modaltext'>Dirección: " + direccionHotel +
                 "</h5><h5 class='modaltext'>Régimen: " + regimen + "</h5><h5 class='modaltext'>Tipo Habitación: " +
@@ -312,23 +324,18 @@ function showEventDetail(id) {
         document.getElementById("ciudad-o").innerHTML = "RECOGIDA";
         document.getElementById("ciudad-d").innerHTML = "ENTREGA";
         //Obtener los acompañantes (AQUELLOS VIAJEROS CUYO CAMPO BOOLEAN SEA FALSE)
-        var viajeros = consultia_events[id]._acompanyantes;
+        var viajeros = consultia_events[id]._acompanyantes; //Array de viajeros
+//       viajeros = '{"viajeros": [{"Nombre" : "Luis", "Email" : "hola@punto.com", "esPrincipal": "true"} , {"Nombre" : "Perico", "Email" : "hola@punto.com", "esPprincipal": "false"}] }';
+//       viajeros = JSON.parse(viajeros); console.log(viajeros);  //ejemplo acceso a campos para pruebas con un json sin pasar por base datos: viajeros.viajeros[i].Nombre
         var html = "";
-        for (i = 0; i < viajeros.length; i++) {
-//            if(!viajeros.campoboolean){
-                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros[i].Nombre + "</h5>";
-//            } else {
-//            //TODO: Obtener nombre y email del viajero principal
-//                var nombreViajeroPrincipal = viajeros[i].Nombre;
-//                var emailViajeroPrincipal = viajeros[i].Email;
-//            }
+        for (i = 0; i < viajeros.viajeros.length; i++) {
+//            if(!viajeros.viajeros[i].esPrincipal){  //campoboolean debe corresponder con el nombre del campo que vendrá de la respuesta API
+                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros.viajeros[i].Nombre + "</h5>";
+//            } 
             
         }
         
-        //TODO: Obtener nombre y email del viajero principal, SI EL CAMPO BOOLEAN QUE VIENE DE API ES TRUE
-        var nombreViajeroPrincipal = 'Nombre Viajero Principal';
-        var emailViajeroPrincipal = 'jm.rubio@consultia.es';
-        
+                
         //Bloque Descripción
         var categoria = consultia_events[id]._categoria;
         var transmision = consultia_events[id]._transmision;

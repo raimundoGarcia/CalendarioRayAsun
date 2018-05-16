@@ -368,7 +368,7 @@ function mostrarAdjuntosEvento(id){
         }
         //visualizar en el frontend el html con los anchor y las imágenes que simbolizan los documentos
         document.getElementById("docs").innerHTML = adjuntos;
-        
+        //una vez incluidos en el html, se pueden seleccionar y formar un array
         var arrayAdjuntos = $('a.linkadjunto');
         //recorrer el array de adjuntos
         $.each(arrayAdjuntos, function () {  //para cada elemento de la clase 'linkadjunto'
