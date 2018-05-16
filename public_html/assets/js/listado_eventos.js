@@ -79,7 +79,8 @@ consultia_list_events= consultia_events.sort(sortEventsByUpcoming);
                 '</div>' +
                 '<div class="textoEvento event__fecha"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp; ' + event_day + ', ' + event_date + event_end_time + '</div>' + //muesra el dia de la semana y fecha
                 '<div class="textoEvento event__hora">' + event_time + '</div>' + //muestra la hora de inicio del evento
-                '<div class="textoEvento event__ubicacion">' + consultia_list_events[i]._ubicacion + '</div>' + //muestra la localización del evento
+                '<div class="textoEvento event__ubicacion"><div event--text_ubicacion>' + consultia_list_events[i]._ubicacion + '</div>' + //muestra la localización del evento
+                '<button class="boton_detalles" onclick="showEventDetail(' + consultia_list_events[i].id + ')">Detalles</button></div>' + 
                 '</div>';
          today = new Date;
 

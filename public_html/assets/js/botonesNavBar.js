@@ -1,3 +1,7 @@
+/**
+ * @description carga la funcionalidad de todos los botones de la barra de navegación
+ * @returns {undefined}
+ */
 function botonesNavVar(){
     // Click - Calendar view btn
     jQuery('.consultia-events-calendar .calendar-view').click(function () { //oculta la lista al apretar el boton de calendario, y muestra el calendario

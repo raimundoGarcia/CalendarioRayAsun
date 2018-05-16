@@ -6,4 +6,7 @@ jQuery(document).ready(function () {
     cargaCalendario();
 
 });
+//$(window).resize(function () { //esta función recarga todo el calendario en caso de que la resolucion cambie
+//    cargaCalendario();
+//});
 
