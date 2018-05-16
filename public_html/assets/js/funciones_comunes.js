@@ -55,7 +55,7 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
                     texto = '<i class="fas fa-h-square"></i>&nbsp;' + asunto;
                     break;
                 case "Tren":
-                    texto = '<i class="fas fa-train"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>');
+                    texto = '<i class="fas fa-train"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
                 case "Barco":
                     texto = '<i class="fas fa-ship"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>').substring(5);
@@ -87,7 +87,7 @@ function formatCabecera(asunto, tipo, formato, maxCaracter) {
                     texto = '<i class="fas fa-h-square"></i>&nbsp;' + asunto;
                     break;
                 case "Tren":
-                    texto = '<i class="fas fa-train"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>');
+                    texto = '<i class="fas fa-train"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>').substring(5);
                     break;
                 case "Barco":
                     texto = '<i class="fas fa-ship"></i>&nbsp;' + asunto.replace("-->", '<i class="fas fa-arrow-right"></i>').substring(5);
