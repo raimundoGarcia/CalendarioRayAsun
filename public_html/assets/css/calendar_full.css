@@ -417,6 +417,20 @@ textarea:focus, input:focus {
 
         flex-direction: column !important;  /*lo aplica hasta 691px*/ 
     }
+    .descripcion, .ubicacion, .info-interes, .adjuntos, .ics {
+       text-align:center; 
+       padding: 10px !important;
+    }
+    
+    #verMapa, #googlesearchvuelo, #info-clima, #info-lugar, .descargaics{
+        width: 100%;
+    }
+    
+    .close{
+     margin-top: 0vw !important;
+     margin-right: 0.7vw !important;
+    }
+        
 }
 
 #fichaDetalle{
@@ -545,7 +559,7 @@ textarea:focus, input:focus {
 }
 
 .seguirvuelo{
-    margin-right: 10px;
+  /*  margin-right: 10px; */
 }
 
 .textoboton{
@@ -638,6 +652,13 @@ textarea:focus, input:focus {
 }
 modal-body{
     border-radius: 2px !important;
+}
+
+.close{
+    color: #fff !important;
+    opacity: 0.7 !important;
+    margin-top: 0.2vw;
+    margin-right: 0.5vw;
 }
 
 /*CLASES DE BOOTSTRAP O MDB SIN DEFINIR EN LA LIBRERÍA*/

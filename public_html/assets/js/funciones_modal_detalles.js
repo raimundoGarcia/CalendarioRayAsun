@@ -344,6 +344,11 @@ function mostrarInfoInteresDestino(latDestino, lonDestino){
  */
 
 function mostrarAdjuntosEvento(id){
+    //PRUEBAS PARA COMPROBAR EL BUEN FUNCIONAMIENTO CUANDO EL ARRAY DE ADJUNTOS CONTIENE VARIOS DOCUMENTOS
+    //consultia_events[id]._adjuntos se sustituye por Adjuntos.vectordocus
+    //consultia_events[id]._adjuntos[n] se sustituye por Adjuntos.vectordocus[n]
+    //DESCOMENTAR PARA PRUEBAS (NOTA: hay imágenes previstas para pdf, xlsx y txt)
+    //var Adjuntos = {"vectordocus":[{"idAdjunto": "179232", "Nombre": "Resumen", "Tipo": "pdf"},{"idAdjunto": "179228", "Nombre": "ejemplo_excel", "Tipo": "xlsx"}]};
     
         if (consultia_events[id]._adjuntos !== null) { //el campo Adjuntos o es null o es un array con una posición mínimo
 
@@ -398,7 +403,7 @@ function mostrarAdjuntosEvento(id){
 //                            document.getElementById(numadjunto).setAttribute('title', mensajeErrorAdjunto);
                         //Si no, tratar el string que devuelve la API
                         } else {
-                            //Sacar el content-type y asignarlo a variable para parámetro de la función b64toBlob
+                            //Sacar el content-type y asignarlo a variable para parámetro de la función b64toBlob para obtener el objeto Blob
                             var arrayString = churro.split(":"); //genera un array de 2 elementos, 'data' y el resto del churro 
                             var contentType = arrayString[1].split(";");  //genera un array de 2 elementos, el primero es el content-type y el segundo es  'base64,stringchurro'
                             var content_type = contentType[0]; //string del content-type

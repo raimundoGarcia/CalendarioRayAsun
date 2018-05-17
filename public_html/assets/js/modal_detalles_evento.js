@@ -36,18 +36,20 @@ function showEventDetail(id) {
     //estructura de la ventana modal
     var ventana_modal = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '            <div class="modal-dialog modal-lg" role="document">' +
+                                        
             '                <!--Content-->' +
             '                <div class="modal-content">' +
+            '                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+            '                            <span aria-hidden="true">&times;</span>'  +
+            '                        </button>' +
             '                    <!--Header-->' +
             '                    <div id="asunto" class="modal-header">' +
             '                        <h4 class="modal-title w-100 modaltext"></h4>' +
-            '                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-            '                            <!--  <span aria-hidden="true">×</span> -->' +
-            '                        </button>' +
             '                    </div>' +
             '                    <!--Body-->' +
             '                    <div class="modal-body modal-cuerpo">' +
             '                        <div class="modal-content">' +
+           
             '                            <div id="topcontent" class="topcontent">' +
             '                                <div class="view logo">' +
             '' +
@@ -248,6 +250,8 @@ function showEventDetail(id) {
     } else if (tipoReserva === "Hotel") { 
         //Ocultar el botón para los vuelos
         document.getElementById("googlesearchvuelo").style.display = "none";
+        //El hotel no tiene logo, para evitar que su div ocupe un espacio que queda blanco en la parte superior
+        document.getElementsByClassName("logo")[0].style.display = "none";
         //Información fija  para hoteles
         document.getElementById("ciudad-o").innerHTML = "ENTRADA";
         document.getElementById("ciudad-d").innerHTML = "SALIDA";
@@ -325,7 +329,7 @@ function showEventDetail(id) {
         document.getElementById("ciudad-d").innerHTML = "ENTREGA";
         //Obtener los acompañantes (AQUELLOS VIAJEROS CUYO CAMPO BOOLEAN SEA FALSE)
         var viajeros = consultia_events[id]._acompanyantes; //Array de viajeros
-//       viajeros = '{"viajeros": [{"Nombre" : "Luis", "Email" : "hola@punto.com", "esPrincipal": "true"} , {"Nombre" : "Perico", "Email" : "hola@punto.com", "esPprincipal": "false"}] }';
+//       viajeros = '{"viajeros": [{"Nombre" : "Luis", "Email" : "hola@punto.com", "esPrincipal": "true"} , {"Nombre" : "Perico", "Email" : "holas@punto.com", "esPprincipal": "false"}] }';
 //       viajeros = JSON.parse(viajeros); console.log(viajeros);  //ejemplo acceso a campos para pruebas con un json sin pasar por base datos: viajeros.viajeros[i].Nombre
         var html = "";
         for (i = 0; i < viajeros.length; i++) {
