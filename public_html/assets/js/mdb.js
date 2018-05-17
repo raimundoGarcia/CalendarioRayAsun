@@ -15056,14 +15056,15 @@ $(window).scroll(function () {
         if ('delay' in options) {
             Effect.delay = options.delay;
         }
-
-        if (isTouchAvailable) {
+        
+       
+        if(body){  //TODO: SOLUCIONADO condicional para evitar error en IE, addEventListener de undefined o null
+        body.addEventListener('mousedown', showEffect, false);
+         if (isTouchAvailable) {
             body.addEventListener('touchstart', showEffect, false);
             body.addEventListener('touchcancel', TouchHandler.registerEvent, false);
             body.addEventListener('touchend', TouchHandler.registerEvent, false);
         }
-        if(body){  //TODO: SOLUCIONADO condicional para evitar error en IE, addEventListener de undefined o null
-        body.addEventListener('mousedown', showEffect, false);
         }
     };
 

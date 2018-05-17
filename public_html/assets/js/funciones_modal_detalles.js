@@ -306,7 +306,6 @@ function mostrarMapa(id,lat,lon,latDestino,lonDestino,tipoReserva){
  * @param {number} lonDestino, longitud en el punto destino en coordenadas decimales
  * @returns {undefined}
  */
-
 function mostrarInfoInteresDestino(latDestino, lonDestino){
     
     var geocoder = new google.maps.Geocoder;
@@ -483,12 +482,13 @@ function previsionMeteo(id,latDestino,lonDestino,diasDif){
 
         //Asignar evento al botón del clima
         $("#info-clima").on('click', function () {
-            $('.iconos').html("");
+            $('.iconos').html(""); console.log(diasDif);
             //caso1: si la diferencia es de 5 días (anteriores a hoy), pero el evento dura como mínimo hasta hoy (hoy es primer día previsión meteo)
             //caso2: eventos con fecha inicio desde hoy hasta 5 días después  
             //caso3: eventos con fechas inicio anteriores 5 días desde hoy cuya duración llega hasta hoy (hoy es primer día previsión meteo)
             if (((diasDif >= -5) && (consultia_events[id].duration >= Math.abs(diasDif))) || ((diasDif <= 5) && (diasDif >= 0)) || ((diasDif < -5) && (consultia_events[id].duration >= Math.abs(diasDif)))) {
-                //interruptor para cambiar la id del elemento html que alberga los paneles de metereología.
+                //interruptor para cambiar la id del elemento html que alberga los paneles de metereología. 
+                console.log("hi");
                 if ($(".iconos").attr("id") === "iconos") {
                     $(".iconos").attr("id", "noMostrar");
                 } else {
@@ -507,7 +507,7 @@ function previsionMeteo(id,latDestino,lonDestino,diasDif){
                     success: function (datosClima) {
                         //mostrar texto indicando ciudad y país del destino/ubicación donde se ofrece la previsión. 
                         //Las variables toman valor en la función mostrarInfoInteresDestino(latDestino,lonDestino)
-                        paneles += ' <h2 class="card-tittle">' + ciudad + ',&nbsp;&nbsp;' + pais + '</h2>  ';
+                        paneles += ' <h2 class="card-tittle">' + ciudad + ',&nbsp;&nbsp;' + pais + '</h2>  '; 
                         //recorrer el JSON para obtener las 40 mediciones como máximo que retorna la API (5 días, datos cada 3 horas -> 40 mediciones)
                         datosClima.list.forEach(function (medicion) {
                             listadoMediciones.push(medicion.dt_txt.substring(0, 10));  //generar array con todas las fechas (40 máximo)  
