@@ -13,8 +13,6 @@
 
 function showEventDetail(id) {
    //inicialización de variables que serán usadas en algunos de los métodos llamados dentro de esta función
-    var pais = "";
-    var ciudad = "";
     //variable global ICS 
     icsDescription = ""; 
     //TODO: Obtener nombre y email del viajero principal

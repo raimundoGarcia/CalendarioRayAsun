@@ -82,7 +82,7 @@ consultia_list_events= consultia_events.sort(sortEventsByUpcoming);
                 '<div class="textoEvento event__ubicacion"><div event--text_ubicacion>' + consultia_list_events[i]._ubicacion + '</div>' + //muestra la localización del evento
                 '<button class="boton_detalles" onclick="showEventDetail(' + consultia_list_events[i].id + ')">Detalles</button></div>' + 
                 '</div>';
-         today = new Date;
+         today = new Date; console.log('Id evento en lista: ' + consultia_list_events[i].id);
 
         var ultimoDia = Date.parse(consultia_list_events[i]._fechaFin); //convierte el String _fechaFin con formato 2017-05-05 a un milisegundos
 
