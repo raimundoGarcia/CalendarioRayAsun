@@ -328,9 +328,9 @@ function showEventDetail(id) {
 //       viajeros = '{"viajeros": [{"Nombre" : "Luis", "Email" : "hola@punto.com", "esPrincipal": "true"} , {"Nombre" : "Perico", "Email" : "hola@punto.com", "esPprincipal": "false"}] }';
 //       viajeros = JSON.parse(viajeros); console.log(viajeros);  //ejemplo acceso a campos para pruebas con un json sin pasar por base datos: viajeros.viajeros[i].Nombre
         var html = "";
-        for (i = 0; i < viajeros.viajeros.length; i++) {
-//            if(!viajeros.viajeros[i].esPrincipal){  //campoboolean debe corresponder con el nombre del campo que vendrá de la respuesta API
-                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros.viajeros[i].Nombre + "</h5>";
+        for (i = 0; i < viajeros.length; i++) {
+//            if(!viajeros[i].esPrincipal){  //campoboolean debe corresponder con el nombre del campo que vendrá de la respuesta API
+                html += "<h5 class='modaltext'>Acompañante " + (i + 1) + ": " + viajeros[i].Nombre + "</h5>";
 //            } 
             
         }
