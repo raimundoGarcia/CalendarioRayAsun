@@ -156,7 +156,27 @@ function sortEventsByUpcoming(a, b) {
         return 0;
     }
 }
-
+/**
+ * @description separa los eventos en dos arrays, dependiendo de si han pasado o estan por venir
+ * @param {string} type los tipos puedes ser upcoming (por venir) o past ( eventos ya finalizados) 
+ * @returns {Array|getEventsByTime.events} Devuelve un array con los eventos del tipo seleccionado
+ */
+function getEventsByTime(type) { //si añade más eventos probar sin esto
+    var events = [];
+    var today_date = new Date(todaysYear, todaysMonth - 1, todaysDate);
+    for (var i = 0; i < consultia_events.length; i++) {
+        if (type === 'upcoming') {
+            if (consultia_events[i].date >= today_date.getTime()) {
+                events.push(consultia_events[i]);
+            }
+        } else {
+            if (consultia_events[i].date < today_date.getTime()) {
+                events.push(consultia_events[i]);
+            }
+        }
+    }
+    return events;
+}
 /**
  * @description se encarga de cargar un nuevo mes al presionar los botones de siguiente/anterior mes o año.
  * @param {string} btn recupera el tipo de botón pulsado.

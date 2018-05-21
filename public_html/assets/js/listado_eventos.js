@@ -6,7 +6,13 @@
 // Show event detail -- mostrar lista de eventos por venir (upcoming) ordenados
 function showEventList() {
 //ordena los eventos por fecha
-consultia_list_events= consultia_events.sort(sortEventsByUpcoming);
+ // Sort event via upcoming
+    var upcoming_events = getEventsByTime('upcoming');
+    upcoming_events.sort(sortEventsByUpcoming);
+    var past_events = getEventsByTime('past');
+    past_events.sort(sortEventsByUpcoming);
+    var consultia_list_events = upcoming_events.concat(past_events);
+    consultia_list_events = consultia_list_events.slice(0, 1000);
 
 
 
@@ -71,8 +77,10 @@ consultia_list_events= consultia_events.sort(sortEventsByUpcoming);
         } else {
             var event_time = '';
         }
-
-        //crea cada evento de la lista dentro de una etiqueta "div"
+        console.log(consultia_list_events[i].id);
+        console.log(consultia_list_events[i]);
+        
+        //crea cada evento de la lista dentro de una etiqueta "div" 
         var eventoListado = '<div class="list__event" >' +
                 '<div class="event__cabecera color-' + consultia_list_events[i].color + '" onclick="showEventDetail(' + consultia_list_events[i].id + ')">' + //abre la ventana modal al hacer click en la cabecera
                 formatCabecera(consultia_list_events[i].name, consultia_list_events[i]._tipo, "lista", null) +

@@ -35,4 +35,21 @@ function mostrarSegunFiltrado(numeroFiltro, cantidadEventos) {
     }
 }
 
-
+ // Cuando el usuario hace scroll down 20px desde la parte superior del documento, muestra un botón para subir de nuevo
+            window.onscroll = function() {scrollFunction(); };
+          
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    document.getElementById("myBtn").style.display = "block";
+                } else {
+                    document.getElementById("myBtn").style.display = "none";
+                }
+            }
+            
+            
+            // Cuando el usuario clicka el botón, se hace un scroll automático hasta la parte superior del documento
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+            
