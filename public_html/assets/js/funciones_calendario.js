@@ -213,7 +213,7 @@ function changedate(btn) { //esta es la función a la que se llama al apretar a 
         firstDay = firstDate.getDay() + 1;  //first_day será el día de la semana del día 1
     } else {
         firstDay = (firstDate.getDay() === 0) ? 7 : firstDate.getDay(); //si la semana empieza a contar en lunes, y el día 1 primer día de semana, la vble. firstDay es 7
-        console.log(firstDay);
+       
     }
     eval("lastDate = new Date(yearNum_full" + ", monthNum_full" + ", 0);"); //asigna a la vble la fecha del último día del mes actual 
     numbDays = lastDate.getDate(); //números de días del mes

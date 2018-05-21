@@ -77,8 +77,7 @@ function showEventList() {
         } else {
             var event_time = '';
         }
-        console.log(consultia_list_events[i].id);
-        console.log(consultia_list_events[i]);
+   
         
         //crea cada evento de la lista dentro de una etiqueta "div" 
         var eventoListado = '<div class="list__event" >' +

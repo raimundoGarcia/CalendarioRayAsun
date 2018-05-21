@@ -482,13 +482,13 @@ function previsionMeteo(id,latDestino,lonDestino,diasDif){
 
         //Asignar evento al botón del clima
         $("#info-clima").on('click', function () {
-            $('.iconos').html(""); console.log(diasDif);
+            $('.iconos').html(""); 
             //caso1: si la diferencia es de 5 días (anteriores a hoy), pero el evento dura como mínimo hasta hoy (hoy es primer día previsión meteo)
             //caso2: eventos con fecha inicio desde hoy hasta 5 días después  
             //caso3: eventos con fechas inicio anteriores 5 días desde hoy cuya duración llega hasta hoy (hoy es primer día previsión meteo)
             if (((diasDif >= -5) && (consultia_events[id].duration >= Math.abs(diasDif))) || ((diasDif <= 5) && (diasDif >= 0)) || ((diasDif < -5) && (consultia_events[id].duration >= Math.abs(diasDif)))) {
                 //interruptor para cambiar la id del elemento html que alberga los paneles de metereología. 
-                console.log("hi");
+               
                 if ($(".iconos").attr("id") === "iconos") {
                     $(".iconos").attr("id", "noMostrar");
                 } else {

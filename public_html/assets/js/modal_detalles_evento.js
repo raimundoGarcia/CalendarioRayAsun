@@ -129,7 +129,8 @@ function showEventDetail(id) {
     $("#espacioModal").append(ventana_modal);
     
     //RELLENAR Y MOSTRAR VENTANA MODAL 
-    
+ 
+
     //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
     //obtener el tipo de reserva 
     var tipoReserva = consultia_events[id]._tipo;
@@ -144,7 +145,7 @@ function showEventDetail(id) {
     hoy = new Date();
     //diferencia entre hoy y la fecha inicio viaje (para clima y para seguimiento vuelo)
     diasDif = diferenciaDiasClima(hoy, fechaInicioViaje); 
-    console.log(consultia_events[id]);
+    
     //Coordenadas origen
     var lat = consultia_events[id]._latitudOrigen;
     var lon = consultia_events[id]._longitudOrigen;
