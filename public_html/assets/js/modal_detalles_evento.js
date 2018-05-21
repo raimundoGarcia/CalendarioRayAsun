@@ -34,7 +34,7 @@ function showEventDetail(id) {
     
     //estructura de la ventana modal
     var ventana_modal = '<div class="modal fade" id="fichaDetalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-            '            <div class="modal-dialog modal-lg" role="document">' +
+                        '            <div class="modal-dialog modal-lg" role="document">' +
                                         
             '                <!--Content-->' +
             '                <div class="modal-content">' +
@@ -123,14 +123,25 @@ function showEventDetail(id) {
             '                </div>' +
             '                <!--/.Content-->' +
             '            </div>' +
+            '           <button id="myBtnM" title="Go to top"><i class="fas fa-angle-up"></i></button>'+
             '        </div>';
     //limpiar el html y anyadir la ventana al index.html
     $("#espacioModal").html("");
     $("#espacioModal").append(ventana_modal);
     
     //RELLENAR Y MOSTRAR VENTANA MODAL 
- 
-
+    
+    //BOTÓN 'SCROLL TO TOP' DE LA VENTANA DETALLE
+    document.getElementById('fichaDetalle').addEventListener('scroll', function(){
+        if($('#fichaDetalle').scrollTop()>500){
+            document.getElementById('myBtnM').style.display = 'block';
+        }
+    });
+    document.getElementById('myBtnM').onclick = function(){
+        $("#fichaDetalle").scrollTop(0);
+        document.getElementById('myBtnM').style.display = 'none';
+    };
+    
     //BLOQUE COMÚN PARA CUALQUIER TIPO RESERVA
     //obtener el tipo de reserva 
     var tipoReserva = consultia_events[id]._tipo;

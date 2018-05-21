@@ -475,6 +475,7 @@ function mostrarAdjuntosEvento(id){
  */
 
 function previsionMeteo(id,latDestino,lonDestino,diasDif){
+    console.log('Id que se pasa por parametro: ' + id);
     //si hay información sobre las coordenadas en la base de datos
     if (latDestino !== null && lonDestino !== null) {
         //construimos la URL para acceder 
