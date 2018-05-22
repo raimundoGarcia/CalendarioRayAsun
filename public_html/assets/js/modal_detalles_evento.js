@@ -50,7 +50,7 @@ function showEventDetail(id) {
             '                        <div class="modal-content">' +
            
             '                            <div id="topcontent" class="topcontent">' +
-            '                                <div class="view logo">' +
+            '                                <div class="logo">' +
             '' +
             '                                </div>' +
             '                                <div class="relleno"></div>' +
