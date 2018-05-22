@@ -7,6 +7,9 @@ jQuery(document).ready(function () {
 
 });
 //$(window).resize(function () { //esta función recarga todo el calendario en caso de que la resolucion cambie
+//    if(rangoFechaIni !== "" && rangoFechaFin !== ""){
+//        filtrar = true;
+//    }
 //    cargaCalendario();
 //});
 
